@@ -1,3 +1,7 @@
+body {
+  font-family: 'Arial', sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -37,7 +41,6 @@
   }
 }
 
-/* App.css */
 .posts-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(250px, 1fr)); /* 3 fixed columns */
