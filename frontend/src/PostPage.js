@@ -1,41 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import Navigation from './Navigation';
-import './PostPage.css'; // Import CSS file for styling
+import { fetchPostById } from './mockAPI'; // Import the mock API function
+import './PostPage.css';
 
 function PostPage() {
-  // Dummy data for the user and post
-  const user = {
-    username: 'john_doe',
-    fullName: 'John Doe',
-    email: 'john@example.com',
-    avatarUrl: 'https://example.com/avatar.png' // URL to user avatar
-  };
+  const [post, setPost] = useState(null);
+  const { id } = useParams(); // Extract the post ID from the URL
+  console.log(id); 
+  useEffect(() => {
+    // Use the extracted ID instead of a hardcoded value
+    fetchPostById(Number(id)).then(data => {
+      setPost(data);
+    });
+  }, [id]); // Depend on the ID so the effect runs again if the ID changes
 
-  const post = {
-    id: 1,
-    title: 'Post Title',
-    startingLocation: 'Start Location',
-    endingLocation: 'End Location',
-    remainingSeats: 5,
-    content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-  };
+  if (!post) {
+    return <div>Loading post...</div>; // Show loading state while the post is being fetched
+  }
 
   return (
-    <div >
+    <div>
       <header>
         <Navigation />
       </header>
-      
       <div className="PostPage">
         <div className="user-info">
             <div className="user-avatar">
-            <img src={user.avatarUrl} alt="User Avatar" />
+              <img src={post.user.avatarUrl} alt="User Avatar" />
             </div>
             <div className="user-details">
-            <h3>User Information</h3>
-            <p><strong>Username:</strong> {user.username}</p>
-            <p><strong>Full Name:</strong> {user.fullName}</p>
-            <p><strong>Email:</strong> {user.email}</p>
+              <h3>User Information</h3>
+              <p><strong>Username:</strong> {post.user.username}</p>
+              <p><strong>Full Name:</strong> {post.user.fullName}</p>
+              <p><strong>Email:</strong> {post.user.email}</p>
             </div>
         </div>
         <div className="post-details">

@@ -21,6 +21,7 @@
 }
 
 .post-details p {
+  text-align: left;
   margin-bottom: 5px; /* Adjust spacing between paragraphs */
 }
 
