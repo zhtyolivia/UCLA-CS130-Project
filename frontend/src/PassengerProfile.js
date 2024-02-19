@@ -34,8 +34,8 @@ const PassengerProfile = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Here, you would handle updating the user profile
-        console.log(username, email, fullName, avatar);
+        // Here, handle updating the user profile
+        // console.log(username, email, fullName, avatar);
         // Assuming a function to update the profile...
         // updateUserProfile({ username, email, fullName, avatar });
         setShowEditPopup(false);

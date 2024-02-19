@@ -1,11 +1,11 @@
 // Sample structure for passenger 
-const passenger = {
-    id: 1, 
-    username: 'test_passenger',
-    name: 'Olive',
-    email: 'olive@example.com',
-    avatarUrl: 'https://example.com/avatar.png'
-}
+// const passenger = {
+//     id: 1, 
+//     username: 'test_passenger',
+//     name: 'Olive',
+//     email: 'olive@example.com',
+//     avatarUrl: 'https://example.com/avatar.png'
+// }
 
 // Sample structure for drivers
 const users = [
@@ -118,7 +118,7 @@ export const getCurrentUserId = () => {
   };
 
   
-  // Mock function to simulate fetching user profile information based on ID
+// Mock function to simulate fetching user profile information based on ID
 export const getUserProfile = (userId) => {
     return new Promise((resolve) => {
       setTimeout(() => {
