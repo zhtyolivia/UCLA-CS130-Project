@@ -1,0 +1,110 @@
+.ProfilePage {
+  margin: 0 auto; /* Center the content horizontally */
+  max-width: 800px; /* Set max-width for the content */
+  padding: 0 20px; /* Add padding to ensure some space on the left and right */
+}
+
+.profile-layout {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the container */
+}
+
+.left-section {
+  text-align: center; /* Center the button below the avatar */
+}
+
+/* 
+.user-avatar {
+  width: 100px;
+  border-radius: 50%; 
+  overflow: hidden; 
+  display: flex; 
+  justify-content: center;
+  align-items: center; 
+
+.user-avatar img {
+  height: 100%; 
+  width: auto; 
+  min-width: 100px; 
+  object-fit: cover; 
+} */
+
+.user-avatar {
+  margin-right: 20px; /* Add space between avatar and user details */
+}
+
+.user-avatar img {
+  width: 50px; /* Set width for the avatar image */
+  height: 50px; /* Set height for the avatar image */
+  border-radius: 50%; /* Make the avatar image round */
+}
+
+.user-avatar {
+  margin-right: 20px; /* Add space between avatar and user details */
+}
+
+.user-avatar img {
+  width: 50px; /* Set width for the avatar image */
+  height: 50px; /* Set height for the avatar image */
+  border-radius: 50%; /* Make the avatar image round */
+}
+
+.edit-button {
+  display: block; /* Ensure the button is a block-level element to occupy its own line */
+  margin-top: 10px; /* Space above the button */
+}
+
+.user-info {
+  display: flex; /* Use flexbox for layout */
+  align-items: center; /* Center items vertically */
+  margin-bottom: 20px; /* Add some space between user info and post details */
+}
+
+.user-details {
+  flex: 1; /* Take remaining space */
+}
+
+.user-info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.edit-button {
+  background-color: #0e9aa7;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 15px;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.edit-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.edit-popup form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.edit-popup form input[type="text"],
+.edit-popup form input[type="email"],
+.edit-popup form input[type="file"] {
+  margin-top: 5px;
+}
+
+.edit-popup form button {
+  margin-top: 10px;
+  margin-right: 5px;
+}
