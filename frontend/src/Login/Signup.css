@@ -150,3 +150,20 @@ html, body {
 .bottom-link:hover {
     text-decoration: underline;
 }
+
+.account-type-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+}
+
+.account-type-btn.selected {
+    background-color: #4CAF50;
+    color: white;
+    border-color: #4CAF50;
+}
