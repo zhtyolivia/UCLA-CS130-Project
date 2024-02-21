@@ -1,33 +1,40 @@
-// App.js
 import React, { useState, useEffect } from 'react';
-import './PassengerHome.css';
 import Navigation from './Navigation';
 import Post from './Post';
 import { fetchPosts } from './mockAPI';
+import './PassengerHome.css';
+import { Link } from 'react-router-dom';
 
-function App() {
-
-  const [posts, setPosts] = useState([]); // Initialize posts state to an empty array
+function PassengerHome() {
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     fetchPosts().then(data => {
-      setPosts(data); // Update the posts state with fetched data
+      setPosts(data);
     });
-  }, []); 
+  }, []);
 
   console.log(posts)
   return (
-    <div className="App">
+    <div className="PassengerHome">
       <header>
         <Navigation />
+        <Link to="/login">Go to Login</Link>
       </header>
       <main className="posts-grid">
         {posts.map(post => (
-          <Post id={post.id} title={post.title} startingLocation={post.startingLocation} endingLocation={post.endingLocation} availableSeats={post.remainingSeats} content={post.content} />
+          <Post 
+            id={post.id} 
+            title={post.title} 
+            startingLocation={post.startingLocation} 
+            endingLocation={post.endingLocation} 
+            availableSeats={post.remainingSeats} 
+            content={post.content} 
+          />
         ))}
       </main>
     </div>
   );
 }
 
-export default App;
+export default PassengerHome;
