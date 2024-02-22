@@ -3,8 +3,9 @@ const router = express.Router();
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
-
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+const {authenticateToken} = require('../middlewares/jwtauthenticate')
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -12,6 +13,17 @@ async function emailExistsInBoth(email) {
 
     return passengerExists || driverExists ? true : false;
 }
+
+router.get('/profile', authenticateToken, (req, res) => {
+    Driver.findById(req.user.userId)
+    .then(user => {
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+        res.json(user);
+    })
+    .catch(err => res.status(500).send({ message: err.message }));
+});
 
 router.post('/register', (req, res) =>{
     let{email, password, name, phonenumber} = req.body;
@@ -108,10 +120,12 @@ router.post('/signin', (req, res) =>{
                 const hashPassword = data[0].password;
                 bcrypt.compare(password,hashPassword).then(result =>{
                     if (result){
+                        const token = jwt.sign({ userId: data[0]._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
                         res.json({
                             status: "Success",
                             message: "User Successfully logged in",
-                            data: data
+                            data: data,
+                            token: token
                         })
                     } else {
                         res.json({
