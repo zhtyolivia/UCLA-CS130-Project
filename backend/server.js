@@ -1,7 +1,7 @@
-const express = require('express');
-const { MongoClient } = require('mongodb');
+const express = require("express");
+const { MongoClient } = require("mongodb");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 // Use CORS middleware to enable CORS for all routes and origins
 app.use(cors());
 const port = process.env.PORT || 3001; // Choose a port different from your frontend
@@ -9,12 +9,12 @@ const port = process.env.PORT || 3001; // Choose a port different from your fron
 app.use(express.json());
 
 // MongoDB connection string
-require('dotenv').config();
+require("dotenv").config();
 const mongoString = process.env.MONGODB_URI;
 
 // Connect to MongoDB
 async function connectToMongoDB() {
-  const client = new MongoClient(mongoString)
+  const client = new MongoClient(mongoString);
   try {
     await client.connect();
     console.log("Connected to MongoDB");
@@ -27,10 +27,14 @@ async function connectToMongoDB() {
 
 connectToMongoDB();
 
-app.get('/', (req, res) => {
-  res.send('Hello World!');
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+
+// Search Logic
+const searchRoute = require("./src/api/routes/searchRoute");
+app.use("/", searchRoute);
