@@ -12,9 +12,16 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [passwordShown, setPasswordShown] = useState(false);
     const navigate = useNavigate();
+    const isValidEmail = username => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(username);
+
 
     const handleLogin = async (e) => {
         e.preventDefault();
+        if (!isValidEmail(username)) {
+            alert('Please enter a valid email address.');
+            return;
+        }
+
         try {
             const response = await axios.post('/api/login', { username, password });
             // Assuming the response includes the account type
@@ -49,7 +56,7 @@ const Login = () => {
                         <div className="input-group">
                             <input type="text" placeholder="Username" required onChange={(e) => setUsername(e.target.value)} />
                         </div>
-                        <div className="input-group">
+                        <div className="input-group password-group">
                             <input type={passwordShown ? "text" : "password"} placeholder="Password" required onChange={(e) => setPassword(e.target.value)} />
                             <button type="button" className="toggle-password" onClick={togglePasswordVisibility}>
                                 <FontAwesomeIcon icon={passwordShown ? faEyeSlash : faEye} />

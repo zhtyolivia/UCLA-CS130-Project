@@ -167,3 +167,21 @@ html, body {
     color: white;
     border-color: #4CAF50;
 }
+.password-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-group input {
+    padding-right: 40px; /* Adjust padding to ensure text does not overlap button */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px; /* Adjust based on your design */
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #717171; /* Adjust color as needed */
+}
