@@ -36,7 +36,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 60px);
-    background-color: #000000; /* Continue the black background */
+    background-color: #3f4b3e; 
 }
 
 .login-card {

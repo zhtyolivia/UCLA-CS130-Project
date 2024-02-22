@@ -24,7 +24,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 60px);
-    background-color: #000; /* Black background */
+    background-color: #3f4b3e; /* Black background */
     padding-top: 40px; /* Make space for the top stripe */
 }
 
