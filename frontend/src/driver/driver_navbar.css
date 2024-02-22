@@ -1,0 +1,41 @@
+/* src/driver/driver_navbar.css */
+.driver-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #263025;
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Adds shadow for depth */
+    padding: 20px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.nav-brand {
+    font-size: 30px; /* Larger font size for brand */
+    font-weight: bold; /* Optional: Makes the brand text bolder */
+    color: white;
+    text-decoration: none;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+}
+
+.nav-item {
+    margin-left: 30px; /* Increased spacing between nav items */
+    font-size: 20px; /* Larger font size for nav items */
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px; /* Padding for clickable area */
+    border-radius: 5px; /* Rounded corners for nav items */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.nav-item:hover {
+    background-color: #5cb85c; /* Change background color on hover */
+    text-decoration: none; /* No underline on hover */
+}

@@ -1,7 +1,7 @@
 // WelcomePage.js
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './WelcomePage.css'; 
+import './welcome_page.css'; 
 
 const WelcomePage = () => {
     return (

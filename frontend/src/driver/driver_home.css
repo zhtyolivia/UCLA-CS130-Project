@@ -1,0 +1,91 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; 
+}
+
+.driver-home-page {
+    font-family: 'Arial', sans-serif;
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+
+.driver-home-page header {
+    margin-bottom: 20px;
+    margin-top: 20px;
+    text-align: center;
+}
+
+.driver-home-page header h1 {
+    font-size: 2rem;
+    color: #333;
+}
+
+.driver-home-page header button {
+    padding: 10px 20px;
+    background-color: #5cb85c;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.driver-home-page header button:hover {
+    background-color: #4cae4c;
+}
+
+.rides-listing {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.ride-card {
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.ride-card h2 {
+    color: #5cb85c;
+    margin-top: 0;
+}
+
+.ride-card p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+nav {
+    margin-top: 30px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #5cb85c;
+    margin-right: 15px;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+.go-to-login-btn {
+    padding: 10px 20px;
+    background-color: #007bff; /* Use your app's color theme */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 20px; /* Adjust as needed */
+}
+
+.go-to-login-btn:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
