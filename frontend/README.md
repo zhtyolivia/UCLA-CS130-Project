@@ -68,3 +68,33 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+# Project File Structure
+Frontend
+The frontend project structure may vary depending on the framework used (such as React, Vue, Angular, etc.), but the basic principles are similar. Here is an example structure based on React:
+```
+/frontend
+  /node_modules
+  /public
+  /src
+    /components
+    /pages
+    /services
+    /hooks
+    /utils
+    /assets
+      /images
+      /styles
+    App.js
+    index.js
+  package.json
+```
+/components: Reusable UI components.
+/pages: The application's page components, usually corresponding to a route.
+/services: Services for communicating with the backend API.
+/hooks: Custom React hooks.
+/utils: Utility functions.
+/assets: Static resources, such as images and style files.
+App.js and index.js: Application entry files.
