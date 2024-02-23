@@ -24,9 +24,6 @@
     border-radius: 50%; /* Make the avatar image round */
 }
 
-.user-details {
-    flex: 1; /* Take remaining space */
-}
 
 .post-details,
 .post-content {
@@ -37,11 +34,17 @@
     text-align: center; /* Center the post title */
 }
 
+.user-details {
+    flex: 1; /* Take remaining space */
+}
+
+
 .user-info-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
+
   }
 
 .edit-container {

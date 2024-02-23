@@ -29,40 +29,14 @@
   object-fit: cover; 
 } */
 
-.user-avatar {
-  margin-right: 20px; /* Add space between avatar and user details */
-}
 
-.user-avatar img {
-  width: 50px; /* Set width for the avatar image */
-  height: 50px; /* Set height for the avatar image */
-  border-radius: 50%; /* Make the avatar image round */
-}
-
-.user-avatar {
-  margin-right: 20px; /* Add space between avatar and user details */
-}
-
-.user-avatar img {
-  width: 50px; /* Set width for the avatar image */
-  height: 50px; /* Set height for the avatar image */
-  border-radius: 50%; /* Make the avatar image round */
-}
 
 .edit-button {
   display: block; /* Ensure the button is a block-level element to occupy its own line */
   margin-top: 10px; /* Space above the button */
 }
 
-.user-info {
-  display: flex; /* Use flexbox for layout */
-  align-items: center; /* Center items vertically */
-  margin-bottom: 20px; /* Add some space between user info and post details */
-}
 
-.user-details {
-  flex: 1; /* Take remaining space */
-}
 
 .user-info-header {
   display: flex;
