@@ -2,6 +2,7 @@
     display: flex; /* Use flexbox for layout */
     align-items: center; /* Align items vertically */
     margin-bottom: 20px; /* Add some space between user info and post details */
+    margin-top: 20px;
 }
 
 .user-avatar {
@@ -18,6 +19,7 @@
     display: flex; /* Use flexbox for layout */
     flex-direction: column; /* Stack flex items vertically */
     justify-content: space-around; /* Distribute space around items */
+    text-align: left;
 }
 
 /* Remove user-info-header or adjust if necessary */
