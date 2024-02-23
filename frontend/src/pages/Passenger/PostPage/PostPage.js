@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Navigation from './Navigation';
-import { fetchPostById } from './mockAPI'; // Import the mock API function
+import Navigation from '../../../components/Navigation/Navigation';
+import { fetchPostById } from '../../../services/mockAPI'; // Import the mock API function
 import './PostPage.css';
 
 function PostPage() {

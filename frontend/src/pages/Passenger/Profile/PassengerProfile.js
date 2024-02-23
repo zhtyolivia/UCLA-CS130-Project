@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import Navigation from './Navigation';
-import { getCurrentUserId, getUserProfile } from './mockAPI';
+import Navigation from '../../../components/Navigation/Navigation';
+import { getCurrentUserId, getUserProfile } from '../../../services/mockAPI';
 import './PassengerProfile.css';
 
 const PassengerProfile = () => {

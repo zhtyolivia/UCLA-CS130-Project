@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCurrentUserId } from './mockAPI'; // Adjust the import path as necessary
+import { getCurrentUserId } from '../../services/mockAPI'; // Adjust the import path as necessary
 import './Navigation.css';
 
 function Navigation() {

@@ -1,6 +1,3 @@
-# Project File Structure
-
-## Frontend
 The frontend project structure may vary depending on the framework used (such as React, Vue, Angular, etc.), but the basic principles are similar. Here is an example structure based on React:
 ```
 /frontend
@@ -18,18 +15,18 @@ The frontend project structure may vary depending on the framework used (such as
     App.js
     index.js
   package.json
-```
-/components: Reusable UI components.
+  ```
+/components: Reusable UI components. 
+
 /pages: The application's page components, usually corresponding to a route.
-/services: Services for communicating with the backend API.
-/hooks: Custom React hooks.
-/utils: Utility functions.
-/assets: Static resources, such as images and style files.
-App.js and index.js: Application entry files.
 
+ /services: Services for communicating with the backend API. 
+ 
+ /hooks: Custom React hooks. 
+ 
+ /utils: Utility functions. /assets: Static resources, such as images and style files. App.js and index.js: Application entry files.
 
-## Backend File Structure
-
+Backend File Structure
 ```
 /backend
   /node_modules
@@ -46,13 +43,13 @@ App.js and index.js: Application entry files.
   server.js (或 app.js)
   package.json
   .env (或其他环境配置文件)
-```
+  ```
+/api: Holds routes, controllers, and middleware. These define how to receive and respond to HTTP requests. 
 
-/api: Holds routes, controllers, and middleware. These define how to receive and respond to HTTP requests.
-/config: Configuration files and constants, such as database configurations.
-/models: Data models or database schema definitions (e.g., using Mongoose to define MongoDB schemas).
-/services: The business logic layer, usually containing code that interacts with the database.
-/utils: Utility functions, such as date processing, encryption tools, etc.
-/tests: Contains test scripts.
-server.js or app.js: The application entry file, configuring the server and middleware.
+/config: Configuration files and constants, such as database configurations. 
 
+/models: Data models or database schema definitions (e.g., using Mongoose to define MongoDB schemas). /services: The business logic layer, usually containing code that interacts with the database. 
+
+/utils: Utility functions, such as date processing, encryption tools, etc. 
+
+/tests: Contains test scripts. server.js or app.js: The application entry file, configuring the server and middleware.
