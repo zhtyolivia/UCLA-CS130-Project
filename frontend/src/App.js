@@ -1,13 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import PassengerHome from './PassengerHome';
-import PostPage from './PostPage';
-import PassengerProfile from './PassengerProfile';
-import Login from './login/login';
-import WelcomePage from './login/welcome_page';
-import Signup from './login/signup';
-import DriverHome from './driver/driver_home';
-import InitiateRide from './driver/initialte_ride';
+import PassengerHome from './pages/Passenger/Home/PassengerHome';
+import PostPage from './pages/Passenger/PostPage/PostPage';
+import PassengerProfile from './pages/Passenger/Profile/PassengerProfile';
+import Login from './pages/Login/Login';
+import WelcomePage from './pages/Login/WelcomePage';
+import Signup from './pages/Login/Signup';
+import DriverHome from './pages/Driver/Home/DriverHome';
+import InitiateRide from './pages/Driver/InitiateRide';
+
+
+
+
 
 
 

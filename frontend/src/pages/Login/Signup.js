@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './signup.css'; // Assuming you have a separate CSS file for the signup page
+import './Signup.css'; // Assuming you have a separate CSS file for the signup page
 import axios from 'axios'; // Ensure axios is installed
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import {faGoogle } from '@fortawesome/free-brands-svg-icons';
-
 
 
 const Signup = () => {

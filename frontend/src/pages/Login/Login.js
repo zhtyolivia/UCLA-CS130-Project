@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './login.css'; // Make sure to import the CSS file
+import './Login.css'; // Make sure to import the CSS file
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faGoogle } from '@fortawesome/free-brands-svg-icons';

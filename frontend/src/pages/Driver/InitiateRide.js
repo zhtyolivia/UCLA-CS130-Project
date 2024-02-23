@@ -1,8 +1,8 @@
 // src/driver/InitiateRide.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './initiate_ride.css'; // Make sure to create and import the CSS file
-import DriverNav from './driver_navbar'; 
+import './InitiateRide.css'; // Make sure to create and import the CSS file
+import DriverNav from './DriverNavbar'; 
 
 const InitiateRide = () => {
     const [title, setTitle] = useState('');

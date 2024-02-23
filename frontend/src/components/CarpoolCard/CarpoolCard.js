@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './Post.css';
+import './CarpoolCard.css';
 
 function Post({ id, title, startingLocation, endingLocation, availableSeats, content }) {
   // console.log(id)

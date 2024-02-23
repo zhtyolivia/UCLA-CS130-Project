@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import './driver_home.css'; // You need to create this CSS file
-import DriverNav from './driver_navbar'; 
+import './DriverHome.css'; 
+import DriverNav from '../DriverNavbar'; 
 
 const DriverHome = () => {
     const [driverRides, setDriverRides] = useState([]);

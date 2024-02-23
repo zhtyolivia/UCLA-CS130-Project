@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './driver_navbar.css'; // Assuming you will create this CSS file for styling
+import './DriverNavbar.css'; // Assuming you will create this CSS file for styling
 
 const DriverNav = () => {
     return (
