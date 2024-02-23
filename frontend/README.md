@@ -91,10 +91,32 @@ The frontend project structure may vary depending on the framework used (such as
     index.js
   package.json
 ```
-/components: Reusable UI components.
-/pages: The application's page components, usually corresponding to a route.
-/services: Services for communicating with the backend API.
-/hooks: Custom React hooks.
-/utils: Utility functions.
-/assets: Static resources, such as images and style files.
-App.js and index.js: Application entry files.
+- `public`: This directory is usually used for static assets like HTML files, icons, and images that don't go through Webpack processing.
+
+- `src`: This is the main container for all the code that runs your application.
+
+- `assets`: Store static assets like images, fonts, and shared CSS that are not component-specific.
+
+- `components`: This is where you keep all your React components. It looks like Post.js and TestComponent.js should be here. If you have components that are very specific to a page and are not reused anywhere else, they might be better placed within a subdirectory of the specific page within pages.
+
+- `hooks`: Custom React hooks should be placed here.
+
+- `pages`: Each page or route in your application should have its own directory within pages. For instance, PassengerHome.js and its corresponding CSS file PassengerHome.css should be in a folder named PassengerHome within pages. The same goes for PassengerProfile.js and PostPage.js along with their corresponding CSS files.
+
+- `services`: This directory should contain files related to external services. For example, API calls should be encapsulated here. mockAPI.js seems like it would belong here.
+
+- `utils`: Utility functions that are used across different components or pages should be stored here. If test.js is a utility file, it should be in utils.
+
+- `index.js`: This is the entry point of your React application.
+
+- `index.css`: This is the global stylesheet for your application.
+
+- `reportWebVitals.js`: This file is used for measuring the performance of your app and is usually part of the default React app setup.
+
+Other files at the root level:
+
+- `package.json`: Contains metadata about the project and the list of dependency packages.
+
+- `package-lock.json`: Automatically generated file to lock down the versions of a package’s dependencies.
+
+- `.gitignore`: This file tells Git which files or folders to ignore in a project.
