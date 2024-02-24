@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import './UserInfo.css'; // 导入组件的样式文件
+import './UserInfo.css'; 
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../../services/mockAPI'; // Import the mock API function
+import defaultAvatar from '../../assets/default_avatar.jpeg';
 
 const UserInfo = () => {
     const [post, setPost] = useState(null);
@@ -24,10 +25,11 @@ const UserInfo = () => {
     }
 
     // If post is available, render the user information
+    // src={post.user.avatarUrl}
     return (
         <div className="user-info">
             <div className="user-avatar">
-                <img src={post.user.avatarUrl} alt="User Avatar" />
+                <img src={defaultAvatar} alt={defaultAvatar} />
             </div>
             <div>
                 <div className="user-info-header"> 

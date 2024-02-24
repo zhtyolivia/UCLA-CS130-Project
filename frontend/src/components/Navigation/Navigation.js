@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { getCurrentUserId } from '../../services/mockAPI'; // Adjust the import path as necessary
+import { getCurrentUserId } from '../../services/mockAPI'; 
 import './Navigation.css';
 
 function Navigation() {
@@ -10,29 +10,29 @@ function Navigation() {
     getCurrentUserId().then(setUserId);
   }, []);
 
-  // Optionally handle loading state if needed
+
   if (userId === null) {
-    return <div>Loading...</div>; // Or some other loading indicator
+    return <div>Loading...</div>; 
   }
 
   return (
-    <nav className="navbar">
-      <div className="navbar-brand">
-        <Link to="/" className="navbar-logo">Swift Link</Link>
+    <nav className="p-navbar">
+      <div className="p-navbar-brand">
+        <Link to="/" className="p-navbar-logo">Swift Link</Link>
       </div>
       
-      <div className="search-bar">
+      <div className="p-search-bar">
         <input type="text" placeholder="Search posts..." />
         <button>Search</button>
       </div>
 
-      <ul className="navbar-nav">
-        <li className="nav-item">
-          <Link to="/home" className="nav-link">Home</Link>
+      <ul className="p-navbar-nav">
+        <li className="p-nav-item">
+          <Link to="/home" className="p-nav-link">Home</Link>
         </li>
-        <li className="nav-item">
+        <li className="p-nav-item">
           {/* Ensure the profile link dynamically uses the fetched userId */}
-          <Link to={`/profile/${userId}`} className="nav-link">Profile</Link>
+          <Link to={`/profile/${userId}`} className="p-nav-link">Profile</Link>
         </li>
       </ul>
     </nav>
