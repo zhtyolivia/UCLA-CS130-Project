@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/Navigation';
 import { fetchPostById } from '../../../services/mockAPI'; // Import the mock API function
+import UserInfo from '../../../components/UserInfo/UserInfo';
 import './PostPage.css';
 
 function PostPage() {
@@ -38,20 +39,7 @@ function PostPage() {
         <Navigation />
       </header>
       <div className="PostPage">
-        <div className="user-info">
-            <div className="user-avatar">
-              <img src={post.user.avatarUrl} alt="User Avatar" />
-            </div>
-            <div className="user-details">
-              <div classname="user-info-header"> 
-                <h3>User Information</h3>
-                
-              </div>
-              <p><strong>Username:</strong> {post.user.username}</p>
-              <p><strong>Full Name:</strong> {post.user.fullName}</p>
-              <p><strong>Email:</strong> {post.user.email}</p>
-            </div>
-        </div>
+      <UserInfo />
         <div className="post-details">
           <h2>{post.title}</h2>
             <div className='edit-container'>
