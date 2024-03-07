@@ -1,9 +1,13 @@
+// Displays information about the driver who initiated this rideshare.
+// Used for the Post page. 
+
 import React, { useState, useEffect } from 'react';
-import './UserInfo.css'; // 导入组件的样式文件
+import './InitiatorInfo.css'; 
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../../services/mockAPI'; // Import the mock API function
+import defaultAvatar from '../../assets/default_avatar.jpeg';
 
-const UserInfo = () => {
+const InitiatorInfo = () => {
     const [post, setPost] = useState(null);
     const { id } = useParams(); 
     useEffect(() => {
@@ -24,10 +28,11 @@ const UserInfo = () => {
     }
 
     // If post is available, render the user information
+    // src={post.user.avatarUrl}
     return (
         <div className="user-info">
             <div className="user-avatar">
-                <img src={post.user.avatarUrl} alt="User Avatar" />
+                <img src={defaultAvatar} alt={defaultAvatar} />
             </div>
             <div>
                 <div className="user-info-header"> 
@@ -44,4 +49,4 @@ const UserInfo = () => {
     
 }
 
-export default UserInfo;
+export default InitiatorInfo;

@@ -1,8 +1,9 @@
-
 /* WelcomePage.css */
+@import '../../styles/variables';
+
 .welcome-container {
     height: 100vh;
-    background-color: #263025; /* Dark background */
+    background-color: $passenger-primary-color; /* Dark background */
     display: flex;
     align-items: center;
     justify-content: center;

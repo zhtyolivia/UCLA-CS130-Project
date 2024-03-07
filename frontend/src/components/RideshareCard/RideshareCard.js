@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './CarpoolCard.css';
+import './RideshareCard.scss';
 
-function Post({ id, title, startingLocation, endingLocation, availableSeats, content }) {
+function RideshareCard({ id, title, startingLocation, endingLocation, availableSeats, content }) {
   // console.log(id)
   return (
     <div className="post">
@@ -19,4 +19,4 @@ function Post({ id, title, startingLocation, endingLocation, availableSeats, con
   );
 }
 
-export default Post;
+export default RideshareCard;

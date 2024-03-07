@@ -1,11 +1,11 @@
 // App.js
 import React, { useState, useEffect } from 'react';
-import './PassengerHome.css';
-import Navigation from '../../../components/Navigation/Navigation';
-import Post from '../../../components/CarpoolCard/CarpoolCard';
+import './PassengerHome.scss';
+import Navigation from '../../../components/Navigation/PassengerNavbar';
+import Post from '../../../components/RideshareCard/RideshareCard';
 import { fetchPosts } from '../../../services/mockAPI';
 
-function App() {
+function PassengerHome() {
 
   const [posts, setPosts] = useState([]); // Initialize posts state to an empty array
 
@@ -15,9 +15,8 @@ function App() {
     });
   }, []); 
 
-  console.log(posts)
   return (
-    <div className="App">
+    <div className="Home">
       <header>
         <Navigation />
       </header>
@@ -30,4 +29,4 @@ function App() {
   );
 }
 
-export default App;
+export default PassengerHome;

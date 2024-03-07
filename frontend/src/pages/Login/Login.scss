@@ -1,3 +1,4 @@
+@import '../../styles/variables';
 html, body {
     height: 100%;
     margin: 0;
@@ -15,10 +16,10 @@ html, body {
     background-color: #000000; /* Black background */
 }
 
-.top-stripe {
+.log-in-top-stripe {
     width: 100%;
     height: 60px;
-    background-color: #263025;
+    background-color: $driver-primary-color;
     display: flex;
     align-items: center;
     padding-left: 16px; /* Adjust as needed for padding on the left */
@@ -36,7 +37,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: calc(100vh - 60px);
-    background-color: #3f4b3e; 
+    background-color: $driver-background-color; 
 }
 
 .login-card {
@@ -63,13 +64,13 @@ html, body {
     position: absolute;
     top: 1rem;
     left: 1rem;
-    color: #8360c3;
+    color: $driver-primary-color;
     text-decoration: none;
     font-size: 1rem;
 }
 
 .login-form h2 {
-    color: #333;
+    color: $text-color-dark;
     margin-bottom: 1rem;
     text-align: center;
 }
@@ -90,7 +91,7 @@ html, body {
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: #39a304;
+    background-color: $driver-primary-color;
     color: white;
     cursor: pointer;
     margin-bottom: 1rem;
@@ -98,7 +99,7 @@ html, body {
 }
 
 .login-btn:hover {
-    background-color: #fab300;
+    background-color: $driver-hover-color;
 }
 
 .forgot-password, .sign-up-text {
@@ -126,7 +127,7 @@ html, body {
 }
 
 .social-btn.google {
-    background-color: #db4437;
+    background-color: $driver-secondary-color;
 }
 
 .social-btn:hover {
@@ -138,7 +139,7 @@ html, body {
 }
 
 .sign-up {
-    color: #8360c3;
+    color: $driver-secondary-color;
     text-decoration: none;
 }
 .password-group {

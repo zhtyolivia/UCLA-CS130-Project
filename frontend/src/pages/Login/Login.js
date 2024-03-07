@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './Login.css'; // Make sure to import the CSS file
+import './Login.scss'; // Make sure to import the CSS file
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faGoogle } from '@fortawesome/free-brands-svg-icons';
@@ -43,7 +43,7 @@ const Login = () => {
 
     return (
         <div className="login-page">
-            <div className="top-stripe">
+            <div className="log-in-top-stripe">
                 <span className="brand-text">SwiftLink</span> 
             </div>
             <div className="login-container">

@@ -7,13 +7,7 @@ import Login from './pages/Login/Login';
 import WelcomePage from './pages/Login/WelcomePage';
 import Signup from './pages/Login/Signup';
 import DriverHome from './pages/Driver/Home/DriverHome';
-import InitiateRide from './pages/Driver/InitiateRide';
-
-
-
-
-
-
+import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
 
 function App() {
   return (
