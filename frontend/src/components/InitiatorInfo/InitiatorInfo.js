@@ -1,10 +1,13 @@
+// Displays information about the driver who initiated this rideshare.
+// Used for the Post page. 
+
 import React, { useState, useEffect } from 'react';
-import './UserInfo.css'; 
+import './InitiatorInfo.css'; 
 import { useParams } from 'react-router-dom';
 import { fetchPostById } from '../../services/mockAPI'; // Import the mock API function
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 
-const UserInfo = () => {
+const InitiatorInfo = () => {
     const [post, setPost] = useState(null);
     const { id } = useParams(); 
     useEffect(() => {
@@ -46,4 +49,4 @@ const UserInfo = () => {
     
 }
 
-export default UserInfo;
+export default InitiatorInfo;

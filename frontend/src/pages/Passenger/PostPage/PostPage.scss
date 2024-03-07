@@ -1,0 +1,42 @@
+@import '../../../styles/variables';
+
+.PostPage {
+  margin: 0 auto; // Center the content horizontally
+  max-width: 800px; // Set max-width for the content
+  padding: 0 20px; // Add padding to ensure some space on the left and right
+
+  h2 {
+    text-align: center; // Center <h2> elements
+  }
+
+  .post-details {
+    margin-top: 20px;
+    color: $text-color-dark;
+  }
+
+  .join-container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+  }
+
+  .join-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: $passenger-primary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 15px;
+    margin-bottom: 5px;
+
+    &:hover {
+      background-color: $passenger-hover-color;
+    }
+  }
+
+  .post-content {
+    margin-top: 20px;
+    color: $text-color-light;
+  }
+}

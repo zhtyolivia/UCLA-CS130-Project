@@ -1,36 +1,47 @@
+// PostPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import Navigation from '../../../components/Navigation/Navigation';
-import { fetchPostById } from '../../../services/mockAPI'; // Import the mock API function
-import UserInfo from '../../../components/UserInfo/UserInfo';
-import './PostPage.css';
+
+// Components 
+import Navigation from '../../../components/Navigation/PassengerNavbar'; 
+import InitiatorInfo from '../../../components/InitiatorInfo/InitiatorInfo'; 
+import JoinReqPopup from '../../../components/JoinReqPopup/JoinReqPopup'; 
+
+// Styles 
+import './PostPage.scss'; 
+
+// Mock API 
+import { fetchPostById } from '../../../services/mockAPI'; 
 
 function PostPage() {
   const [post, setPost] = useState(null);
   const [showRequestPopup, setShowRequestPopup] = useState(false);
-  const { id } = useParams(); 
+  const { id } = useParams();
 
   useEffect(() => {
     fetchPostById(Number(id)).then(data => {
       setPost(data);
     });
-  }, [id]); 
+  }, [id]);
 
   const handleRequestClick = () => {
     setShowRequestPopup(true);
   };
 
   const handleClosePopup = () => {
-      setShowRequestPopup(false);
+    setShowRequestPopup(false);
   };
 
   const handleSubmit = (e) => {
-      e.preventDefault();
-      setShowRequestPopup(false);
+    e.preventDefault();
+    // Implement what should happen when the form is submitted
+    setShowRequestPopup(false);
+    // For example, send a request to join
+    console.log("Join request sent.");
   };
 
   if (!post) {
-    return <div>Loading post...</div>; // Show loading state while the post is being fetched
+    return <div>Loading post...</div>;
   }
 
   return (
@@ -39,21 +50,21 @@ function PostPage() {
         <Navigation />
       </header>
       <div className="PostPage">
-      <UserInfo />
+        <InitiatorInfo />
         <div className="post-details">
           <h2>{post.title}</h2>
-            <div className='edit-container'>
-            <button className="edit-button">Send join request</button>
-            </div>
-            
-            <p><strong>Start Location:</strong> {post.startingLocation}</p>
-            <p><strong>End Location:</strong> {post.endingLocation}</p>
-            <p><strong>Remaining Seats:</strong> {post.remainingSeats}</p>
-        </div>
-        <div className="post-content">
+          <div className='join-container'>
+            <button className="join-button" onClick={handleRequestClick}>Send join request</button>
+          </div>
+          <p><strong>Start Location:</strong> {post.startingLocation}</p>
+          <p><strong>End Location:</strong> {post.endingLocation}</p>
+          <p><strong>Remaining Seats:</strong> {post.remainingSeats}</p>
+          <div className="post-content">
             <p>{post.content}</p>
+          </div>
         </div>
       </div>
+      {showRequestPopup && <JoinReqPopup onClose={handleClosePopup} onSubmit={handleSubmit} />}
     </div>
   );
 }

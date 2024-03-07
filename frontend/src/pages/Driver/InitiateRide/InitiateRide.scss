@@ -1,0 +1,45 @@
+@import '../../../styles/variables';
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box; // This ensures padding doesn't affect the total width/height of elements
+  }
+  
+  .initiate-ride-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: $text-color-dark;
+  
+    .initiate-ride-form {
+      display: flex;
+      flex-direction: column;
+      max-width: 500px;
+      width: 100%;
+  
+      input,
+      textarea {
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        color: $text-color-light;
+      }
+  
+      button {
+        padding: 10px 20px;
+        background-color: $driver-primary-color; // Adapt the color to match your app's theme
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1rem;
+  
+        &:hover {
+          background-color: $driver-secondary-color; 
+        }
+      }
+    }
+  }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getCurrentUserId } from '../../services/mockAPI'; 
-import './Navigation.css';
+import '../../components/Navigation/PassengerNavbar.scss';
 
 function Navigation() {
   const [userId, setUserId] = useState(null);
