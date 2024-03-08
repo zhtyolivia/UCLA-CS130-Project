@@ -1,40 +1,35 @@
-const express = require("express");
-const { MongoClient } = require("mongodb");
-const app = express();
-const cors = require("cors");
-// Use CORS middleware to enable CORS for all routes and origins
-app.use(cors());
-const port = process.env.PORT || 3001; // Choose a port different from your frontend
-
-app.use(express.json());
-
-// MongoDB connection string
 require("dotenv").config();
-const mongoString = process.env.MONGODB_URI;
+const connectDB = require("./src/config/db");
+connectDB();
+var testAPIRouter = require("./src/api/routes/testAPI");
 
-// Connect to MongoDB
-async function connectToMongoDB() {
-  const client = new MongoClient(mongoString);
-  try {
-    await client.connect();
-    console.log("Connected to MongoDB");
-    // Here you can start defining routes and using the MongoDB client
-    // Example: const collection = client.db("test").collection("devices");
-  } catch (error) {
-    console.error("Could not connect to MongoDB", error);
-  }
-}
+const express = require("express");
+const app = express();
 
-connectToMongoDB();
+// Use CORS middleware to enable CORS for all routes and origins
+const cors = require('cors');
+app.use(cors());
 
+const PassengerRouter = require('./src/api/routes/passenger_api');
+const DriverRouter = require('./src/api/routes/driver_api')
+const DriverPostRouter = require('./src/api/routes/driverpost_api')
+const PassengerPostRouter = require("./src/api/routes/passengerpost_api");
+
+app.use(express.json()); // Middleware for parsing JSON bodies
+
+// Define a simple route
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  res.send("Ride Sharing App Backend");
 });
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
-});
 
-// Search Logic
-const searchRoute = require("./src/api/routes/searchRoute");
-app.use("/", searchRoute);
+//
+app.use('/passenger', PassengerRouter)
+app.use('/driver', DriverRouter)
+app.use('/driverpost',DriverPostRouter)
+app.use("/testAPI", testAPIRouter);
+app.use("/passengerpost", PassengerPostRouter);
+
+
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

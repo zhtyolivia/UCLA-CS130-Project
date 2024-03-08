@@ -1,0 +1,71 @@
+@import '../../../styles/variables';
+
+.ProfilePage {
+  margin: 0 auto; /* Center the content horizontally */
+  max-width: 800px; /* Set max-width for the content */
+  padding: 0 20px; /* Add padding to ensure some space on the left and right */
+}
+
+.profile-layout {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the container */
+}
+
+.left-section {
+  text-align: center; /* Center the button below the avatar */
+}
+
+.edit-button {
+  display: block; /* Ensure the button is a block-level element to occupy its own line */
+  margin-top: 10px; /* Space above the button */
+}
+
+.user-info-header {
+  display: flex;
+  justify-content: flex;
+  align-items: center; 
+  width: 100%; 
+}
+
+.edit-button {
+  margin-left: auto;
+  margin-right: 0;
+  cursor: pointer;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  padding-right: 10px;
+  padding-left: 10px;
+  background-color: $passenger-primary-color;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.edit-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  z-index: 2;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.edit-popup form label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.edit-popup form input[type="text"],
+.edit-popup form input[type="email"],
+.edit-popup form input[type="file"] {
+  margin-top: 5px;
+}
+
+.edit-popup form button {
+  margin-top: 10px;
+  margin-right: 5px;
+}
