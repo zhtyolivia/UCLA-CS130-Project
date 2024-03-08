@@ -1,7 +1,7 @@
 // PostPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-
+import { fetchPostById } from '../../../services/api'; 
 // Components 
 import Navigation from '../../../components/Navigation/PassengerNavbar'; 
 import InitiatorInfo from '../../../components/InitiatorInfo/InitiatorInfo'; 
@@ -11,7 +11,6 @@ import JoinReqPopup from '../../../components/JoinReqPopup/JoinReqPopup';
 import './PostPage.scss'; 
 
 // Mock API 
-import { fetchPostById } from '../../../services/mockAPI'; 
 
 function PostPage() {
   const [post, setPost] = useState(null);
@@ -19,8 +18,10 @@ function PostPage() {
   const { id } = useParams();
 
   useEffect(() => {
-    fetchPostById(Number(id)).then(data => {
+    fetchPostById(id).then(data => {
       setPost(data);
+    }).catch(error => {
+      console.error("Error fetching post:", error);
     });
   }, [id]);
 
