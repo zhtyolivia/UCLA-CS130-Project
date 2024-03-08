@@ -9,7 +9,8 @@ const PassengerSchema = new Schema({
     driverposts: [{
         driverpostId: {type: Schema.Types.ObjectId, ref: 'Driverpost'},
         status: String,
-    }]
+    }],
+    joinrequests: [{type: Schema.Types.ObjectId, ref:'Joinrequest'}]
 });
 
 const Passenger = mongoose.model('Passenger', PassengerSchema);
