@@ -118,8 +118,10 @@ router.post('/signin', (req, res) =>{
         Driver.find({email}).then(data => {
             if (data){
                 const hashPassword = data[0].password;
+                //console.log(hashPassword);
                 bcrypt.compare(password,hashPassword).then(result =>{
                     if (result){
+                        //console.log("same");
                         const token = jwt.sign({ userId: data[0]._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
                         res.json({
                             status: "Success",

@@ -6,6 +6,10 @@ const PassengerSchema = new Schema({
     password: String,
     name: String,
     phonenumber: String,
+    driverposts: [{
+        driverpostId: {type: Schema.Types.ObjectId, ref: 'Driverpost'},
+        status: String,
+    }]
 });
 
 const Passenger = mongoose.model('Passenger', PassengerSchema);

@@ -6,6 +6,7 @@ const DriverSchema = new Schema({
     password: String,
     name: String,
     phonenumber: String,
+    driverposts: [{type: Schema.Types.ObjectId, ref: 'Driverpost'}]
 });
 
 const Driver = mongoose.model('Driver', DriverSchema);
