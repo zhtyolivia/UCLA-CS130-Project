@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const express = require("express");
 const Passengerpost = require("../../models/passengerpost_model");
 const Passenger = require("../../models/passenger_model");
@@ -96,5 +97,52 @@ passengerpostRouter.get("/search", async (req, res) => {
       res.json([]);
     });
 });
+
+// Delete route that uses the post ID as a unique identifier
+passengerpostRouter.delete(
+  "/deletepost/:postId",
+  authenticateToken,
+  async (req, res) => {
+    const passengerId = req.user.userId; // Assuming this is populated by the authenticateToken middleware
+    const postId = req.params.postId;
+
+    try {
+      // Convert string IDs to ObjectId for comparison
+      const objectIdPassengerId = new mongoose.Types.ObjectId(passengerId);
+      const objectIdPostId = new mongoose.Types.ObjectId(postId);
+
+      // First, find the post to ensure it exists and belongs to the requesting passenger
+      const post = await Passengerpost.findOne({
+        _id: objectIdPostId,
+        passengerId: objectIdPassengerId,
+      });
+
+      if (!post) {
+        return res.status(404).json({
+          status: "FAILED",
+          message:
+            "Post not found or you do not have permission to delete this post",
+        });
+      }
+
+      // Delete the found post
+      await Passengerpost.findByIdAndDelete(objectIdPostId);
+
+      // Remove the post reference from the Passenger document, if necessary
+      // Assuming the Passenger model has a field named 'passengerposts' storing post references
+      await Passenger.findByIdAndUpdate(objectIdPassengerId, {
+        $pull: { passengerposts: objectIdPostId },
+      });
+
+      res.json({ status: "SUCCESS", message: "Post deleted successfully" });
+    } catch (err) {
+      console.error(err); // For debugging purposes
+      res.status(500).json({
+        status: "FAILED",
+        message: "An error occurred during the deletion process",
+      });
+    }
+  }
+);
 
 module.exports = passengerpostRouter;
