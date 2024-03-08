@@ -37,7 +37,7 @@ const posts = [
         remainingSeats: 5, 
         content: 'I will be driving from Westwood to San Diego on Sun Feb 18. Looking for another five ppl to carpool. ', 
         createdAt: '2024-02-14', 
-        lastUpdatedOn: 'Mar 24 2024'
+        lastUpdatedOn: '2024-03-28', 
     },
     {
         id: 2, 
@@ -48,7 +48,7 @@ const posts = [
         remainingSeats: 4, 
         content: 'I will be driving from San Diego to Westwood on Sun Feb 28. Looking for another four ppl to carpool. ', 
         createdAt: '2024-02-14', 
-        lastUpdatedOn: 'Mar 24 2024'
+        lastUpdatedOn: '2024-03-19', 
     },
     {
         id: 3, 
@@ -72,11 +72,11 @@ export const fetchUsers = () => {
   
 // Simulate fetching all posts
 export const fetchPosts = () => {
-return new Promise((resolve) => {
-    setTimeout(() => {
-    resolve(posts); // Resolve the promise with the sample posts
-    }, 5); // Simulate a network delay
-});
+  return new Promise((resolve) => {
+      setTimeout(() => {
+      resolve(posts); // Resolve the promise with the sample posts
+      }, 5); // Simulate a network delay
+  });
 };
 
 /*
@@ -169,27 +169,70 @@ export const getUserRideHistory = (userId) => {
   })
 }
 
-export const getJoinRequestNotifications = (userId) => {
-  /*
-    Returns 
-  */
+// ===============================
+//             Search  
+// ===============================
+
+
+export const getSearchResult = (query) => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const notifications = [
-        {
-          id: 1, // notification id 
-          userId: 1, 
-          ride: posts[0],
-          status: "accepted", // "accepted" or "rejected"
-        },
-        {
-          id: 2,
-          userId: 1, 
-          ride: posts[1],
-          status: "rejected",
-        },
-      ];
-      resolve(notifications.filter(notification => notification.userId === userId));
+      resolve(posts.slice(0, 2)); 
+    }, 5);
+  });
+};
+
+// ===============================
+//      Notification 
+// ===============================
+
+const notifications = [
+  {
+    id: 1, // notification id 
+    userId: 1, 
+    ride: posts[0],
+    read: false, 
+  },
+  {
+    id: 2,
+    userId: 1, 
+    ride: posts[1],
+    read: false, 
+  },
+];
+
+export const getJoinRequestNotifications = (userId) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(notifications.filter(notification => notification.userId === userId && notification.read === false));
     }, 100);
   });
 };
+
+
+// To May and Mike: In this function, I mark the notification as read instead of deleting it, 
+// but I think you guys can consider deleting the notification during your developement.  
+export const markNotificationAsRead = (notificationId) => {
+  return new Promise((resolve, reject) => {
+    // Find the index of the notification with the given ID
+    const index = notifications.findIndex(notification => notification.id === notificationId);
+
+    if (index !== -1) {
+      // Notification found, update its read status
+      notifications[index].read = true;
+      resolve({ message: "Notification marked as read." });
+    } else {
+      // Notification not found, reject the promise
+      reject(new Error("Notification not found"));
+    }
+  });
+};
+
+
+/*
+No mock API for: 
+  - Edit info/update account info 
+  - Send join request 
+  - Cancel join request  
+  - ...
+*/

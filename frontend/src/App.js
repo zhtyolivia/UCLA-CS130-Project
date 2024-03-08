@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import PassengerHome from './pages/Passenger/Home/PassengerHome';
+import SearchResults from './pages/Passenger/Home/SearchResult';
 import PostPage from './pages/Passenger/PostPage/PostPage';
 import PassengerProfile from './pages/Passenger/Profile/PassengerProfile';
 import Login from './pages/Login/Login';
@@ -19,6 +20,7 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route path="/home" element={<PassengerHome />} />
           <Route path="/posts" element={<PassengerHome />} />
+          <Route path="/search" element={<SearchResults />} /> 
           <Route path="/posts/:id" element={<PostPage />} />
           <Route path="/profile/:id" element={<PassengerProfile />} />
           <Route path="/driver-home" element={<DriverHome />} />

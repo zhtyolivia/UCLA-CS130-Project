@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Tooltip, IconButton, Popover, Paper, Typography, List, ListItem, Divider, Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
-import { getJoinRequestNotifications, getCurrentUserId } from '../services/mockAPI';
+import { getJoinRequestNotifications, getCurrentUserId, markNotificationAsRead } from '../services/mockAPI';
 import { useNavigate } from 'react-router-dom';
 
 const Notification = () => {
@@ -16,7 +16,7 @@ const Notification = () => {
       const fetchedNotifications = await getJoinRequestNotifications(userId);
       setNotifications(fetchedNotifications);
     };
-  
+
     fetchNotifications();
   }, []);
 
@@ -29,12 +29,19 @@ const Notification = () => {
     setAnchorEl(null);
   };
 
-  const handleNotificationClick = (notificationId, postId) => {
+  const handleNotificationClick = async (notificationId, postId) => {
+    // Mark the notification as read
+    try {
+      await markNotificationAsRead(notificationId);
+      // Fetch notifications again to update the list after marking as read
+      const userId = await getCurrentUserId();
+      const fetchedNotifications = await getJoinRequestNotifications(userId);
+      setNotifications(fetchedNotifications);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+
     handleClose(); // Close the dropdown
-
-    // Remove the clicked notification from the list
-    setNotifications(notifications.filter(notification => notification.ride.id !== notificationId));
-
     navigate(`/posts/${postId}`); // Navigate to the post page
   };
 
@@ -53,7 +60,7 @@ const Notification = () => {
             <List>
               {notifications.map((notification, index) => (
                 <React.Fragment key={index}>
-                  <ListItem button onClick={() => handleNotificationClick(notification.ride.id, notification.ride.id)}>
+                  <ListItem button onClick={() => handleNotificationClick(notification.id, notification.ride.id)}>
                     <Typography variant="body1" style={{ marginLeft: '10px'}}>
                       There is a status update for your request to join "{notification.ride.title}".
                     </Typography>
