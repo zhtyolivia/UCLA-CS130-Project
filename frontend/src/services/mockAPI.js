@@ -6,6 +6,7 @@
 //     email: 'olive@example.com',
 //     avatarUrl: 'https://example.com/avatar.png'
 // 
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 // Sample structure for drivers
 const users = [
@@ -24,7 +25,7 @@ const users = [
         avatarUrl: 'https://example.com/avatar.png'
     }
 ];
-  
+
 // Sample structure for posts
 const posts = [
     {
@@ -58,6 +59,7 @@ const posts = [
         createdAt: '2024-02-15' 
     },
 ];
+
   
 // Simulate fetching all users
 export const fetchUsers = () => {
@@ -75,6 +77,7 @@ return new Promise((resolve) => {
 });
 };
 
+/*
 export const fetchPostById = (id) => {
     return new Promise((resolve, reject) => { // Ensure both resolve and reject are defined here
       setTimeout(() => {
@@ -92,7 +95,22 @@ export const fetchPostById = (id) => {
       }, 5);
     });
   };
+*/
   
+export const fetchPostById = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/driverpost/${id}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const data = await response.json();
+    return data;
+  } catch (e) {
+    console.error("Error fetching data: ", e);
+    throw e; // Re-throw the error for handling it in the calling function
+  }
+};
+
 // Simulate fetching a single user by ID
 export const fetchUserById = (id) => {
     return new Promise((resolve) => {

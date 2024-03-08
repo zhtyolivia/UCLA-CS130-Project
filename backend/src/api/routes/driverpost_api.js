@@ -145,6 +145,17 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
   }
 });
 
+// for getting all posts
+driverpostRouter.get("/", async (req, res) => {
+  try {
+    const posts = await Driverpost.find({});
+    res.json(posts);
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
+
+
 driverpostRouter.get("/search", async (req, res) => {
   let searchTerm = req.query.term;
   // console.log("searchTerm", searchTerm);

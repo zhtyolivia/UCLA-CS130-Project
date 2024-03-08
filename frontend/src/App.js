@@ -22,7 +22,7 @@ function App() {
           <Route path="/posts/:id" element={<PostPage />} />
           <Route path="/profile/:id" element={<PassengerProfile />} />
           <Route path="/driver-home" element={<DriverHome />} />
-          <Route path="/initiate-ride" element={<InitiateRide />} />
+          <Route path="/initiate-ride " element={<InitiateRide />} />
         </Routes>
       </div>
     </Router>
