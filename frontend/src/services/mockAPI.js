@@ -36,7 +36,8 @@ const posts = [
         endingLocation: 'SD', 
         remainingSeats: 5, 
         content: 'I will be driving from Westwood to San Diego on Sun Feb 18. Looking for another five ppl to carpool. ', 
-        createdAt: '2024-02-14' 
+        createdAt: '2024-02-14', 
+        lastUpdatedOn: 'Mar 24 2024'
     },
     {
         id: 2, 
@@ -46,7 +47,8 @@ const posts = [
         endingLocation: 'LA', 
         remainingSeats: 4, 
         content: 'I will be driving from San Diego to Westwood on Sun Feb 28. Looking for another four ppl to carpool. ', 
-        createdAt: '2024-02-14' 
+        createdAt: '2024-02-14', 
+        lastUpdatedOn: 'Mar 24 2024'
     },
     {
         id: 3, 
@@ -151,4 +153,43 @@ export const getUserProfile = (userId) => {
         resolve(passenger);
       }, 100);
     });
+};
+
+export const getUserRideHistory = (userId) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Example: Returning the first post for demonstration; adjust as needed
+      const firstPostId = posts[0].id; // Assuming 'posts' array is accessible in this scope
+      const rideHistory = [{
+        ride: posts.find(post => post.userId === userId && post.id === firstPostId),
+        status: 'joined' // Example status; adjust based on your logic
+      }]; 
+      resolve(rideHistory); 
+    }, 100)
+  })
+}
+
+export const getJoinRequestNotifications = (userId) => {
+  /*
+    Returns 
+  */
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const notifications = [
+        {
+          id: 1, // notification id 
+          userId: 1, 
+          ride: posts[0],
+          status: "accepted", // "accepted" or "rejected"
+        },
+        {
+          id: 2,
+          userId: 1, 
+          ride: posts[1],
+          status: "rejected",
+        },
+      ];
+      resolve(notifications.filter(notification => notification.userId === userId));
+    }, 100);
+  });
 };

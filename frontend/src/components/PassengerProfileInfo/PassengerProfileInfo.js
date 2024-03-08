@@ -34,6 +34,7 @@ const PassengerInfo = () => {
             <div className="passenger-avatar">
                 {/* Display user's avatar or a default avatar */}
                 <img src={defaultAvatar} alt={defaultAvatar} />
+                {/* Show the edit info button */}
                 <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
             </div>
             <div>

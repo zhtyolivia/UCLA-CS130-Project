@@ -15,57 +15,29 @@
   text-align: center; /* Center the button below the avatar */
 }
 
-.edit-button {
-  display: block; /* Ensure the button is a block-level element to occupy its own line */
-  margin-top: 10px; /* Space above the button */
-}
 
-.user-info-header {
-  display: flex;
-  justify-content: flex;
-  align-items: center; 
-  width: 100%; 
-}
-
-.edit-button {
-  margin-left: auto;
-  margin-right: 0;
-  cursor: pointer;
-  padding-top: 8px;
-  padding-bottom: 8px;
-  padding-right: 10px;
-  padding-left: 10px;
-  background-color: $passenger-primary-color;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-}
-
-.edit-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background-color: white;
-  padding: 20px;
-  z-index: 2;
+.ride-history-item {
+  position: relative; // This makes it the reference for the absolutely positioned child
   border: 1px solid #ccc;
   border-radius: 5px;
-}
-
-.edit-popup form label {
-  display: block;
+  padding: 15px;
   margin-bottom: 10px;
-}
 
-.edit-popup form input[type="text"],
-.edit-popup form input[type="email"],
-.edit-popup form input[type="file"] {
-  margin-top: 5px;
-}
+  .view-detail-button {
+    position: absolute; // Position the button absolutely within the ride-history-item
+    top: 10px; // Distance from the top of the container
+    right: 10px; // Distance from the right of the container
+    display: inline-block;
+    margin-top: 0; // Remove the margin-top as it's now positioned absolutely
+    background-color: $passenger-secondary-color;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: $button-font-size;
 
-.edit-popup form button {
-  margin-top: 10px;
-  margin-right: 5px;
+    &:hover {
+      background-color: darken($passenger-secondary-color, 10%);
+    }
+  }
 }
