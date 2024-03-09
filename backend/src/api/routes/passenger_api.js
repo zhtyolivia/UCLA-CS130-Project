@@ -1,4 +1,6 @@
 const express = require('express');
+const multer = require("multer");
+const sharp = require("sharp");
 const router = express.Router();
 
 const Driver = require('../../models/driver_model');
@@ -201,5 +203,48 @@ router.put('/update', authenticateToken, async (req, res) => {
     }
 });
 
+// ======================================== Avatar ==========================================
+const upload = multer({
+    limits: { fileSize: 16 * 1024 * 1024 }, // 16MB limit
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error("Please upload an image file (jpg, jpeg, or png)."));
+      }
+      cb(undefined, true);
+    },
+});
+
+// API endpoint to upload and update the passenger's avatar
+router.post(
+    "/:id/avatar",
+    upload.single("avatar"),
+    async (req, res) => {
+      try {
+        const passenger = await Passenger.findById(req.params.id);
+        if (!passenger) {
+          return res.status(404).send({ error: "Passenger not found" });
+        }
+  
+        // Resize the image to a square, maintaining aspect ratio
+        const buffer = await sharp(req.file.buffer)
+          .resize(250, 250, {
+            fit: sharp.fit.cover,
+            position: sharp.strategy.entropy,
+          })
+          .png()
+          .toBuffer();
+  
+        passenger.avatar = { data: buffer, contentType: "image/png" };
+        await passenger.save();
+        res.send({ message: "Avatar updated successfully" });
+      } catch (error) {
+        res.status(400).send({ error: error.message });
+      }
+    },
+    (error, req, res, next) => {
+      // Error handling middleware for Multer
+      res.status(400).send({ error: error.message });
+    }
+);
 
 module.exports = router;
