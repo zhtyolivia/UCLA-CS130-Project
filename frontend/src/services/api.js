@@ -30,3 +30,16 @@ export const fetchDriverPosts = async () => {
     }
   };
   
+export const fetchSearchResults = async (term) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/driverpost/search?term=${term}`); 
+    if(!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const results = await response.json(); 
+    return results; 
+  } catch (e) {
+    console.error("Error fetching search resultsL ", e); 
+    throw e; 
+  }
+}

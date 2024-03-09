@@ -4,9 +4,9 @@ import { getCurrentUserId } from '../../services/mockAPI';
 import '../../components/Navigation/PassengerNavbar.scss';
 import Notification from "../Notification";
 import { IconButton, Tooltip } from '@mui/material';
-// import NotificationsIcon from '@mui/icons-material/Notifications';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ControlPointIcon from '@mui/icons-material/ControlPoint';
 
 function Navigation() {
   const [userId, setUserId] = useState(null);
@@ -25,7 +25,7 @@ function Navigation() {
 
   const handleSearch = () => {
     // Redirect to search page with query
-    navigate(`/search?query=${encodeURIComponent(searchValue)}`);
+    navigate(`/search?query=${searchValue}`);
   };
 
   if (userId === null) {
@@ -60,6 +60,18 @@ function Navigation() {
           </Tooltip>
         </li>
         
+        {/* ControlPointIcon */}
+        <li className="p-nav-item">
+          <Tooltip title="Account">
+            <IconButton 
+              aria-label="Profile" 
+              color="inherit" 
+              onClick={() => navigate(`/passenger-post`)}>
+              <ControlPointIcon />
+            </IconButton>
+          </Tooltip>
+        </li>
+
         <li className="p-nav-item">
           <Notification />
         </li>

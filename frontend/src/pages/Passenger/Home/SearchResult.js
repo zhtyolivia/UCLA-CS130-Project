@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Post from '../../../components/RideshareCard/RideshareCard';
 import { getSearchResult } from '../../../services/mockAPI';
+import { fetchSearchResults } from '../../../services/api.js';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 
 function SearchResults() {
@@ -10,7 +11,14 @@ function SearchResults() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getSearchResult(searchQuery).then(setPosts);
+    fetchSearchResults(searchQuery).then(data => {
+      console.log('Feteched search results:', data); 
+      setPosts(data); 
+      console.log('State updated'); 
+    }).catch(error => {
+      console.error('Error fetching search results:', error)
+    })
+    console.log(searchQuery)
   }, [searchQuery]);
 
   return (

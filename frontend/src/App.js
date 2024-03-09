@@ -9,6 +9,7 @@ import WelcomePage from './pages/Login/WelcomePage';
 import Signup from './pages/Login/Signup';
 import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
+import PassengerPost from './pages/Passenger/PassengerPost/PassengerPost';
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
           <Route path="/posts/:id" element={<PostPage />} />
           <Route path="/profile/:id" element={<PassengerProfile />} />
           <Route path="/driver-home" element={<DriverHome />} />
-          <Route path="/initiate-ride " element={<InitiateRide />} />
+          <Route path="/initiate-ride" element={<InitiateRide />} />
+          <Route path="/passenger-post" element={<PassengerPost />} />
         </Routes>
       </div>
     </Router>
