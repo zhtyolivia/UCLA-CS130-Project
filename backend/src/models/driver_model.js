@@ -7,7 +7,8 @@ const DriverSchema = new Schema({
     name: String,
     phonenumber: String,
     driverposts: [{type: Schema.Types.ObjectId, ref: 'Driverpost'}],
-    joinrequests: [{type: Schema.Types.ObjectId, ref:'Joinrequest'}]
+    joinrequests: [{type: Schema.Types.ObjectId, ref:'Joinrequest'}],
+    avatar: { data: Buffer, contentType: String }
 });
 
 const Driver = mongoose.model('Driver', DriverSchema);
