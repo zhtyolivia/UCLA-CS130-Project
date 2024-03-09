@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { Link, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import PassengerInfo from '../../../components/PassengerProfileInfo/PassengerProfileInfo';
 import { getCurrentUserId, getUserRideHistory } from '../../../services/mockAPI';
-import { Link } from 'react-router-dom';
 import './PassengerProfile.scss';
+import { isLoggedIn } from '../../../utils/LoginActions'; 
 
 const PassengerProfile = () => {
     const [rideHistory, setRideHistory] = useState([]);
@@ -18,6 +19,10 @@ const PassengerProfile = () => {
         fetchRideHistory();
         console.log(rideHistory)
     }, []);
+
+    if (!isLoggedIn()) {
+        return <Navigate to="/welcome" />;
+    }
 
     return (
         <div>

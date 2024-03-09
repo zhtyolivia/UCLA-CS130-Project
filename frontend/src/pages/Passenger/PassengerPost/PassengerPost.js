@@ -1,7 +1,8 @@
 import '../../Driver/InitiateRide/InitiateRide.scss';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
+import { isLoggedIn } from '../../../utils/LoginActions'; 
 
 const PassengerPost = () => {
     const [title, setTitle] = useState('');
@@ -22,6 +23,11 @@ const PassengerPost = () => {
     const goBack = () => {
         navigate('/driver-home'); // Navigates back to the DriverHome page
     };
+
+    // If the user hasn't logged in, navigate to welcome page.
+    if (!isLoggedIn()) {
+        return <Navigate to="/welcome" />;
+    }
 
     return (
         <div >

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate  } from 'react-router-dom';
 import PassengerHome from './pages/Passenger/Home/PassengerHome';
 import SearchResults from './pages/Passenger/Home/SearchResult';
 import PostPage from './pages/Passenger/PostPage/PostPage';
@@ -25,7 +25,7 @@ function App() {
           <Route path="/home" element={<PassengerHome />} />
           <Route path="/posts" element={<PassengerHome />} />
           <Route path="/search" element={<SearchResults />} /> 
-          <Route path="/posts/:id" element={<PostPage />} />
+          <Route path="/:id" element={<PostPage />} />
           <Route path="/profile/:id" element={<PassengerProfile />} />
           <Route path="/driver-home" element={<DriverHome />} />
           <Route path="/initiate-ride" element={<InitiateRide />} />
@@ -33,6 +33,8 @@ function App() {
         </Routes>
       </div>
     </Router>
+
+
   );
 }
 

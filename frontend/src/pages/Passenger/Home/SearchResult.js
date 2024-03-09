@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Navigate } from 'react-router-dom';
 import Post from '../../../components/RideshareCard/RideshareCard';
-import { getSearchResult } from '../../../services/mockAPI';
 import { fetchSearchResults } from '../../../services/api.js';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
+import { isLoggedIn } from '../../../utils/LoginActions'; 
+
 
 function SearchResults() {
   const [searchParams] = useSearchParams();
@@ -20,6 +21,10 @@ function SearchResults() {
     })
     console.log(searchQuery)
   }, [searchQuery]);
+
+  if (!isLoggedIn()) {
+    return <Navigate to="/welcome" />;
+  }
 
   return (
     <div className="Home">
