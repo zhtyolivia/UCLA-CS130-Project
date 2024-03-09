@@ -155,4 +155,51 @@ router.post('/signin', (req, res) =>{
     }
 });
 
+router.put('/update', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    const { name, phonenumber, email, newPassword } = req.body;
+
+    try {
+        const user = await Passenger.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        // Update name and phone number
+        if (name) user.name = name.trim();
+        if (phonenumber) user.phonenumber = phonenumber.trim();
+
+        // Update email after validation
+        if (email && email !== user.email) {
+            // Validate and check for existing email
+            const emailTaken = await emailExistsInBoth(email);
+            if (emailTaken) {
+                return res.status(400).send({ message: "Email already in use" });
+            }
+            user.email = email.trim();
+            // Optional: Implement email verification
+        }
+
+        // Update password
+        if (newPassword) {
+            // Validate new password strength here
+
+            // Hash new password and update
+            const hashPassword = await bcrypt.hash(newPassword, 10);
+            user.password = hashPassword;
+        }
+
+        await user.save();
+        res.status(200).send({
+            status: "SUCCESS",
+            message: "Profile updated successfully",
+            data: user
+        });
+
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
+
 module.exports = router;
