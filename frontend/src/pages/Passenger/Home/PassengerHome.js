@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect } from 'react';
+import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
 import './PassengerHome.scss';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import Post from '../../../components/RideshareCard/RideshareCard';
 import { fetchDriverPosts } from '../../../services/api'; // Make sure the path is correct
+import { isLoggedIn } from '../../../utils/LoginActions'; // Make sure the path is correct
 
 function PassengerHome() {
 
@@ -20,7 +22,10 @@ function PassengerHome() {
     });
   }, []);
 
-
+  if (!isLoggedIn()) {
+    return <Navigate to="/welcome" />;
+  }
+  
   return (
     <div className="Home">
       <header>
@@ -29,7 +34,14 @@ function PassengerHome() {
       </header>
       <main className="posts-grid">
         {posts.map(post => (
-          <Post id={post.id} title={post.title} startingLocation={post.startingLocation} endingLocation={post.endingLocation} content={post.additionalNotes} />
+          <Post 
+            id={post._id} 
+            startingLocation={post.startingLocation} 
+            endingLocation={post.endingLocation} 
+            availableSeats={post.numberOfSeats}
+            startTime={post.startTime}
+            content={post.additionalNotes} 
+          />
         ))}
       </main>
     </div>

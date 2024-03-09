@@ -29,6 +29,7 @@
     border-radius: 5px;
     margin-top: 15px;
     margin-bottom: 5px;
+    font-size: $button-font-size; 
 
     &:hover {
       background-color: $passenger-hover-color;

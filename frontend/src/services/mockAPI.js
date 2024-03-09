@@ -36,7 +36,8 @@ const posts = [
         endingLocation: 'SD', 
         remainingSeats: 5, 
         content: 'I will be driving from Westwood to San Diego on Sun Feb 18. Looking for another five ppl to carpool. ', 
-        createdAt: '2024-02-14' 
+        createdAt: '2024-02-14', 
+        lastUpdatedOn: '2024-03-28', 
     },
     {
         id: 2, 
@@ -46,7 +47,8 @@ const posts = [
         endingLocation: 'LA', 
         remainingSeats: 4, 
         content: 'I will be driving from San Diego to Westwood on Sun Feb 28. Looking for another four ppl to carpool. ', 
-        createdAt: '2024-02-14' 
+        createdAt: '2024-02-14', 
+        lastUpdatedOn: '2024-03-19', 
     },
     {
         id: 3, 
@@ -70,11 +72,11 @@ export const fetchUsers = () => {
   
 // Simulate fetching all posts
 export const fetchPosts = () => {
-return new Promise((resolve) => {
-    setTimeout(() => {
-    resolve(posts); // Resolve the promise with the sample posts
-    }, 5); // Simulate a network delay
-});
+  return new Promise((resolve) => {
+      setTimeout(() => {
+      resolve(posts); // Resolve the promise with the sample posts
+      }, 5); // Simulate a network delay
+  });
 };
 
 /*
@@ -152,3 +154,85 @@ export const getUserProfile = (userId) => {
       }, 100);
     });
 };
+
+export const getUserRideHistory = (userId) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Example: Returning the first post for demonstration; adjust as needed
+      const firstPostId = posts[0].id; // Assuming 'posts' array is accessible in this scope
+      const rideHistory = [{
+        ride: posts.find(post => post.userId === userId && post.id === firstPostId),
+        status: 'joined' // Example status; adjust based on your logic
+      }]; 
+      resolve(rideHistory); 
+    }, 100)
+  })
+}
+
+// ===============================
+//             Search  
+// ===============================
+
+
+export const getSearchResult = (query) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(posts.slice(0, 2)); 
+    }, 5);
+  });
+};
+
+// ===============================
+//      Notification 
+// ===============================
+
+const notifications = [
+  {
+    id: 1, // notification id 
+    userId: 1, 
+    ride: posts[0],
+    read: false, 
+  },
+  {
+    id: 2,
+    userId: 1, 
+    ride: posts[1],
+    read: false, 
+  },
+];
+
+export const getJoinRequestNotifications = (userId) => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(notifications.filter(notification => notification.userId === userId && notification.read === false));
+    }, 100);
+  });
+};
+
+
+// To May and Mike: In this function, I mark the notification as read instead of deleting it, 
+// but I think you guys can consider deleting the notification during your developement.  
+export const markNotificationAsRead = (notificationId) => {
+  return new Promise((resolve, reject) => {
+    // Find the index of the notification with the given ID
+    const index = notifications.findIndex(notification => notification.id === notificationId);
+
+    if (index !== -1) {
+      // Notification found, update its read status
+      notifications[index].read = true;
+      resolve({ message: "Notification marked as read." });
+    } else {
+      // Notification not found, reject the promise
+      reject(new Error("Notification not found"));
+    }
+  });
+};
+
+
+/*
+No mock API for: 
+  - Edit info/update account info 
+  - Send join request 
+  - Cancel join request  
+  - ...
+*/
