@@ -39,6 +39,19 @@ const PassengerProfile = () => {
                       </div>
                   ))}
                 </div>
+
+                <div className="ride-history">
+                    <h3>Message History</h3>
+                    {rideHistory.map((ride, index) => ( // Using index as a fallback key
+                      <div key={ride.ride.id || index} className="ride-history-item">
+                          {/* Assuming 'lastUpdatedOn' is available on your ride object */}
+                          <p><strong>Last updated on:</strong> {ride.ride.createdAt}</p> 
+                          <p><strong>Status:</strong> {ride.status}</p>
+                          {/* Make sure 'ride.ride.id' correctly references the post/ride ID */}
+                      </div>
+                  ))}
+                </div>
+
             </div>
         </div>
     );

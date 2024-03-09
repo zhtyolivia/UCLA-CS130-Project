@@ -7,6 +7,7 @@ import { IconButton, Tooltip } from '@mui/material';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ControlPointIcon from '@mui/icons-material/ControlPoint';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 function Navigation() {
   const [userId, setUserId] = useState(null);
@@ -26,6 +27,12 @@ function Navigation() {
   const handleSearch = () => {
     // Redirect to search page with query
     navigate(`/search?query=${searchValue}`);
+  };
+
+  const signoutaction = () => {
+    window.localStorage.clear();
+    console.log(window,localStorage)
+    navigate('/welcome');
   };
 
   if (userId === null) {
@@ -77,12 +84,25 @@ function Navigation() {
         </li>
 
         <li className="p-nav-item">
+         
           <Tooltip title="Account">
             <IconButton 
               aria-label="Profile" 
               color="inherit" 
               onClick={() => navigate(`/profile/${userId}`)}>
               <AccountCircleIcon />
+            </IconButton>
+          </Tooltip>
+          
+        </li>
+
+        <li className="p-nav-item">
+          <Tooltip title="Logout">
+            <IconButton 
+              aria-label="Logout" 
+              color="inherit" 
+              onClick={signoutaction}>
+              <LogoutIcon />
             </IconButton>
           </Tooltip>
         </li>
