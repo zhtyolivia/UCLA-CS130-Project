@@ -50,6 +50,22 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
   }
 });
 
+driverpostRouter.get('/:postId', async (req, res) => {
+  const { postId } = req.params;
+
+  try {
+    const driverPost = await Driverpost.findById(postId).exec();
+
+    if (!driverPost) {
+      return res.status(404).json({ message: 'Driver post not found' });
+    }
+
+    res.json(driverPost);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
 
 driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
   try {
@@ -107,21 +123,34 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
 
 driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
   const driverId = req.user.userId;
-  let{startingLocation, endingLocation, startTime, numberOfSeats, additionalNotes} = req.body;
+  let{startingLocation, endingLocation, startTime, licensenumber, model, numberOfSeats, additionalNotes} = req.body;
   startingLocation = startingLocation.trim();
   endingLocation = endingLocation.trim();
   startTime = startTime.trim();
+  licensenumber = licensenumber.trim();
+  model = model.trim();
   //numberOfSeats = numberOfSeats.trim();
   additionalNotes = additionalNotes.trim();
 
   try {
-    // Create the new rideshare post
+    const driver = await Driver.findById(driverId);
+    if (!driver) {
+      return res.status(404).json({
+        status: "FAILED",
+        message: "Driver not found"
+      });
+    }
+    const { phonenumber, email } = driver;
     const newdriverpost = new Driverpost({
       driverId, // Assuming your Driverpost model has a field for driverId
       startingLocation,
       endingLocation,
       startTime,
+      licensenumber,
+      model,
       numberOfSeats,
+      phonenumber,
+      email,
       additionalNotes
     });
 
