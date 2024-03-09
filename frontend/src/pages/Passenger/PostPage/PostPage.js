@@ -1,7 +1,7 @@
 // PostPage.js
 import React, { useState, useEffect } from 'react';
 import { useParams, Navigate } from 'react-router-dom';
-import { fetchPostById } from '../../../services/api'; 
+import { API_BASE_URL,fetchPostById } from '../../../services/api'; 
 // Components 
 import Navigation from '../../../components/Navigation/PassengerNavbar'; 
 import InitiatorInfo from '../../../components/InitiatorInfo/InitiatorInfo'; 

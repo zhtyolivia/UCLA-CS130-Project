@@ -3,6 +3,8 @@ import axios from "axios";
 
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
+// !!!!!! 
+// this function might not be working properly... 
 export const fetchPostById = async (id) => {
   try {
     console.log(id)
@@ -45,5 +47,6 @@ export const fetchSearchResults = async (term) => {
     throw e; 
   }
 }
+
 
 

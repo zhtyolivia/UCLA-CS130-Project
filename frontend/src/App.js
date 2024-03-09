@@ -12,6 +12,16 @@ import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
 import PassengerPost from './pages/Passenger/PassengerPost/PassengerPost';
 
+import axios from "axios";
+
+
+const token = window.localStorage.getItem("AuthToken");
+if (token) {
+  axios.defaults.headers.common["authorization"] = token;
+} else {
+  axios.defaults.headers.common["authorization"] = null;
+}
+
 function App() {
   return (
     <Router>

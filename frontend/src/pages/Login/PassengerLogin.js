@@ -58,19 +58,16 @@ const PassengerLogin = () => {
 
     const loginAction = async (values) => {
         try {
-          console.log(values.email)
           const body = {
               email: values.email,
               password: values.password,
           };
-          console.log(body)
           const res = await axios.post(`${API_BASE_URL}/passenger/signin`, body);
           console.log(res.data.status)
-          window.localStorage.setItem('AuthToken', `Bearer ${res.data.token}`);
-          
 
           if (res.data.status === 'Success') {
             window.localStorage.setItem('AuthToken', `Bearer ${res.data.token}`);
+            // window.localStorage.setItem('AuthToken', `${res.data.token}`);
             window.location.reload();
             navigate('/home');
           } else if (res.data.status === 'FAILED') {

@@ -4,7 +4,7 @@ import './PassengerProfileInfo.scss';
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 import EditInfoPopup from './EditInfoPopup';
 
-const PassengerInfo = () => {
+const PassengerInfo = ({fullName, email, phoneNumber}) => {
     const [userProfile, setUserProfile] = useState(null);
     const [showEditPopup, setShowEditPopup] = useState(false); 
 
@@ -42,9 +42,9 @@ const PassengerInfo = () => {
                     <h3>User Information</h3>
                 </div>
                 <div className="passenger-details">
-                    <p><strong>Username:</strong> {userProfile.username}</p>
-                    <p><strong>Full Name:</strong> {userProfile.fullName}</p>
-                    <p><strong>Email:</strong> {userProfile.email}</p>
+                    <p><strong>Username/Email:</strong> {email}</p>
+                    <p><strong>Full Name:</strong> {fullName}</p>
+                    <p><strong>Phone number:</strong> {phoneNumber}</p>
                 </div>
             </div>
             {showEditPopup && 

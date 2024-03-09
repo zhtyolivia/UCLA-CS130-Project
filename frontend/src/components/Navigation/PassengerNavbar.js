@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { getCurrentUserId } from '../../services/mockAPI'; 
+import { fetchPassengerProfileWithAuth } from '../../services/api'; 
 import '../../components/Navigation/PassengerNavbar.scss';
 import Notification from "../Notification";
 import { IconButton, Tooltip } from '@mui/material';
@@ -16,7 +17,8 @@ function Navigation() {
 
   useEffect(() => {
     // Fetch current user ID
-    getCurrentUserId().then(setUserId);
+    const token = localStorage.getItem('AuthToken'); 
+    setUserId(token);
   }, []);
 
   const handleSearchInputChange = (event) => {
