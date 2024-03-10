@@ -13,7 +13,7 @@ const DriverpostSchema = new Schema({
   },
   startTime: {
     type: Date,
-    // required: true,
+    required: true,
   },
   licensenumber:{
     type: String
@@ -23,7 +23,7 @@ const DriverpostSchema = new Schema({
   },
   numberOfSeats: {
     type: Number,
-    // required: true,
+    required: true,
   },
   phonenumber:{
     type: String
