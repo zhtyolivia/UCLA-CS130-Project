@@ -1,12 +1,17 @@
+@import '../../styles/variables';
+
 .passenger-info {
     display: flex; /* Use flexbox for layout */
-    align-items: center; /* Align items vertically */
     margin-bottom: 20px; /* Add some space between user info and post details */
     margin-top: 20px;
 }
 
 .passenger-avatar {
     margin-right: 50px; /* Add space between avatar and user details */
+    // display: flex;
+    justify-content: center;
+    align-items: center;
+    align-items: center;
 }
 
 .passenger-avatar img {
@@ -27,6 +32,23 @@
 }
 
 .edit-button {
-    padding-top: 5px; 
-    padding-bottom: 5px;
+    display: block;
+    place-items: center;
+
+    margin-top: 10px;
+    
+    background-color: $passenger-primary-color;
+    color: white;
+    padding: 8px 15px;
+    border: none; 
+    border-radius: 5px;
+
+    text-decoration: none;
+    font-size: $button-font-size; 
+
+
+    &:hover {
+        background-color: darken($passenger-primary-color, 10%);
+    }
 }
+  

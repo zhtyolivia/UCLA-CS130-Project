@@ -1,10 +1,14 @@
 // services/api.js
+import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
+// !!!!!! 
+// this function might not be working properly... 
 export const fetchPostById = async (id) => {
   try {
-    const response = await fetch(`${API_BASE_URL}/driverpost/${id}`);
+    console.log(id)
+    const response = await fetch(`${API_BASE_URL}/driverpost/:${id}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }
@@ -30,3 +34,19 @@ export const fetchDriverPosts = async () => {
     }
   };
   
+export const fetchSearchResults = async (term) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/driverpost/search?term=${term}`); 
+    if(!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    const results = await response.json(); 
+    return results; 
+  } catch (e) {
+    console.error("Error fetching search resultsL ", e); 
+    throw e; 
+  }
+}
+
+
+

@@ -4,36 +4,56 @@ import './PassengerProfileInfo.scss';
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 import EditInfoPopup from './EditInfoPopup';
 
-const PassengerInfo = () => {
-    const [userProfile, setUserProfile] = useState(null);
-    const [showEditPopup, setShowEditPopup] = useState(false); 
+import axios from "axios";
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
+const PassengerInfo = ({name, email, phonenumber}) => {
+    const [showEditPopup, setShowEditPopup] = useState(false); 
+    const [profile, setProfile] = useState({
+        name,
+        email,
+        phonenumber
+      });
     useEffect(() => {
-        getCurrentUserId().then(userId => {
-            getUserProfile(userId).then(profile => {
-                setUserProfile(profile);
-            });
+        setProfile({
+            name: name,
+            email: email,
+            phonenumber: phonenumber
         });
-    }, []);
+      }, [name, email, phonenumber]); // Depend on props to update state
+    
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setProfile(prev => ({ ...prev, [name]: value }));
+    }
 
     const handleEditClick = () => setShowEditPopup(true);
 
     const handleClosePopup = () => setShowEditPopup(false);
 
-    const handleSubmit = (e) => {
-        e.preventDefault(); // Corrected typo
-        // Implement functionality to actually update the user profile here
-        console.log("Profile info updated");
-        setShowEditPopup(false); 
-    }
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
 
-    if (!userProfile) return <div>Loading profile...</div>;
+        try{
+            const data = await axios.put(`${API_BASE_URL}/passenger/update`, profile).then((res) => res.data);
+            if (data.status === 'SUCCESS') {
+                setProfile(profile)
+                console.log(profile)
+                console.log(data)
+                setShowEditPopup(false); 
+                // window.location.reload();
+            }
+        } catch(err) {
+            console.error(err)
+        }
+    }
 
     return (
         <div className="passenger-info">
             <div className="passenger-avatar">
                 {/* Display user's avatar or a default avatar */}
                 <img src={defaultAvatar} alt={defaultAvatar} />
+                {/* Show the edit info button */}
                 <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
             </div>
             <div>
@@ -41,16 +61,17 @@ const PassengerInfo = () => {
                     <h3>User Information</h3>
                 </div>
                 <div className="passenger-details">
-                    <p><strong>Username:</strong> {userProfile.username}</p>
-                    <p><strong>Full Name:</strong> {userProfile.fullName}</p>
-                    <p><strong>Email:</strong> {userProfile.email}</p>
+                <p><strong>Username/Email:</strong> {email}</p>
+                    <p><strong>Full Name:</strong> {name}</p>
+                    <p><strong>Phone number:</strong> {phonenumber}</p>
                 </div>
             </div>
             {showEditPopup && 
                 <EditInfoPopup 
                     onClose={handleClosePopup} 
                     onSubmit={handleSubmit} 
-                    userData={userProfile} // Pass current user data to the popup
+                    onChange={handleChange}
+                    profile={profile}
                 />
             }
         </div>
@@ -58,4 +79,3 @@ const PassengerInfo = () => {
 }
 
 export default PassengerInfo;
-

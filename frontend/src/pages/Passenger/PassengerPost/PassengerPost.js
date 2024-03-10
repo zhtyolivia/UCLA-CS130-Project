@@ -1,10 +1,10 @@
-// src/driver/InitiateRide.js
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './InitiateRide.scss'; // Make sure to create and import the CSS file
-import DriverNav from '../../../components/Navigation/DriverNavbar'; 
+import '../../Driver/InitiateRide/InitiateRide.scss';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, Navigate } from 'react-router-dom';
+import Navigation from '../../../components/Navigation/PassengerNavbar';
+import { isLoggedIn } from '../../../utils/LoginActions'; 
 
-const InitiateRide = () => {
+const PassengerPost = () => {
     const [title, setTitle] = useState('');
     const [startLocation, setStartLocation] = useState('');
     const [endLocation, setEndLocation] = useState('');
@@ -18,15 +18,24 @@ const InitiateRide = () => {
         e.preventDefault();
         // Process form data here, like sending it to the backend
         // After submission, navigate to another page or give feedback to the user
-        navigate('/home'); // Example redirection after form submission
+        navigate('/driver-home'); // Example redirection after form submission
     };
+    const goBack = () => {
+        navigate('/driver-home'); // Navigates back to the DriverHome page
+    };
+
+    // If the user hasn't logged in, navigate to welcome page.
+    if (!isLoggedIn()) {
+        return <Navigate to="/welcome" />;
+    }
 
     return (
         <div >
-            <DriverNav />
+            <Navigation />
             <div className="initiate-ride-page">
                 
-                <h1>Initiate a Ride</h1>
+                <h1>Send a message to all drivers</h1>
+                Tell the drivers about a ride you want to have.
                 <form onSubmit={handleSubmit} className="initiate-ride-form">
                     <input
                         type="text"
@@ -46,29 +55,17 @@ const InitiateRide = () => {
                         value={endLocation}
                         onChange={(e) => setEndLocation(e.target.value)}
                     />
-                    <input
-                        type="number"
-                        placeholder="Seats Available"
-                        value={seats}
-                        onChange={(e) => setSeats(e.target.value)}
-                    />
-                    <input
-                        type="email"
-                        placeholder="Email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
                     <textarea
                         placeholder="Description"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
 
-                    <button class="driver-button" type="submit">Submit Ride</button>
+                    <button class="passenger-button" type="submit">Submit Ride</button>
                 </form>
             </div>
         </div>
     );
 };
 
-export default InitiateRide;
+export default PassengerPost;

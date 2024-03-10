@@ -1,29 +1,19 @@
 import './EditInfoPopup.scss'; // Importing the CSS for the Popup
 
-const EditInfoPopup = ({ onClose, onSubmit, onChange, userData }) => {
+const EditInfoPopup = ({ onClose, onSubmit, onChange, profile}) => {
+  
   return (
     <div className="edit-popup-overlay">
       <div className="edit-popup-content">
         <h3>Edit your user information</h3>
         <form onSubmit={onSubmit}>
-          <label htmlFor="username">Username</label>
+          <label htmlFor="name">Full Name</label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={userData.username}
+            id="name"
+            name="name"
+            defaultValue={profile.name} 
             onChange={onChange}
-            placeholder="Username"
-          />
-
-          <label htmlFor="fullName">Full Name</label>
-          <input
-            type="text"
-            id="fullName"
-            name="fullName"
-            value={userData.fullName}
-            onChange={onChange}
-            placeholder="Full Name"
           />
 
           <label htmlFor="email">Email</label>
@@ -31,9 +21,17 @@ const EditInfoPopup = ({ onClose, onSubmit, onChange, userData }) => {
             type="email"
             id="email"
             name="email"
-            value={userData.email}
+            defaultValue={profile.email} 
             onChange={onChange}
-            placeholder="Email"
+          />
+
+          <label htmlFor="phonenumber">Phone number</label>
+            <input
+              type="text"
+              id="phonenumber"
+              name="phonenumber"
+              defaultValue={profile.phonenumber} 
+              onChange={onChange}
           />
 
           <label htmlFor="avatar">Avatar</label>
@@ -41,7 +39,6 @@ const EditInfoPopup = ({ onClose, onSubmit, onChange, userData }) => {
             type="file"
             id="avatar"
             name="avatar"
-            onChange={onChange}
           />
 
           <div className="edit-popup-actions">

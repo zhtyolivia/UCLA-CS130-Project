@@ -1,11 +1,12 @@
 // PostPage.js
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../../../services/api'; 
+import { useParams, Navigate } from 'react-router-dom';
+import { API_BASE_URL,fetchPostById } from '../../../services/api'; 
 // Components 
 import Navigation from '../../../components/Navigation/PassengerNavbar'; 
 import InitiatorInfo from '../../../components/InitiatorInfo/InitiatorInfo'; 
 import JoinReqPopup from '../../../components/JoinReqPopup/JoinReqPopup'; 
+import { isLoggedIn } from '../../../utils/LoginActions'; 
 
 // Styles 
 import './PostPage.scss'; 
@@ -42,7 +43,13 @@ function PostPage() {
   };
 
   if (!post) {
+    console.log(id)
     return <div>Loading post...</div>;
+  }
+
+  // If the user hasn't logged in, navigate to welcome page.
+  if (!isLoggedIn()) {
+    return <Navigate to="/welcome" />;
   }
 
   return (
