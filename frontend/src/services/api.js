@@ -33,6 +33,8 @@ export const fetchDriverPosts = async () => {
       throw e;
     }
   };
+
+  
   
 export const fetchSearchResults = async (term) => {
   try {
