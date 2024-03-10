@@ -1,45 +1,106 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { getCurrentUserId } from '../../services/mockAPI'; 
-import './DriverNavbar.scss'; // Assuming you will create this CSS file for styling
+import { Link, useNavigate } from 'react-router-dom';
+import './DriverNavbar.scss';
+import Notification from "../Notification";
+import { IconButton, Tooltip } from '@mui/material';
+import HomeIcon from '@mui/icons-material/Home';
+import AddIcon from '@mui/icons-material/Add';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
+const getCurrentUserId = (token) => {
+  // Decode JWT and get user ID. For now, we're just passing the token through for the example.
+  return token;
+};
 const DriverNav = () => {
-    const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState(null);
+  const [searchValue, setSearchValue] = useState('');
+  const navigate = useNavigate();
 
-    useEffect(() => {
-      getCurrentUserId().then(setUserId);
-    }, []);
-  
-  
-    if (userId === null) {
-      return <div>Loading...</div>; 
-    }
-  
-    return (
-      <nav className="d-navbar">
-        <div className="d-navbar-brand">
-          <Link to="/" className="d-navbar-logo">Swift Link</Link>
-        </div>
-        
-        <div className="d-search-bar">
-          <input type="text" placeholder="Search posts..." />
-          <button>Search</button>
-        </div>
-  
-        <ul className="d-navbar-nav">
-          <li className="d-nav-item">
-            <Link to="/driver-home" className="d-nav-link">Home</Link>
-          </li>
-          <li className="d-nav-item">
-            <Link to="/initiate-ride" className="d-nav-link">Initiate Ride</Link>
-          </li>
-          <li className="d-nav-item">
-            {/* Ensure the profile link dynamically uses the fetched userId */}
-            <Link to={`/profile/${userId}`} className="d-nav-link">Profile</Link>
-          </li>
-        </ul>
-      </nav>
-    );
+  useEffect(() => {
+    // Fetch current user ID
+    const token = localStorage.getItem('AuthToken');
+    setUserId(token);
+  }, []);
+
+  const handleSearchInputChange = (event) => {
+    setSearchValue(event.target.value);
+  };
+
+  const handleSearch = () => {
+    navigate(`/search?query=${searchValue}`);
+  };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigate('/welcome');
+  };
+
+  if (!userId) {
+    return <div>Loading...</div>;
   }
+
+  return (
+    <nav className="d-navbar">
+      <div className="d-navbar-brand">
+        <Link to="/" className="d-navbar-logo">Swift Link</Link>
+      </div>
+      
+      <div className="d-search-bar">
+        <input
+          type="text"
+          placeholder="Search posts..."
+          value={searchValue}
+          onChange={handleSearchInputChange}
+        />
+        <button onClick={handleSearch}>Search</button>
+      </div>
+
+      <ul className="d-navbar-nav">
+        <li className="d-nav-item">
+          <Tooltip title="Home">
+            <IconButton onClick={() => navigate("/driver-home")}>
+              <HomeIcon />
+            </IconButton>
+          </Tooltip>
+        </li>
+        
+        <li className="d-nav-item">
+          <Tooltip title="Initiate Ride">
+            <IconButton onClick={() => navigate("/initiate-ride")}>
+              <AddIcon />
+            </IconButton>
+          </Tooltip>
+        </li>
+
+        <li className="d-nav-item">
+          <Notification />
+        </li>
+
+        <li className="p-nav-item">
+         
+          <Tooltip title="Account">
+            <IconButton 
+              aria-label="Profile" 
+              color="inherit" 
+              onClick={() => navigate(`/driver-profile/${userId}`)}>
+              <AccountCircleIcon />
+            </IconButton>
+          </Tooltip>
+          
+        </li>
+
+        <li className="d-nav-item">
+          <Tooltip title="Logout">
+            <IconButton onClick={handleLogout}>
+              <ExitToAppIcon />
+            </IconButton>
+          </Tooltip>
+        </li>
+      </ul>
+    </nav>
+  );
+};
 
 export default DriverNav;

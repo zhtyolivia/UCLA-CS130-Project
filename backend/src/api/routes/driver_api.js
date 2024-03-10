@@ -7,6 +7,7 @@ const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const Passengerpost = require('../../models/passengerpost_model');
 const joinRequest = require('../../models/joinrequest_model');
+const Driverpost = require("../../models/driverpost_model");
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {authenticateToken} = require('../middlewares/jwtauthenticate');
@@ -17,6 +18,20 @@ async function emailExistsInBoth(email) {
 
     return passengerExists || driverExists ? true : false;
 }
+
+router.get('/my-driver-posts', authenticateToken, async (req, res) => {
+    const driverId = req.user.userId; 
+    try {
+      const driverWithPosts = await Driver.findById(driverId)
+                                          .populate('driverposts') // This will populate all the driverPost documents based on their IDs stored in driverPosts array
+                                          .exec();
+  
+      res.json(driverWithPosts.driverposts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  });
 
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
     const driverId = req.user.userId; // Assuming the driver's ID is stored in req.user.userId
