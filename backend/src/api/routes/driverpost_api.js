@@ -9,6 +9,46 @@ const driverpostRouter = express.Router();
 
 // Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
+driverpostRouter.get("/search", async (req, res) => {
+  let searchTerm = req.query.term;
+
+  if (searchTerm) {
+      // Your existing code for processing the search term and constructing the search query
+      delimiters.forEach((delimiter) => {
+          const spacedDelimiter = ` ${delimiter.trim()} `;
+          searchTerm = searchTerm.split(delimiter).join(spacedDelimiter);
+      });
+
+      let terms = searchTerm.split(" ").filter(Boolean);
+      terms = terms.filter((term) => !delimiters.includes(term));
+
+      let searchQuery = { $or: [] };
+      terms.forEach((term) => {
+          const regex = new RegExp(term, 'i'); // Case-insensitive regex for each term
+          searchQuery.$or.push({ startingLocation: regex });
+          searchQuery.$or.push({ endingLocation: regex });
+      });
+
+      Driverpost.find(searchQuery)
+          .then((results) => {
+              res.json(results);
+          })
+          .catch((error) => {
+              console.error("Search failed:", error.message);
+              res.status(500).json({ error: "Search operation failed" });
+          });
+  } else {
+      // If no searchTerm is provided, return all posts
+      Driverpost.find({})
+          .then((results) => {
+              res.json(results);
+          })
+          .catch((error) => {
+              console.error("Failed to fetch posts:", error.message);
+              res.status(500).json({ error: "Failed to fetch posts" });
+          });
+  }
+});
 
 driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, async (req, res) => {
   const { requestId } = req.params;
@@ -205,48 +245,6 @@ driverpostRouter.get("/", async (req, res) => {
 });
 
 
-driverpostRouter.get("/search", async (req, res) => {
-  let searchTerm = req.query.term;
-  // console.log("searchTerm", searchTerm);
 
-  if (!searchTerm) {
-    return res.status(400).json({ error: "No search term provided" });
-  }
-
-  delimiters.forEach((delimiter) => {
-    // Add space before and after the delimiter if not already present
-    // So if it is "LA, SD" it will become "LA , SD"
-    const spacedDelimiter = ` ${delimiter.trim()} `;
-    searchTerm = searchTerm.split(delimiter).join(spacedDelimiter);
-  });
-  // Split by space and remove empty strings
-  let terms = searchTerm.split(" ").filter(Boolean);
-  terms = terms.filter((term) => !delimiters.includes(term));
-  // console.log("Terms after splitting and filtering:", terms);
-
-  // Construct a search query using all terms for both starting and ending locations
-  let searchQuery = { $or: [] };
-  terms.forEach((term) => {
-    searchQuery.$or.push({ startingLocation: term });
-    searchQuery.$or.push({ endingLocation: term });
-  });
-  // console.log("Constructed searchQuery:", JSON.stringify(searchQuery, null, 2));
-
-  // Perform the search operation
-  Driverpost.find(searchQuery)
-    .maxTimeMS(30000)
-    .then((results) => {
-      // If no results found, results will be an empty array
-      // console.log(`Number of results found: ${results.length}`);
-      //console.log("Results found:", results);
-      res.json(results);
-    })
-    .catch((error) => {
-      // Log the error for server-side debugging
-      console.error("Search failed:", error.message);
-      // Return an empty array if there's an error during the search
-      res.json([]);
-    });
-});
 
 module.exports = driverpostRouter;
