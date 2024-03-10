@@ -7,6 +7,7 @@ const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require('../../models/driverpost_model');
+const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {authenticateToken} = require('../middlewares/jwtauthenticate');
@@ -23,6 +24,12 @@ router.get('/profile', authenticateToken, async (req, res) => {
         const user = await Passenger.findById(req.user.userId);
         if (!user) {
             return res.status(404).send({ message: "User not found" });
+        }
+
+        // Convert avatar buffer to base64 string if exists
+        let avatarBase64;
+        if (user.avatar && user.avatar.data) {
+            avatarBase64 = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
         }
 
         // Fetch all join requests made by the passenger
@@ -51,10 +58,15 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return rideshareDetails;
         });
 
+        // Fetch all posts made by the passenger
+        const passengerPosts = await Passengerpost.find({ passengerId: req.user.userId });
+
         // Include join request details with user profile information
         const userProfile = {
             ...user._doc, // Spread the user document to include all user info
-            rideshares // Add the rideshare details to the profile response
+            avatar: avatarBase64,
+            rideshares, // Add the rideshare details to the profile response
+            passengerPosts
         };
 
         res.json(userProfile);
@@ -300,36 +312,37 @@ const upload = multer({
 });
 
 // API endpoint to upload and update the passenger's avatar
-router.post(
-    "/:id/avatar",
-    upload.single("avatar"),
-    async (req, res) => {
-      try {
-        const passenger = await Passenger.findById(req.params.id);
+router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
+    if (!req.file) { // Check if the file is not uploaded
+        return res.status(400).send({ message: "Avatar is required." });
+    }
+
+    try {
+        // Use the authenticated user's ID instead of getting it from the URL
+        const passenger = await Passenger.findById(req.user.userId);
         if (!passenger) {
-          return res.status(404).send({ error: "Passenger not found" });
+            return res.status(404).send({ error: "Passenger not found" });
         }
-  
-        // Resize the image to a square, maintaining aspect ratio
+
+        // Proceed with resizing and saving the avatar as before
         const buffer = await sharp(req.file.buffer)
-          .resize(250, 250, {
-            fit: sharp.fit.cover,
-            position: sharp.strategy.entropy,
-          })
-          .png()
-          .toBuffer();
-  
+            .resize(250, 250, {
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+            })
+            .png()
+            .toBuffer();
+
         passenger.avatar = { data: buffer, contentType: "image/png" };
         await passenger.save();
         res.send({ message: "Avatar updated successfully" });
-      } catch (error) {
+    } catch (error) {
         res.status(400).send({ error: error.message });
-      }
-    },
-    (error, req, res, next) => {
-      // Error handling middleware for Multer
-      res.status(400).send({ error: error.message });
     }
-);
+}, (error, req, res, next) => {
+    // Error handling middleware for Multer
+    res.status(400).send({ error: error.message });
+});
+
 
 module.exports = router;
