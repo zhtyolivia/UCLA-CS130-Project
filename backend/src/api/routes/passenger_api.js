@@ -7,6 +7,7 @@ const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require('../../models/driverpost_model');
+const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {authenticateToken} = require('../middlewares/jwtauthenticate');
@@ -57,11 +58,15 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return rideshareDetails;
         });
 
+        // Fetch all posts made by the passenger
+        const passengerPosts = await Passengerpost.find({ passengerId: req.user.userId });
+
         // Include join request details with user profile information
         const userProfile = {
             ...user._doc, // Spread the user document to include all user info
             avatar: avatarBase64,
-            rideshares // Add the rideshare details to the profile response
+            rideshares, // Add the rideshare details to the profile response
+            passengerPosts
         };
 
         res.json(userProfile);

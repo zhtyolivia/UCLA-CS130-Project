@@ -275,38 +275,38 @@ const upload = multer({
     },
 });
 
-  // API endpoint to upload and update the driver's avatar
-router.post(
-    "/:id/avatar",
-    upload.single("avatar"),
-    async (req, res) => {
-      try {
-        const driver = await Driver.findById(req.params.id);
+// API endpoint to upload and update the driver's avatar
+router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
+    if (!req.file) { // Check if the file is not uploaded
+        return res.status(400).send({ message: "Avatar is required." });
+    }
+
+    try {
+        // Use the authenticated driver's ID from the token
+        const driver = await Driver.findById(req.user.userId);
         if (!driver) {
-          return res.status(404).send({ error: "Driver not found" });
+            return res.status(404).send({ error: "Driver not found" });
         }
-  
-        // Resize the image to a square, maintaining aspect ratio
+
+        // Proceed with resizing and saving the avatar
         const buffer = await sharp(req.file.buffer)
-          .resize(250, 250, {
-            fit: sharp.fit.cover,
-            position: sharp.strategy.entropy,
-          })
-          .png()
-          .toBuffer();
-  
+            .resize(250, 250, {
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+            })
+            .png()
+            .toBuffer();
+
         driver.avatar = { data: buffer, contentType: "image/png" };
         await driver.save();
         res.send({ message: "Avatar updated successfully" });
-      } catch (error) {
+    } catch (error) {
         res.status(400).send({ error: error.message });
-      }
-    },
-    (error, req, res, next) => {
-      // Error handling middleware for Multer
-      res.status(400).send({ error: error.message });
     }
-);
+}, (error, req, res, next) => {
+    // Error handling middleware for Multer
+    res.status(400).send({ error: error.message });
+});
   
 
 module.exports = router;
