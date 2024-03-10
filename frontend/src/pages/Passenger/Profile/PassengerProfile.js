@@ -24,7 +24,6 @@ const PassengerProfile = () => {
                 setEmail(data.email); 
                 setPhonenumber(data.phonenumber); 
                 setName(data.name); 
-
             } catch (err) {
                 console.error(err);
             }
