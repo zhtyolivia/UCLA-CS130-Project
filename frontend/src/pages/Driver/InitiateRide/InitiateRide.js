@@ -11,14 +11,34 @@ const InitiateRide = () => {
     const [seats, setSeats] = useState('');
     const [email, setEmail] = useState('');
     const [description, setDescription] = useState('');
+    const [licensePlate, setLicensePlate] = useState('');
+    const [carModel, setCarModel] = useState('');
+
     const [avatar, setAvatar] = useState(null);
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Process form data here, like sending it to the backend
+    
+        // Create an object with form data
+        const rideData = {
+            title,
+            startLocation,
+            endLocation,
+            seats,
+            email,
+            description,
+            carModel,       // Add car model
+            licensePlate,   // Add license plate
+        };
+    
+        console.log(rideData); // For testing, remove in production
+    
+        // Here you would send the rideData to your backend, e.g., using axios:
+        // await axios.post('your_backend_endpoint', rideData);
+    
         // After submission, navigate to another page or give feedback to the user
-        navigate('/home'); // Example redirection after form submission
+        navigate('/driver-home'); // Example redirection after form submission
     };
 
     return (
@@ -58,6 +78,19 @@ const InitiateRide = () => {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
+                    <input
+                        type="text"
+                        placeholder="Car Model"
+                        value={carModel}
+                        onChange={(e) => setCarModel(e.target.value)}
+                    />
+                    <input
+                        type="text"
+                        placeholder="License Plate"
+                        value={licensePlate}
+                        onChange={(e) => setLicensePlate(e.target.value)}
+                    />
+
                     <textarea
                         placeholder="Description"
                         value={description}
