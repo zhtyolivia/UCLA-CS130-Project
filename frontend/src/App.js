@@ -8,6 +8,7 @@ import PassengerLogin from './pages/Login/PassengerLogin';
 import DriverLogin from './pages/Login/DriverLogin';
 import WelcomePage from './pages/Login/WelcomePage';
 import DriverSignup from './pages/Login/DriverSignup';
+import Success from './pages/Login/Success';
 import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
 import PassengerPost from './pages/Passenger/PassengerPost/PassengerPost';
@@ -32,8 +33,7 @@ function App() {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/driver-login" element={<DriverLogin />} />
-          <Route path="/success" element={<SuccessPage />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/success" element={<Success />} />
           <Route path="/passenger-login" element={<PassengerLogin />} />
           <Route path="/driver-signup" element={<DriverSignup />} />
           <Route path="/home" element={<PassengerHome />} />
