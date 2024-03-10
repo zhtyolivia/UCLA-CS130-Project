@@ -16,6 +16,7 @@ const PassengerProfile = () => {
     const [email, setEmail] = useState(''); 
     const [name, setName] = useState(''); 
     const [phonenumber, setPhonenumber] = useState(''); 
+    const [passengerPosts, setPassengerPosts] = useState([])
 
     useEffect(() => {
         const getPassengerProfile = async () => {
@@ -26,6 +27,8 @@ const PassengerProfile = () => {
                 setPhonenumber(data.phonenumber); 
                 setName(data.name); 
                 setJoinRequests(data.rideshares);
+                setPassengerPosts(data.passengerPosts);
+                console.log(data)
             } catch (err) {
                 console.error(err);
             }
@@ -34,7 +37,6 @@ const PassengerProfile = () => {
     }, []);
 
     const convertDate2Readable = (dateString) => {
-        console.log(dateString)
         const options = {
             timeZone: "America/Los_Angeles",
             year: 'numeric',
@@ -46,7 +48,6 @@ const PassengerProfile = () => {
         };
         const date = new Date(dateString); // Convert string to Date object
         const datePacific = date.toLocaleString('en-US', options);
-        console.log(datePacific); // Output format: "MM/DD/YYYY, hh:mm:ss AM/PM" in Pacific Time
         return datePacific;
     }
 
@@ -61,7 +62,8 @@ const PassengerProfile = () => {
             <div className="ProfilePage">
                 <PassengerInfo name={name} email={email} phonenumber={phonenumber}/>
                 <div className="ride-history">
-                    <h3>Ride History</h3>
+                    <h3>Join Request History</h3>
+                    <div className="section-divider"></div>
                     {joinRequests.map(joinRequest => ( // Using index as a fallback key
                       <div key={joinRequest.postId} className="ride-history-item">
                           <p><strong>Start location:</strong> {joinRequest.startingLocation}</p>
@@ -73,15 +75,15 @@ const PassengerProfile = () => {
                       </div>
                   ))}
                 </div>
-
+                
                 <div className="ride-history">
-                    <h3>Message History</h3>
-                    {rideHistory.map((ride, index) => ( // Using index as a fallback key
-                      <div key={ride.ride.id || index} className="ride-history-item">
-                          {/* Assuming 'lastUpdatedOn' is available on your ride object */}
-                          <p><strong>Last updated on:</strong> {ride.ride.createdAt}</p> 
-                          <p><strong>Status:</strong> {ride.status}</p>
-                          {/* Make sure 'ride.ride.id' correctly references the post/ride ID */}
+                    <h3>Post History</h3>
+                    <div className="section-divider"></div>
+                    {passengerPosts.map(post => ( // Using index as a fallback key
+                      <div key={post.postId} className="ride-history-item">
+                          <p><strong>Start location:</strong> {post.startingLocation}</p>
+                          <p><strong>End location:</strong> {post.endingLocation}</p>
+                          <p><strong>Start time:</strong> {convertDate2Readable(post.startTime)}</p>
                       </div>
                   ))}
                 </div>
