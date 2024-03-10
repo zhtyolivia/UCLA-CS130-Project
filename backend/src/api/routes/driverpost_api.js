@@ -54,6 +54,11 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
   const { requestId } = req.params;
   try {
       const JoinRequest = await joinRequest.findById(requestId);
+      if (JoinRequest.status !== 'pending') {
+        // If the join request is not pending, do not proceed with acceptance
+        return res.status(400).json({ message: 'Join request is not pending or has already been processed' });
+      }
+  
       // Update the join request status to 'accepted'
       JoinRequest.status = 'accepted';
       await JoinRequest.save();
@@ -61,7 +66,6 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
       if (!driverPost) {
           return res.status(404).json({ message: 'Driver post not found' });
       }
-
       // Assuming driverPost has an array to store passengerIds of accepted passengers
       if (!driverPost.passengers.includes(JoinRequest.passengerId)) {
           driverPost.passengers.push(JoinRequest.passengerId);
@@ -79,6 +83,10 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
       const JoinRequest = await joinRequest.findById(requestId);
       if (!JoinRequest) {
           return res.status(404).json({ message: 'Join request not found' });
+      }
+      if (JoinRequest.status !== 'pending') {
+        // If the join request is not pending, do not proceed with acceptance
+        return res.status(400).json({ message: 'Join request is not pending or has already been processed' });
       }
 
       JoinRequest.status = 'declined';
@@ -107,6 +115,11 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
       passengerId: passengerId
     }).exec();
 
+    let driverAvatar = undefined;
+    // Convert driver avatar buffer to base64 string if exists and join request is accepted
+    if (driverPost.driverId.avatar && driverPost.driverId.avatar.data) {
+      driverAvatar = `data:${driverPost.driverId.avatar.contentType};base64,${driverPost.driverId.avatar.data.toString('base64')}`;
+    }
     // Prepare the response object including the driverPost details
     let response = {
       driverPost: {
@@ -118,6 +131,7 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
         additionalNotes: driverPost.additionalNotes,
         // Conditionally include the license number
         ...(JoinRequest && JoinRequest.status === 'accepted' && {
+          avatar:driverAvatar,
           drivername: driverPost.driverId.name,
           licenseNumber: driverPost.licensenumber,
           model: driverPost.model,
@@ -193,7 +207,47 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
   }
 });
 
+driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => {
+  const passengerId = req.user.userId; // Assuming `req.user` is populated by your authentication middleware
+  const { postId } = req.params;
 
+  try {
+    // Find the join request made by this passenger for the specified post
+    const JoinRequest = await joinRequest.findOne({
+      driverPostId: postId,
+      passengerId: passengerId,
+    });
+
+    // If no join request is found, return an error
+    if (!JoinRequest) {
+      return res.status(404).json({ message: 'Join request not found or already cancelled' });
+    }
+
+    // Optionally, update the Passenger document to remove this join request
+    await Passenger.findByIdAndUpdate(passengerId, {
+      $pull: { joinrequests: JoinRequest._id }
+    });
+
+    // Optionally, update the DriverPost document to remove this join request
+    await Driverpost.findByIdAndUpdate(postId, {
+      $pull: { joinrequests: JoinRequest._id ,passengers: passengerId}
+    });
+
+    // If the post belongs to a driver, you might also want to remove this join request from the Driver document
+    const existingPost = await Driverpost.findById(postId);
+    if (existingPost && existingPost.driverId) {
+      await Driver.findByIdAndUpdate(existingPost.driverId, {
+        $pull: { joinrequests: JoinRequest._id}
+      });
+    }
+    // Remove the join request
+    await joinRequest.findByIdAndDelete(JoinRequest._id);
+    res.json({ message: 'Join request cancelled successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+});
 
 driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
   const driverId = req.user.userId;
