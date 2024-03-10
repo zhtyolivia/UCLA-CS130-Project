@@ -50,8 +50,9 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
   }
 });
 
-driverpostRouter.get('/:postId', async (req, res) => {
+driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
   const { postId } = req.params;
+  const passengerId = req.user.userId; // Assuming `req.user` holds authenticated user info and has a userId field
 
   try {
     const driverPost = await Driverpost.findById(postId).exec();
@@ -60,7 +61,26 @@ driverpostRouter.get('/:postId', async (req, res) => {
       return res.status(404).json({ message: 'Driver post not found' });
     }
 
-    res.json(driverPost);
+    // Query for a join request by the current passenger for this driver post
+    const JoinRequest = await joinRequest.findOne({
+      driverPostId: postId,
+      passengerId: passengerId
+    }).exec();
+
+    // Prepare the response object including the driverPost details
+    let response = {
+      driverPost: driverPost,
+      hasJoined: false, // Default to false
+      joinRequestStatus: null // Default to null
+    };
+
+    // If a join request exists, modify the response object accordingly
+    if (JoinRequest) {
+      response.hasJoined = true;
+      response.joinRequestStatus = JoinRequest.status;
+    }
+
+    res.json(response);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

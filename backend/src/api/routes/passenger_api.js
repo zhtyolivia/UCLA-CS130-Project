@@ -6,9 +6,10 @@ const router = express.Router();
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const joinRequest = require('../../models/joinrequest_model');
+const Driverpost = require('../../models/driverpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate')
+const {authenticateToken} = require('../middlewares/jwtauthenticate');
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -17,15 +18,50 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
-router.get('/profile', authenticateToken, (req, res) => {
-    Passenger.findById(req.user.userId)
-    .then(user => {
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const user = await Passenger.findById(req.user.userId);
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        res.json(user);
-    })
-    .catch(err => res.status(500).send({ message: err.message }));
+
+        // Fetch all join requests made by the passenger
+        const JoinRequests = await joinRequest.find({ passengerId: req.user.userId })
+                                              .populate('driverPostId')
+                                              .exec();
+
+        // Prepare join request details
+        const rideshares = JoinRequests.map(request => {
+            const rideshareDetails = {
+                postId: request.driverPostId._id,
+                startingLocation: request.driverPostId.startingLocation,
+                endingLocation: request.driverPostId.endingLocation,
+                startTime: request.driverPostId.startTime,
+                status: request.status,
+                additionalNotes: request.driverPostId.additionalNotes,
+                numberOfSeats: request.driverPostId.numberOfSeats,
+                // Include full details if accepted, partial if pending or rejected
+                ...(request.status === 'accepted' && {
+                    licensenumber: request.driverPostId.licensenumber,
+                    model: request.driverPostId.model,
+                    phonenumber: request.driverPostId.phonenumber,
+                    email: request.driverPostId.email
+                })
+            };
+            return rideshareDetails;
+        });
+
+        // Include join request details with user profile information
+        const userProfile = {
+            ...user._doc, // Spread the user document to include all user info
+            rideshares // Add the rideshare details to the profile response
+        };
+
+        res.json(userProfile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message });
+    }
 });
 
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
@@ -238,6 +274,17 @@ router.put('/update', authenticateToken, async (req, res) => {
 
     } catch (err) {
         res.status(500).send({ message: err.message });
+    }
+});
+
+// GET all driver posts for passengers to view
+router.get('/driverposts', authenticateToken, async (req, res) => {
+    try {
+        const driverPosts = await Driverpost.find({}); // Modify query as needed
+        res.status(200).json(driverPosts);
+    } catch (error) {
+        console.error('Failed to fetch driver posts:', error);
+        res.status(500).json({ message: 'Failed to fetch driver posts' });
     }
 });
 

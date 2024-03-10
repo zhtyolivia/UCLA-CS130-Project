@@ -3,9 +3,12 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import { isLoggedIn } from '../../../utils/LoginActions'; 
+import axios from 'axios';
+import { API_BASE_URL } from '../../../services/api';
+
 
 const PassengerPost = () => {
-    const [title, setTitle] = useState('');
+    const [date, setDate] = useState('');
     const [startLocation, setStartLocation] = useState('');
     const [endLocation, setEndLocation] = useState('');
     const [seats, setSeats] = useState('');
@@ -16,12 +19,29 @@ const PassengerPost = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Process form data here, like sending it to the backend
-        // After submission, navigate to another page or give feedback to the user
-        navigate('/driver-home'); // Example redirection after form submission
-    };
-    const goBack = () => {
-        navigate('/driver-home'); // Navigates back to the DriverHome page
+        
+        const body = {
+            'startingLocation': startLocation, 
+            'endingLocation': endLocation, 
+            'startTime': date, 
+            'numberOfPeople': seats, 
+            'additionalNotes': description
+        }; 
+
+        try {
+            console.log(body)
+            const res = await axios.post(`${API_BASE_URL}/passengerpost/newpost`, body);
+            console.log(res)
+            const data = res.data;
+            if (data.status === 'Success') {
+                console.log(data)
+            } else if (data.status === 'FAILED') {
+                console.log(data)
+            }
+        } catch(err) {
+            console.error(err);
+        }
+        // TODO: give user some response when correctly posted
     };
 
     // If the user hasn't logged in, navigate to welcome page.
@@ -34,29 +54,36 @@ const PassengerPost = () => {
             <Navigation />
             <div className="initiate-ride-page">
                 
-                <h1>Send a message to all drivers</h1>
-                Tell the drivers about a ride you want to have.
+                <h1>Didn't find a rideshare you want? </h1>
+                Tell the drivers about your desired trip.
                 <form onSubmit={handleSubmit} className="initiate-ride-form">
                     <input
                         type="text"
-                        placeholder="Title"
-                        value={title}
-                        onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <input
-                        type="text"
-                        placeholder="Start Location"
+                        placeholder="Start Location (required)"
                         value={startLocation}
                         onChange={(e) => setStartLocation(e.target.value)}
                     />
                     <input
                         type="text"
-                        placeholder="End Location"
+                        placeholder="End Location (required)"
                         value={endLocation}
                         onChange={(e) => setEndLocation(e.target.value)}
                     />
+                    <input
+                        type="number"
+                        placeholder="Number of people you have (required)"
+                        value={seats}
+                        onChange={(e) => setSeats(e.target.value)}
+                    />
+                    <input
+                        type="date"
+                        placeholder="Date you're looking for (required)"
+                        value={date}
+                        onChange={(e) => setDate(e.target.value)}
+                    />
                     <textarea
-                        placeholder="Description"
+                        type="text"
+                        placeholder="Detailed description of your request (optional)"
                         value={description}
                         onChange={(e) => setDescription(e.target.value)}
                     />
