@@ -51,57 +51,50 @@ const DriverInfo = ({name, email, phonenumber}) => {
             console.error(err)
         }
     }
-    // Fetch driver posts
-// Fetch driver posts
-    async function fetchMyDriverPosts() {
-        try {
-        const token = localStorage.getItem('AuthToken'); // Assuming you store your token in localStorage
-        const response = await axios.get(`${API_BASE_URL}/driver/my-driver-posts`, {
-            headers: {
-            'Authorization': `Bearer ${token}`, // Properly formatted authorization header
-            },
-        });
-    
-        // Set the driver posts state to the response data
-        setDriverPosts(response.data);
-    
-        // For debugging
-        console.log('Driver Posts:', response.data);
-        } catch (error) {
-        console.error('Error fetching driver posts:', error);
-    
-        // If the error has a response object, log its details for more information
-        if (error.response) {
-            console.error('Error Response:', error.response.data);
-            console.error('Status:', error.response.status);
-            console.error('Headers:', error.response.headers);
-        }
-        }
-    }
-  
 
-    // Fetch join requests
+    const fetchMyDriverPosts = async () => {
+        try {
+            const token = localStorage.getItem('AuthToken');
+            const response = await axios.get(`${API_BASE_URL}/driver/my-driver-posts`, {
+                headers: { 'Authorization': token },
+            });
+            setDriverPosts(response.data);
+            console.log('Fetched Driver Posts:', response.data);
+
+        } catch (error) {
+            console.error('Error fetching driver posts:', error.response ? error.response.data : error.message);
+        }
+    };
+    
     const fetchJoinRequests = async () => {
         try {
-            const response = await axios.get(`${API_BASE_URL}/driver/my-join-requests`);
-            setJoinRequests(response.data || []);
-        } catch (err) {
-            console.error(err);
+            const token = localStorage.getItem('AuthToken');
+            const response = await axios.get(`${API_BASE_URL}/driver/my-join-requests`, {
+                headers: { 'Authorization': token },
+            });
+            setJoinRequests(response.data);
+            console.log('Fetched Join Requests:', response.data);
+
+        } catch (error) {
+            console.error('Error fetching join requests:', error.response ? error.response.data : error.message);
         }
     };
 
     // Toggle driver posts dropdown
     const toggleDriverPosts = () => {
         setShowDriverPosts(!showDriverPosts);
-        if (!showDriverPosts) fetchMyDriverPosts();
+        if (!showDriverPosts && !driverPosts.length) {
+            fetchMyDriverPosts();
+        }
     };
 
     // Toggle join requests dropdown
     const toggleJoinRequests = () => {
         setShowJoinRequests(!showJoinRequests);
-        if (!showJoinRequests) fetchJoinRequests();
+        if (!showJoinRequests && !joinRequests.length) {
+            fetchJoinRequests();
+        }
     };
-
     return (
         <div className="driver-info">
             <div className="driver-avatar">
@@ -117,12 +110,20 @@ const DriverInfo = ({name, email, phonenumber}) => {
                 <p><strong>Phone Number:</strong> {phonenumber}</p>
                 <button className="info-button" onClick={toggleDriverPosts}>My Posts</button>
                 <button className="info-button" onClick={toggleJoinRequests}>Join Requests</button>
+
                 {showDriverPosts && (
                     <div className="dropdown-content">
                         {driverPosts.map((post, index) => (
-                            <div key={index}>
-                                <p>{post.title}</p>
-                                {/* Render additional post details */}
+                            <div key={index} className="post-detail">
+                                <p><strong>Title:</strong> {post.title}</p>
+                                <p><strong>Starting Location:</strong> {post.startingLocation}</p>
+                                <p><strong>Ending Location:</strong> {post.endingLocation}</p>
+                                <p><strong>Start Time:</strong> {new Date(post.startTime).toLocaleString()}</p>
+                                <p><strong>Seats Available:</strong> {post.numberOfSeats}</p>
+                                <p><strong>License Number:</strong> {post.licensenumber}</p>
+                                <p><strong>Car Model:</strong> {post.model}</p>
+                                <p><strong>Additional Notes:</strong> {post.additionalNotes}</p>
+                                {/* Add any other details you wish to display here */}
                             </div>
                         ))}
                     </div>
