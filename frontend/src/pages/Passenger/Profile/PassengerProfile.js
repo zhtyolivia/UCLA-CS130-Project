@@ -70,7 +70,7 @@ const PassengerProfile = () => {
                           <p><strong>End location:</strong> {joinRequest.endingLocation}</p>
                           <p><strong>Start time:</strong> {convertDate2Readable(joinRequest.startTime)}</p>
                           <p><strong>Status:</strong> {joinRequest.status}</p>
-                          <Link to={`/posts/${joinRequest.postId}`} className="view-detail-button">View Detail</Link>
+                          <Link to={`/driverposts/${joinRequest.postId}`} className="view-detail-button">View Detail</Link>
 
                       </div>
                   ))}

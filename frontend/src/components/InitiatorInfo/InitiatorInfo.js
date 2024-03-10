@@ -8,28 +8,6 @@ import { fetchPostById } from '../../services/mockAPI'; // Import the mock API f
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 
 const InitiatorInfo = ({post}) => {
-    console.log(post)
-    // const [post, setPost] = useState(null);
-    // const { id } = useParams(); 
-    // useEffect(() => {
-    //     const fetchPost = async () => {
-    //         try {
-    //             const data = await fetchPostById(Number(id));
-    //             setPost(data);
-    //         } catch (error) {
-    //             console.error('Error fetching post:', error);
-    //         }
-    //     };
-    //     fetchPost();
-    // }, [id]); 
-
-    // // If post is null or still loading, display a loading indicator
-    // if (!post) {
-    //     return <div>Loading...</div>;
-    // }
-
-    // If post is available, render the user information
-    // src={post.user.avatarUrl}
     return (
         <div className="user-info">
             <div className="user-avatar">
@@ -37,12 +15,14 @@ const InitiatorInfo = ({post}) => {
             </div>
             <div>
                 <div className="user-info-header"> 
-                    <h3>Driver Information</h3>
+                    <h3>Further Driver & Trip Information</h3>
                 </div>
                 <div className="user-details">
-                    <p><strong>Username:</strong> {post.driverId}</p>
-                    <p><strong>Full Name:</strong> {}</p>
-                    <p><strong>Email:</strong> {}</p>
+                    <p><strong>Full Name:</strong> {post.drivername}</p>
+                    <p><strong>Email:</strong> {post.email}</p>
+                    <p><strong>License Number:</strong> {post.licenseNumber}</p>
+                    <p><strong>Phone number:</strong> {post.phonenumber}</p>
+                    <p><strong>Email:</strong> {post.email}</p>
                 </div>
             </div>
         </div>
