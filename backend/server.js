@@ -11,8 +11,8 @@ const cors = require('cors');
 app.use(cors());
 
 const PassengerRouter = require('./src/api/routes/passenger_api');
-const DriverRouter = require('./src/api/routes/driver_api')
-const DriverPostRouter = require('./src/api/routes/driverpost_api')
+const DriverRouter = require('./src/api/routes/driver_api');
+const DriverPostRouter = require('./src/api/routes/driverpost_api');
 const PassengerPostRouter = require("./src/api/routes/passengerpost_api");
 
 app.use(express.json()); // Middleware for parsing JSON bodies
@@ -24,9 +24,9 @@ app.get("/", (req, res) => {
 
 
 //
-app.use('/passenger', PassengerRouter)
-app.use('/driver', DriverRouter)
-app.use('/driverpost',DriverPostRouter)
+app.use('/passenger', PassengerRouter);
+app.use('/driver', DriverRouter);
+app.use('/driverpost',DriverPostRouter);
 app.use("/testAPI", testAPIRouter);
 app.use("/passengerpost", PassengerPostRouter);
 
