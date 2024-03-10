@@ -6,6 +6,7 @@ const router = express.Router();
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const Passengerpost = require('../../models/passengerpost_model');
+const joinRequest = require('../../models/joinrequest_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {authenticateToken} = require('../middlewares/jwtauthenticate');
@@ -16,6 +17,39 @@ async function emailExistsInBoth(email) {
 
     return passengerExists || driverExists ? true : false;
 }
+
+router.get('/my-join-requests', authenticateToken, async (req, res) => {
+    const driverId = req.user.userId; // Assuming the driver's ID is stored in req.user.userId
+
+    try {
+        const driver = await Driver.findById(driverId);
+
+        if (!driver) {
+            return res.status(404).json({ message: "Driver not found" });
+        }
+
+        const joinRequestsDetails = await joinRequest.find({
+            '_id': { $in: driver.joinrequests }}).populate('driverPostId passengerId'); 
+
+        const detailedRequests = joinRequestsDetails.map(request => ({
+            requestId: request._id,
+            postId: request.driverPostId._id,
+            passengerName: request.passengerId.name,
+            startingLocation: request.driverPostId.startingLocation,
+            endingLocation: request.driverPostId.endingLocation,
+            startTime: request.driverPostId.startTime,
+            status: request.status,
+            message: request.message,
+        }));
+
+        res.json(detailedRequests);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+module.exports = router;
 
 router.get('/profile', authenticateToken, (req, res) => {
     Driver.findById(req.user.userId)
