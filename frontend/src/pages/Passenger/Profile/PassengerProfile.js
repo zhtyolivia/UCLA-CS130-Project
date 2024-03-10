@@ -5,6 +5,8 @@ import PassengerInfo from '../../../components/PassengerProfileInfo/PassengerPro
 import { getCurrentUserId, getUserRideHistory } from '../../../services/mockAPI';
 import './PassengerProfile.scss';
 import { isLoggedIn } from '../../../utils/LoginActions'; 
+
+import { convertDate2Readable } from '../../../utils/util'; 
 import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
@@ -35,21 +37,6 @@ const PassengerProfile = () => {
         };
         getPassengerProfile();
     }, []);
-
-    const convertDate2Readable = (dateString) => {
-        const options = {
-            timeZone: "America/Los_Angeles",
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-        };
-        const date = new Date(dateString); // Convert string to Date object
-        const datePacific = date.toLocaleString('en-US', options);
-        return datePacific;
-    }
 
     if (!isLoggedIn()) {
         return <Navigate to="/welcome" />;
