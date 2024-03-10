@@ -95,7 +95,7 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
   const passengerId = req.user.userId; // Assuming `req.user` holds authenticated user info and has a userId field
 
   try {
-    const driverPost = await Driverpost.findById(postId).exec();
+    const driverPost = await Driverpost.findById(postId).populate('driverId').exec();
 
     if (!driverPost) {
       return res.status(404).json({ message: 'Driver post not found' });
@@ -109,7 +109,21 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
 
     // Prepare the response object including the driverPost details
     let response = {
-      driverPost: driverPost,
+      driverPost: {
+        // Include all driverPost details that are always visible
+        startingLocation: driverPost.startingLocation,
+        endingLocation: driverPost.endingLocation,
+        startTime: driverPost.startTime,
+        numberOfSeats: driverPost.numberOfSeats,
+        additionalNotes: driverPost.additionalNotes,
+        // Conditionally include the license number
+        ...(JoinRequest && JoinRequest.status === 'accepted' && {
+          drivername: driverPost.driverId.name,
+          licenseNumber: driverPost.licensenumber,
+          model: driverPost.model,
+          email: driverPost.driverId.email,
+          phonenumber: driverPost.driverId.phonenumber}),
+      },
       hasJoined: false, // Default to false
       joinRequestStatus: null // Default to null
     };
