@@ -39,7 +39,7 @@ function App() {
           <Route path="/home" element={<PassengerHome />} />
           <Route path="/posts" element={<PassengerHome />} />
           <Route path="/search" element={<SearchResults />} /> 
-          <Route path="/:id" element={<PostPage />} />
+          <Route path="/driverposts/:id" element={<PostPage />} />
           <Route path="/profile/:id" element={<PassengerProfile />} />
           <Route path="/driver-home" element={<DriverHome />} />
           <Route path="/initiate-ride" element={<InitiateRide />} />

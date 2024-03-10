@@ -12,9 +12,11 @@ export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localh
 const PassengerProfile = () => {
 
     const [rideHistory, setRideHistory] = useState([]);
+    const [joinRequests, setJoinRequests] = useState([]); 
     const [email, setEmail] = useState(''); 
     const [name, setName] = useState(''); 
     const [phonenumber, setPhonenumber] = useState(''); 
+    const [passengerPosts, setPassengerPosts] = useState([])
 
     useEffect(() => {
         const getPassengerProfile = async () => {
@@ -24,18 +26,34 @@ const PassengerProfile = () => {
                 setEmail(data.email); 
                 setPhonenumber(data.phonenumber); 
                 setName(data.name); 
-
+                setJoinRequests(data.rideshares);
+                setPassengerPosts(data.passengerPosts);
+                console.log(data)
             } catch (err) {
                 console.error(err);
             }
         };
         getPassengerProfile();
-    });
+    }, []);
+
+    const convertDate2Readable = (dateString) => {
+        const options = {
+            timeZone: "America/Los_Angeles",
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+        };
+        const date = new Date(dateString); // Convert string to Date object
+        const datePacific = date.toLocaleString('en-US', options);
+        return datePacific;
+    }
 
     if (!isLoggedIn()) {
         return <Navigate to="/welcome" />;
     }
-
     return (
         <div>
             <header>
@@ -44,27 +62,28 @@ const PassengerProfile = () => {
             <div className="ProfilePage">
                 <PassengerInfo name={name} email={email} phonenumber={phonenumber}/>
                 <div className="ride-history">
-                    <h3>Ride History</h3>
-                    {rideHistory.map((ride, index) => ( // Using index as a fallback key
-                      <div key={ride.ride.id || index} className="ride-history-item">
-                          <p><strong>Rideshare:</strong> {ride.ride.title}</p>
-                          {/* Assuming 'lastUpdatedOn' is available on your ride object */}
-                          <p><strong>Last updated on:</strong> {ride.ride.createdAt}</p> 
-                          <p><strong>Status:</strong> {ride.status}</p>
-                          {/* Make sure 'ride.ride.id' correctly references the post/ride ID */}
-                          <Link to={`/posts/${ride.ride.id}`} className="view-detail-button">View Detail</Link>
+                    <h3>Join Request History</h3>
+                    <div className="section-divider"></div>
+                    {joinRequests.map(joinRequest => ( // Using index as a fallback key
+                      <div key={joinRequest.postId} className="ride-history-item">
+                          <p><strong>Start location:</strong> {joinRequest.startingLocation}</p>
+                          <p><strong>End location:</strong> {joinRequest.endingLocation}</p>
+                          <p><strong>Start time:</strong> {convertDate2Readable(joinRequest.startTime)}</p>
+                          <p><strong>Status:</strong> {joinRequest.status}</p>
+                          <Link to={`/driverposts/${joinRequest.postId}`} className="view-detail-button">View Detail</Link>
+
                       </div>
                   ))}
                 </div>
-
+                
                 <div className="ride-history">
-                    <h3>Message History</h3>
-                    {rideHistory.map((ride, index) => ( // Using index as a fallback key
-                      <div key={ride.ride.id || index} className="ride-history-item">
-                          {/* Assuming 'lastUpdatedOn' is available on your ride object */}
-                          <p><strong>Last updated on:</strong> {ride.ride.createdAt}</p> 
-                          <p><strong>Status:</strong> {ride.status}</p>
-                          {/* Make sure 'ride.ride.id' correctly references the post/ride ID */}
+                    <h3>Post History</h3>
+                    <div className="section-divider"></div>
+                    {passengerPosts.map(post => ( // Using index as a fallback key
+                      <div key={post.postId} className="ride-history-item">
+                          <p><strong>Start location:</strong> {post.startingLocation}</p>
+                          <p><strong>End location:</strong> {post.endingLocation}</p>
+                          <p><strong>Start time:</strong> {convertDate2Readable(post.startTime)}</p>
                       </div>
                   ))}
                 </div>

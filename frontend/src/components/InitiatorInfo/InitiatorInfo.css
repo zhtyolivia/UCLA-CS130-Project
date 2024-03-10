@@ -7,11 +7,12 @@
 
 .user-avatar {
     margin-right: 20px; /* Add space between avatar and user details */
+    margin-top: 25px;
 }
 
 .user-avatar img {
-    width: 50px; /* Set width for the avatar image */
-    height: 50px; /* Set height for the avatar image */
+    width: 70px; /* Set width for the avatar image */
+    height: 70px; /* Set height for the avatar image */
     border-radius: 50%; /* Make the avatar image round */
 }
 
