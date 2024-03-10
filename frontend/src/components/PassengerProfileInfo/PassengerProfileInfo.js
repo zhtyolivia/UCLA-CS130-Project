@@ -27,13 +27,12 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
             phonenumber: phonenumber,
             avatar: avatar
         });
-
-        console.log(profile)
-      }, [name, email, phonenumber, avatar]);
+    }, [name, email, phonenumber, avatar]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target; 
         if (name === 'avatar') {
+            console.log(files[0]);
             setProfile(prev => ({ ...prev, avatar: files[0]}));
             console.log('after setProfile, profile: ', profile)
         } else {
@@ -72,7 +71,8 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
                 
             }
             
-            if (profile.avatar) {
+            if (profile.avatar && profile.avatar instanceof File) {
+                console.log('entering if...', profile.avatar)
                 // If there's an avatar, perform a second request to upload avatar 
                 const formData = new FormData(); 
                 formData.append('avatar', profile.avatar); 
@@ -95,7 +95,7 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
     return (
         <div className="passenger-info">
             <div className="passenger-avatar">
-            <img src={profile.avatar ? profile.avatar : defaultAvatar} alt="Avatar" />
+            <img src={profile.avatar ? (profile.avatar instanceof File ? URL.createObjectURL(profile.avatar) : profile.avatar) : defaultAvatar} alt="Avatar" />
                 <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
             </div>
             <div>
