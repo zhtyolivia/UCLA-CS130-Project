@@ -9,6 +9,23 @@ const passengerpostRouter = express.Router();
 // Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
 
+// Given post id, show all the post info.
+passengerpostRouter.get('/:postId', authenticateToken, async (req, res) => {
+  const { postId } = req.params; // Extract the postId from the URL parameters
+
+  try {
+      const post = await Passengerpost.findById(postId).exec(); // Fetch the post from the database
+
+      if (!post) {
+          return res.status(404).json({ message: "Passenger post not found" });
+      }
+      res.json(post); // Return the post details
+  } catch (error) {
+      console.error('Error fetching passenger post:', error);
+      res.status(500).json({ message: 'Error fetching passenger post' });
+  }
+});
+
 passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
   const passengerId = req.user.userId;
   let {
