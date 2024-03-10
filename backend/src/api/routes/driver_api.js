@@ -5,10 +5,10 @@ const router = express.Router();
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
-const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate');
+const {authenticateToken} = require('../middlewares/jwtauthenticate')
+const {verifyGoogleToken} = require('../../services/authHelpers.js')
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -17,6 +17,7 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
+// Encapsulate the API
 router.get('/profile', authenticateToken, (req, res) => {
     Driver.findById(req.user.userId)
     .then(user => {
@@ -28,84 +29,127 @@ router.get('/profile', authenticateToken, (req, res) => {
     .catch(err => res.status(500).send({ message: err.message }));
 });
 
-router.post('/register', (req, res) =>{
-    let{email, password, name, phonenumber} = req.body;
-    email = email.trim();
-    password = password.trim();
-    name = name.trim();
-    phonenumber = phonenumber.trim();
+// Helper function to check if email exists for both Driver and Passenger
+async function emailExistsInBoth(email) {
+    const passengerExists = await Passenger.findOne({ email }).exec();
+    const driverExists = await Driver.findOne({ email }).exec();
+    return passengerExists || driverExists ? true : false;
+}
 
-    if(email == "" || password == "" || name == "" || phonenumber == ""){
-        res.json({
+router.post('/register', async (req, res) => {
+    const { email, password, name, phonenumber, token, accountType } = req.body;
+
+    // Handle Google Signup
+    if (token) {
+        try {
+            const payload = await verifyGoogleToken(token);
+            const emailFromGoogle = payload['email'];
+            const nameFromGoogle = payload['name'];
+
+            let user;
+            let Model = accountType === 'driver' ? Driver : Passenger;
+            user = await Model.findOne({ email: emailFromGoogle });
+
+            if (!user) {
+                user = new Model({
+                    email: emailFromGoogle,
+                    name: nameFromGoogle,
+                    password: null, // No password for Google signup
+                    phonenumber: '', // Might prompt the user for this later
+                });
+                await user.save();
+            }
+
+            console.log("Email from Google:", emailFromGoogle);
+            //console.log("Name from Google:", nameFromGoogle);
+            const authToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
+            return res.status(200).json({ message: `${accountType.charAt(0).toUpperCase() + accountType.slice(1)} registered successfully via Google`, token: authToken, user, emailFromGoogle});
+        } catch (error) {
+            console.error('Error during Google signup:', error);
+            return res.status(500).json({ message: 'Internal server error during Google signup' });
+        }
+    }
+
+    // Traditional Signup Logic
+    if (email == "" || password == "" || name == "" || phonenumber == "") {
+        return res.json({
             status: "FAILED",
             message: "Empty Input for some fields"
         });
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
-        res.json({
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        return res.json({
             status: "FAILED",
             message: "Invalid Email"
-        })
-    } else if (!/^[a-zA-z]*$/.test(name)){
-        res.json({
+        });
+    } else if (!/^[a-zA-Z]*$/.test(name)) {
+        return res.json({
             status: "FAILED",
             message: "Invalid Name"
-        })
-    } else if (!/^\d{10}$/.test(phonenumber)){
-        res.json({
+        });
+    } else if (!/^\d{10}$/.test(phonenumber)) {
+        return res.json({
             status: "FAILED",
             message: "Invalid PhoneNumber"
-        })
-    } else if (password.length < 8){
-        res.json({
+        });
+    } else if (password.length < 8) {
+        return res.json({
             status: "FAILED",
-            message: "Invalid Password"
-        })
+            message: "Password must be at least 8 characters"
+        });
     } else {
-        emailExistsInBoth(email).then(emailExists =>{
-            if (emailExists){
-                res.json({
+        emailExistsInBoth(email).then(exists => {
+            if (exists) {
+                return res.json({
                     status: "FAILED",
-                    message: "User with this email already exist as a driver or passenger"
+                    message: "User with this email already exists"
                 });
-            } else{
+            } else {
                 const saltRounds = 10;
-                bcrypt.hash(password, saltRounds).then(hashPassword =>{
-                    const newDriver = new Driver({
-                        email,
-                        password: hashPassword,
-                        name,
-                        phonenumber
-                    });
-                    newDriver.save().then(result =>{
-                        res.json({
+                bcrypt.hash(password, saltRounds).then(hashPassword => {
+                    let newUser;
+                    if (accountType === 'driver') {
+                        newUser = new Driver({
+                            email,
+                            password: hashPassword,
+                            name,
+                            phonenumber
+                        });
+                    } else { // Default to Passenger if accountType is not specified or is 'passenger'
+                        newUser = new Passenger({
+                            email,
+                            password: hashPassword,
+                            name,
+                            phonenumber
+                        });
+                    }
+                    newUser.save().then(result => {
+                        return res.json({
                             status: "SUCCESS",
-                            message: "Registration Successfully",
+                            message: "Registration successful",
                             data: result,
-                        })
-                    })
-                    .catch(err => {
-                        res.json({
+                        });
+                    }).catch(err => {
+                        return res.json({
                             status: "FAILED",
-                            message: "Error Occur when trying to save user account"
-                        })
-                    })
-                }).catch(err =>{
-                    res.json({
+                            message: "Error saving user account"
+                        });
+                    });
+                }).catch(err => {
+                    return res.json({
                         status: "FAILED",
-                        message: "Error Occur when hashing password"
-                    })
-                })
+                        message: "Error hashing password"
+                    });
+                });
             }
-
         }).catch(err => {
             console.log(err);
-            res.json({
+            return res.json({
                 status: "FAILED",
-                message: "Error Occur when trying to check for existing User"
-            })
-        })
+                message: "Error checking for existing user"
+            });
+        });
     }
-})
+});
 
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
@@ -160,106 +204,5 @@ router.post('/signin', (req, res) =>{
     }
 });
 
-router.put('/update', authenticateToken, async (req, res) => {
-    const userId = req.user.userId;
-    const { name, phonenumber, email, newPassword } = req.body;
-
-    try {
-        const user = await Driver.findById(userId);
-        if (!user) {
-            return res.status(404).send({ message: "User not found" });
-        }
-
-        // Update name and phone number
-        if (name) user.name = name.trim();
-        if (phonenumber) user.phonenumber = phonenumber.trim();
-
-        // Update email after validation
-        if (email && email !== user.email) {
-            // Validate and check for existing email
-            const emailTaken = await emailExistsInBoth(email);
-            if (emailTaken) {
-                return res.status(400).send({ message: "Email already in use" });
-            }
-            user.email = email.trim();
-            // Optional: Implement email verification
-        }
-
-        // Update password
-        if (newPassword) {
-            // Validate new password strength here
-
-            // Hash new password and update
-            const hashPassword = await bcrypt.hash(newPassword, 10);
-            user.password = hashPassword;
-        }
-
-        await user.save();
-        res.status(200).send({
-            status: "SUCCESS",
-            message: "Profile updated successfully",
-            data: user
-        });
-
-    } catch (err) {
-        res.status(500).send({ message: err.message });
-    }
-});
-
-router.get('/passengerposts', authenticateToken, async (req, res) => {
-    try {
-        const passengerPosts = await Passengerpost.find({});
-        res.status(200).json(passengerPosts);
-    } catch (error) {
-        console.error('Failed to fetch passenger posts:', error);
-        res.status(500).json({ message: 'Failed to fetch passenger posts' });
-    }
-});
-
-// ======================================== Avatar ==========================================
-// Multer setup for file handling
-const upload = multer({
-    limits: { fileSize: 16 * 1024 * 1024 }, // 16MB limit
-    fileFilter(req, file, cb) {
-      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
-        return cb(new Error("Please upload an image file (jpg, jpeg, or png)."));
-      }
-      cb(undefined, true);
-    },
-});
-
-  // API endpoint to upload and update the driver's avatar
-router.post(
-    "/:id/avatar",
-    upload.single("avatar"),
-    async (req, res) => {
-      try {
-        const driver = await Driver.findById(req.params.id);
-        if (!driver) {
-          return res.status(404).send({ error: "Driver not found" });
-        }
-  
-        // Resize the image to a square, maintaining aspect ratio
-        const buffer = await sharp(req.file.buffer)
-          .resize(250, 250, {
-            fit: sharp.fit.cover,
-            position: sharp.strategy.entropy,
-          })
-          .png()
-          .toBuffer();
-  
-        driver.avatar = { data: buffer, contentType: "image/png" };
-        await driver.save();
-        res.send({ message: "Avatar updated successfully" });
-      } catch (error) {
-        res.status(400).send({ error: error.message });
-      }
-    },
-    (error, req, res, next) => {
-      // Error handling middleware for Multer
-      res.status(400).send({ error: error.message });
-    }
-);
-  
 
 module.exports = router;

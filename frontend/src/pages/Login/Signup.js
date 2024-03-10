@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './Signup.scss'; // Assuming you have a separate CSS file for the signup page
-import axios from 'axios'; // Ensure axios is installed
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import {faGoogle } from '@fortawesome/free-brands-svg-icons';
-
+import { faEye, faEyeSlash, faGoogle } from '@fortawesome/free-solid-svg-icons';
+import './Signup.scss';
+import axios from 'axios';
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup';
 
 const Signup = () => {
     const [email, setEmail] = useState('');
@@ -16,6 +15,19 @@ const Signup = () => {
 
     const isValidEmail = email => /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email);
 
+    const handleGoogleSuccess = (googleData) => {
+        // This function is triggered after successful Google Signup
+        // Here you can handle redirection or state update based on Google's response
+        console.log('Google signup successful:', googleData);
+
+        // Optional: Send received data/token to your backend for verification and account creation
+        // navigate('/some-path'); // Navigate user based on your application's flow
+    };
+
+    const handleGoogleFailure = (error) => {
+        console.error('Login failed:', error);
+        alert('Google signup failed: ' + (error.error || 'Please try again.'));
+    };
 
     const handleSignup = async (e) => {
         e.preventDefault();
@@ -23,7 +35,7 @@ const Signup = () => {
             alert('Please enter a valid email address.');
             return;
         }
-
+    
         if (!accountType) {
             alert('Please select an account type');
             return;
@@ -31,22 +43,25 @@ const Signup = () => {
         const userData = {
             email,
             password,
-            accountType,
+            // accountType might not be needed if the endpoint itself determines the type
         };
         try {
-            // Make the POST request to your backend API
-            const response = await axios.post('/api/signup', userData);
+            // Determine the correct endpoint based on accountType
+            const endpoint = accountType === 'driver' ? '/driver/register' : '/passenger/register';
+    
+            // Make the POST request to your backend API 
+            const response = await axios.post(`http://localhost:3001${endpoint}`, userData);
             // If the response is successful, you might get a token or a success message
             console.log(response.data);
             // Redirect to login page after successful signup
             navigate('/login');
         } catch (error) {
             // If there's an error, handle it here
-            // For example, if the email is already in use or if there was a server error
             console.error('Signup failed:', error.response?.data || error.message);
             alert(error.response?.data.error || 'Signup failed, please try again.');
         }
     };
+    
 
     const togglePasswordVisibility = () => {
         setPasswordShown(!passwordShown);
@@ -83,10 +98,12 @@ const Signup = () => {
                         <button type="submit" className="signup-btn">Signup</button>
                         <div className="divider">Or</div>
                         <div className="social-login">
-                        <button type="button" className="social-btn google">
-                            <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
-                        </button>
-                        </div>                    
+                            <GoogleSignup
+                                onSuccess={handleGoogleSuccess}
+                                onFailure={handleGoogleFailure}
+                                accountType={accountType} // Pass the selected accountType
+                            />
+                        </div>
                     </form>
                 </div>
             </div>
