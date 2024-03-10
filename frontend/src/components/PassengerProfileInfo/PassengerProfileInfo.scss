@@ -37,7 +37,7 @@
 
     margin-top: 10px;
     
-    background-color: $passenger-primary-color;
+    background-color: $passenger-secondary-color;
     color: white;
     padding: 8px 15px;
     border: none; 
@@ -48,7 +48,7 @@
 
 
     &:hover {
-        background-color: darken($passenger-primary-color, 10%);
+        background-color: darken($passenger-secondary-color, 10%);
     }
 }
   
