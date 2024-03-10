@@ -1,0 +1,89 @@
+// DriverInfo.scss
+
+@import '../../styles/variables';
+
+.driver-info-wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.driver-info {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.driver-avatar {
+    margin-bottom: 20px;
+    img {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 3px solid $driver-primary-color;
+    }
+}
+
+.driver-info-content {
+    width: 100%;
+}
+
+.driver-info-header {
+    margin-bottom: 20px;
+    h3 {
+        color: $text-color-dark;
+        font-size: 1.5rem;
+        margin: 0;
+    }
+}
+
+.driver-details {
+    text-align: left;
+    width: 100%;
+    p {
+        font-size: 1rem;
+        color: $text-color-light;
+        margin: 10px 0;
+    }
+    strong {
+        color: $text-color-dark;
+    }
+}
+
+.edit-button {
+    background-color: $driver-primary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin-top: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    &:hover {
+        background-color: darken($driver-primary-color, 10%);
+    }
+}
+
+@media (max-width: 768px) {
+    .driver-info-wrapper {
+        padding: 10px;
+    }
+    .driver-info {
+        padding: 20px;
+    }
+    .driver-avatar img {
+        width: 120px;
+        height: 120px;
+    }
+    .driver-info-header h3 {
+        font-size: 1.2rem;
+    }
+}
