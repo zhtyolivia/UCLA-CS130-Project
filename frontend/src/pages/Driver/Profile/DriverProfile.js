@@ -27,7 +27,6 @@ const DriverProfile = () => {
                 }
             };
             getDriverProfile();
-        
     }, []);
 
     if (!isLoggedIn()) {

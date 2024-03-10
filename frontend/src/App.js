@@ -42,7 +42,7 @@ function App() {
           <Route path="/driver-home" element={<DriverHome />} />
           <Route path="/initiate-ride" element={<InitiateRide />} />
           <Route path="/passenger-post" element={<PassengerPost />} />
-          <Route path="/driver-profile" element={<DriverProfile />} />
+          <Route path="/driver-profile/:id" element={<DriverProfile />} />
         </Routes>
       </div>
     </Router>
