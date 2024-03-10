@@ -71,7 +71,7 @@ function Navigation() {
         
         {/* ControlPointIcon */}
         <li className="p-nav-item">
-          <Tooltip title="Account">
+          <Tooltip title="Send post">
             <IconButton 
               aria-label="Profile" 
               color="inherit" 
