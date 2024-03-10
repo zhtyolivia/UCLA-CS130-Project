@@ -7,6 +7,7 @@ import PassengerProfile from './pages/Passenger/Profile/PassengerProfile';
 import PassengerLogin from './pages/Login/PassengerLogin';
 import Login from './pages/Login/Login';
 import WelcomePage from './pages/Login/WelcomePage';
+import SuccessPage from './pages/Login/Success';
 import Signup from './pages/Login/Signup';
 import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/" element={<WelcomePage />} />
           <Route path="/welcome" element={<WelcomePage />} />
+          <Route path="/success" element={<SuccessPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/passenger-login" element={<PassengerLogin />} />
           <Route path="/signup" element={<Signup />} />
