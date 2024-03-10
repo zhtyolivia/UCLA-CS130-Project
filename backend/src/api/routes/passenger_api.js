@@ -5,9 +5,10 @@ const router = express.Router();
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
+const Driverpost = require('../../models/driverpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate')
+const {authenticateToken} = require('../middlewares/jwtauthenticate');
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -200,6 +201,17 @@ router.put('/update', authenticateToken, async (req, res) => {
 
     } catch (err) {
         res.status(500).send({ message: err.message });
+    }
+});
+
+// GET all driver posts for passengers to view
+router.get('/driverposts', authenticateToken, async (req, res) => {
+    try {
+        const driverPosts = await Driverpost.find({}); // Modify query as needed
+        res.status(200).json(driverPosts);
+    } catch (error) {
+        console.error('Failed to fetch driver posts:', error);
+        res.status(500).json({ message: 'Failed to fetch driver posts' });
     }
 });
 

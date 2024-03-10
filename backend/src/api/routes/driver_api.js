@@ -5,9 +5,10 @@ const router = express.Router();
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
+const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate')
+const {authenticateToken} = require('../middlewares/jwtauthenticate');
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -202,6 +203,16 @@ router.put('/update', authenticateToken, async (req, res) => {
 
     } catch (err) {
         res.status(500).send({ message: err.message });
+    }
+});
+
+router.get('/passengerposts', authenticateToken, async (req, res) => {
+    try {
+        const passengerPosts = await Passengerpost.find({});
+        res.status(200).json(passengerPosts);
+    } catch (error) {
+        console.error('Failed to fetch passenger posts:', error);
+        res.status(500).json({ message: 'Failed to fetch passenger posts' });
     }
 });
 
