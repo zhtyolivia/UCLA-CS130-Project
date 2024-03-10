@@ -16,8 +16,10 @@
 
   .join-container {
     display: flex;
+    flex-direction: column;
     justify-content: center; 
     align-items: center; 
+    margin-top: 10px;
   }
 
   .join-button {
@@ -27,7 +29,7 @@
     color: white;
     border: none;
     border-radius: 5px;
-    margin-top: 15px;
+    margin-top: 5px;
     margin-bottom: 5px;
     font-size: $button-font-size; 
 
@@ -36,8 +38,66 @@
     }
   }
 
+  .cancel-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: $passenger-secondary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: $button-font-size; 
+
+    &:hover {
+      background-color: darken($passenger-secondary-color, 10%);
+    }
+  }
+
+  .cancel-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: $passenger-secondary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: $button-font-size; 
+
+    &:hover {
+      background-color: darken($passenger-secondary-color, 10%);
+    }
+  }
+
+  .accepted-button {
+    cursor: pointer;
+    padding: 10px;
+    background-color: $passenger-highlight-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    font-size: $button-font-size; 
+
+    &:hover {
+      background-color: darken($passenger-highlight-color, 10%);
+    }
+  }
+
   .post-content {
     margin-top: 20px;
     color: $text-color-light;
+  }
+
+  .button-container{
+    display: block;
+  }
+
+  .button-text {
+    color:$passenger-primary-color;
+    font-size: $button-font-size;
+    font-weight: bold;
   }
 }

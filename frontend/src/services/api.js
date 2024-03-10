@@ -3,12 +3,11 @@ import axios from "axios";
 
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
-// !!!!!! 
-// this function might not be working properly... 
+
 export const fetchPostById = async (id) => {
   try {
     console.log(id)
-    const response = await fetch(`${API_BASE_URL}/driverpost/:${id}`);
+    const response = await fetch(`${API_BASE_URL}/driverpost/${id}`);
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`);
     }

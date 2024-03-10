@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getCurrentUserId, getUserProfile } from '../../services/mockAPI';
 import './PassengerProfileInfo.scss'; 
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 import EditInfoPopup from './EditInfoPopup';
@@ -38,8 +37,6 @@ const PassengerInfo = ({name, email, phonenumber}) => {
             const data = await axios.put(`${API_BASE_URL}/passenger/update`, profile).then((res) => res.data);
             if (data.status === 'SUCCESS') {
                 setProfile(profile)
-                console.log(profile)
-                console.log(data)
                 setShowEditPopup(false); 
                 // window.location.reload();
             }
@@ -51,9 +48,7 @@ const PassengerInfo = ({name, email, phonenumber}) => {
     return (
         <div className="passenger-info">
             <div className="passenger-avatar">
-                {/* Display user's avatar or a default avatar */}
                 <img src={defaultAvatar} alt={defaultAvatar} />
-                {/* Show the edit info button */}
                 <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
             </div>
             <div>

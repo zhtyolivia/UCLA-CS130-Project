@@ -4,7 +4,7 @@ import './RideshareCard.scss';
 
 function RideshareCard({ id, startingLocation, endingLocation, availableSeats, startTime, content }) {
   return (
-    <Link to={`/${id}`} className="post-link" style={{ textDecoration: 'none', color: 'inherit' }}>
+    <Link to={`/driverposts/${id}`} className="post-link" style={{ textDecoration: 'none', color: 'inherit' }}>
       <div className="post">
         {/* <h2 className="post-title">{title}</h2> */}
         <div className="post-details">
