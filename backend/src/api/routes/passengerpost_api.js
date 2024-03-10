@@ -8,6 +8,63 @@ const passengerpostRouter = express.Router();
 
 // Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
+passengerpostRouter.get("/search", async (req, res) => {
+  let searchTerm = req.query.term;
+
+  if (searchTerm) {
+      delimiters.forEach((delimiter) => {
+          const spacedDelimiter = ` ${delimiter.trim()} `;
+          searchTerm = searchTerm.split(delimiter).join(spacedDelimiter);
+      });
+
+      let terms = searchTerm.split(" ").filter(Boolean);
+      terms = terms.filter((term) => !delimiters.includes(term));
+
+      let searchQuery = { $or: [] };
+      terms.forEach((term) => {
+          const regex = new RegExp(term, 'i'); // Case-insensitive regex for each term
+          searchQuery.$or.push({ startingLocation: regex });
+          searchQuery.$or.push({ endingLocation: regex });
+      });
+
+      Passengerpost.find(searchQuery)
+          .then((results) => {
+              res.json(results);
+          })
+          .catch((error) => {
+              console.error("Search failed:", error.message);
+              res.status(500).json({ error: "Search operation failed" });
+          });
+  } else {
+      // If no searchTerm is provided, return all passenger posts
+      Passengerpost.find({})
+          .then((results) => {
+              res.json(results);
+          })
+          .catch((error) => {
+              console.error("Failed to fetch passenger posts:", error.message);
+              res.status(500).json({ error: "Failed to fetch passenger posts" });
+          });
+  }
+});
+
+
+// Given post id, show all the post info.
+passengerpostRouter.get('/:postId', authenticateToken, async (req, res) => {
+  const { postId } = req.params; // Extract the postId from the URL parameters
+
+  try {
+      const post = await Passengerpost.findById(postId).exec(); // Fetch the post from the database
+
+      if (!post) {
+          return res.status(404).json({ message: "Passenger post not found" });
+      }
+      res.json(post); // Return the post details
+  } catch (error) {
+      console.error('Error fetching passenger post:', error);
+      res.status(500).json({ message: 'Error fetching passenger post' });
+  }
+});
 
 passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
   const passengerId = req.user.userId;
@@ -52,50 +109,6 @@ passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
       message: "An error occurred when trying to create a new driver post",
     });
   }
-});
-
-passengerpostRouter.get("/search", async (req, res) => {
-  let searchTerm = req.query.term;
-  // console.log("searchTerm", searchTerm);
-
-  if (!searchTerm) {
-    return res.status(400).json({ error: "No search term provided" });
-  }
-
-  delimiters.forEach((delimiter) => {
-    // Add space before and after the delimiter if not already present
-    // So if it is "LA, SD" it will become "LA , SD"
-    const spacedDelimiter = ` ${delimiter.trim()} `;
-    searchTerm = searchTerm.split(delimiter).join(spacedDelimiter);
-  });
-  // Split by space and remove empty strings
-  let terms = searchTerm.split(" ").filter(Boolean);
-  terms = terms.filter((term) => !delimiters.includes(term));
-  // console.log("Terms after splitting and filtering:", terms);
-
-  // Construct a search query using all terms for both starting and ending locations
-  let searchQuery = { $or: [] };
-  terms.forEach((term) => {
-    searchQuery.$or.push({ startingLocation: term });
-    searchQuery.$or.push({ endingLocation: term });
-  });
-  // console.log("Constructed searchQuery:", JSON.stringify(searchQuery, null, 2));
-
-  // Perform the search operation
-  Passengerpost.find(searchQuery)
-    .maxTimeMS(30000)
-    .then((results) => {
-      // If no results found, results will be an empty array
-      // console.log(`Number of results found: ${results.length}`);
-      //console.log("Results found:", results);
-      res.json(results);
-    })
-    .catch((error) => {
-      // Log the error for server-side debugging
-      console.error("Search failed:", error.message);
-      // Return an empty array if there's an error during the search
-      res.json([]);
-    });
 });
 
 // Delete route that uses the post ID as a unique identifier

@@ -32,6 +32,8 @@ function App() {
           <Route path="/" element={<WelcomePage />} />
           <Route path="/welcome" element={<WelcomePage />} />
           <Route path="/driver-login" element={<DriverLogin />} />
+          <Route path="/success" element={<SuccessPage />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/passenger-login" element={<PassengerLogin />} />
           <Route path="/driver-signup" element={<DriverSignup />} />
           <Route path="/home" element={<PassengerHome />} />

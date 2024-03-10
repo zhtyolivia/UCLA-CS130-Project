@@ -1,11 +1,16 @@
 const express = require('express');
+const multer = require("multer");
+const sharp = require("sharp");
 const router = express.Router();
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
+const joinRequest = require('../../models/joinrequest_model');
+const Driverpost = require('../../models/driverpost_model');
+const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate')
+const {authenticateToken} = require('../middlewares/jwtauthenticate');
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -14,16 +19,99 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
-router.get('/profile', authenticateToken, (req, res) => {
-    Passenger.findById(req.user.userId)
-    .then(user => {
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const user = await Passenger.findById(req.user.userId);
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        res.json(user);
-    })
-    .catch(err => res.status(500).send({ message: err.message }));
+
+        // Convert avatar buffer to base64 string if exists
+        let avatarBase64;
+        if (user.avatar && user.avatar.data) {
+            avatarBase64 = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
+        }
+
+        // Fetch all join requests made by the passenger
+        const JoinRequests = await joinRequest.find({ passengerId: req.user.userId })
+                                              .populate('driverPostId')
+                                              .exec();
+
+        // Prepare join request details
+        const rideshares = JoinRequests.map(request => {
+            const rideshareDetails = {
+                postId: request.driverPostId._id,
+                startingLocation: request.driverPostId.startingLocation,
+                endingLocation: request.driverPostId.endingLocation,
+                startTime: request.driverPostId.startTime,
+                status: request.status,
+                additionalNotes: request.driverPostId.additionalNotes,
+                numberOfSeats: request.driverPostId.numberOfSeats,
+                // Include full details if accepted, partial if pending or rejected
+                ...(request.status === 'accepted' && {
+                    licensenumber: request.driverPostId.licensenumber,
+                    model: request.driverPostId.model,
+                    phonenumber: request.driverPostId.phonenumber,
+                    email: request.driverPostId.email
+                })
+            };
+            return rideshareDetails;
+        });
+
+        // Fetch all posts made by the passenger
+        const passengerPosts = await Passengerpost.find({ passengerId: req.user.userId });
+
+        // Include join request details with user profile information
+        const userProfile = {
+            ...user._doc, // Spread the user document to include all user info
+            avatar: avatarBase64,
+            rideshares, // Add the rideshare details to the profile response
+            passengerPosts
+        };
+
+        res.json(userProfile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message });
+    }
 });
+
+router.get('/my-join-requests', authenticateToken, async (req, res) => {
+    const passengerId = req.user.userId; // Assuming the passenger's ID is stored in req.user.userId
+
+    try {
+        const JoinRequests = await joinRequest.find({ passengerId })
+                                              .populate('driverPostId')
+                                              .exec();
+
+        const rideshares = JoinRequests.map(request => {
+            const rideshareDetails = {
+                postId: request.driverPostId._id,
+                startingLocation: request.driverPostId.startingLocation,
+                endingLocation: request.driverPostId.endingLocation,
+                startTime: request.driverPostId.startTime,
+                status: request.status,
+                additionalNotes: request.driverPostId.additionalNotes,
+                numberOfSeats: request.driverPostId.numberOfSeats,
+                // Include full details if accepted, partial if pending or rejected
+                ...(request.status === 'accepted' && {
+                    licensenumber: request.driverPostId.licensenumber,
+                    model:request.driverPostId.model,
+                    phonenumber: request.driverPostId.phonenumber,
+                    email: request.driverPostId.email
+                })
+            };
+            return rideshareDetails;
+        });
+
+        res.json(rideshares);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+module.exports = router;
 
 router.post('/register', (req, res) =>{
     let{email, password, name, phonenumber} = req.body;
@@ -199,6 +287,61 @@ router.put('/update', authenticateToken, async (req, res) => {
     } catch (err) {
         res.status(500).send({ message: err.message });
     }
+});
+
+// GET all driver posts for passengers to view
+router.get('/driverposts', authenticateToken, async (req, res) => {
+    try {
+        const driverPosts = await Driverpost.find({}); // Modify query as needed
+        res.status(200).json(driverPosts);
+    } catch (error) {
+        console.error('Failed to fetch driver posts:', error);
+        res.status(500).json({ message: 'Failed to fetch driver posts' });
+    }
+});
+
+// ======================================== Avatar ==========================================
+const upload = multer({
+    limits: { fileSize: 16 * 1024 * 1024 }, // 16MB limit
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error("Please upload an image file (jpg, jpeg, or png)."));
+      }
+      cb(undefined, true);
+    },
+});
+
+// API endpoint to upload and update the passenger's avatar
+router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
+    if (!req.file) { // Check if the file is not uploaded
+        return res.status(400).send({ message: "Avatar is required." });
+    }
+
+    try {
+        // Use the authenticated user's ID instead of getting it from the URL
+        const passenger = await Passenger.findById(req.user.userId);
+        if (!passenger) {
+            return res.status(404).send({ error: "Passenger not found" });
+        }
+
+        // Proceed with resizing and saving the avatar as before
+        const buffer = await sharp(req.file.buffer)
+            .resize(250, 250, {
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+            })
+            .png()
+            .toBuffer();
+
+        passenger.avatar = { data: buffer, contentType: "image/png" };
+        await passenger.save();
+        res.send({ message: "Avatar updated successfully" });
+    } catch (error) {
+        res.status(400).send({ error: error.message });
+    }
+}, (error, req, res, next) => {
+    // Error handling middleware for Multer
+    res.status(400).send({ error: error.message });
 });
 
 
