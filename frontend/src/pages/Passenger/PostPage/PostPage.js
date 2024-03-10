@@ -8,7 +8,10 @@ import InitiatorInfo from '../../../components/InitiatorInfo/InitiatorInfo';
 import JoinReqPopup from '../../../components/JoinReqPopup/JoinReqPopup'; 
 import CancelJoinReq from '../../../components/JoinReqPopup/CancelJoinReq'; 
 import AcceptedPopup from '../../../components/JoinReqPopup/AcceptedPopup'; 
+
+// utils 
 import { isLoggedIn } from '../../../utils/LoginActions'; 
+import {convertDate2Readable} from '../../../utils/util';
 
 // Styles 
 import './PostPage.scss'; 
@@ -118,7 +121,7 @@ function PostPage() {
           
           <p><strong>Start Location:</strong> {post.startingLocation}</p>
           <p><strong>End Location:</strong> {post.endingLocation}</p>
-          <p><strong>Date & Time:</strong> {post.startTime}</p>
+          <p><strong>Date & Time:</strong> {convertDate2Readable(post.startTime)}</p>
           <p><strong>Remaining Seats:</strong> {post.remainingSeats}</p>
           <p><strong>Description:</strong> {post.additionalNotes}</p>
 

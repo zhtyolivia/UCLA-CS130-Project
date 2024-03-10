@@ -5,7 +5,6 @@ import PassengerInfo from '../../../components/PassengerProfileInfo/PassengerPro
 import { getCurrentUserId, getUserRideHistory } from '../../../services/mockAPI';
 import './PassengerProfile.scss';
 import { isLoggedIn } from '../../../utils/LoginActions'; 
-
 import { convertDate2Readable } from '../../../utils/util'; 
 import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
