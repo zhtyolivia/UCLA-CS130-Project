@@ -17,16 +17,31 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
-router.get('/profile', authenticateToken, (req, res) => {
-    Driver.findById(req.user.userId)
-    .then(user => {
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const user = await Driver.findById(req.user.userId);
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        res.json(user);
-    })
-    .catch(err => res.status(500).send({ message: err.message }));
+
+        // Initialize the user profile object with user details
+        let userProfile = {
+            ...user._doc, // Spread the user document to include all user info
+            avatar: undefined, // Initialize avatar field
+        };
+
+        // Convert avatar buffer to base64 string if exists
+        if (user.avatar && user.avatar.data) {
+            userProfile.avatar = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
+        }
+
+        res.json(userProfile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message });
+    }
 });
+
 
 router.post('/register', (req, res) =>{
     let{email, password, name, phonenumber} = req.body;
