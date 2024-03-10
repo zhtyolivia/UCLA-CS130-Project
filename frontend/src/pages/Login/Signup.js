@@ -28,21 +28,21 @@ const Signup = () => {
             alert('Please select an account type');
             return;
         }
+
+        const endpoint = accountType === 'driver' ? '/driver/register' : '/passenger/register';
+        const url = `http://localhost:3001${endpoint}`;
         const userData = {
             email,
             password,
-            accountType,
+            accountType
+            // Include other data needed by your backend for registration
         };
+
         try {
-            // Make the POST request to your backend API
-            const response = await axios.post('/api/signup', userData);
-            // If the response is successful, you might get a token or a success message
+            const response = await axios.post(url, userData);
             console.log(response.data);
-            // Redirect to login page after successful signup
-            navigate('/login');
+            navigate('/login'); // Redirect to login page on success
         } catch (error) {
-            // If there's an error, handle it here
-            // For example, if the email is already in use or if there was a server error
             console.error('Signup failed:', error.response?.data || error.message);
             alert(error.response?.data.error || 'Signup failed, please try again.');
         }

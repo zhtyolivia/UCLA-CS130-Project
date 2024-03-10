@@ -27,84 +27,76 @@ router.get('/profile', authenticateToken, (req, res) => {
     .catch(err => res.status(500).send({ message: err.message }));
 });
 
-router.post('/register', (req, res) =>{
-    let{email, password, name, phonenumber} = req.body;
-    email = email.trim();
-    password = password.trim();
-    name = name.trim();
-    phonenumber = phonenumber.trim();
+// ======================================== Sign Up ==========================================
+router.post('/register', async (req, res) => {
+    let { email, password, name, phonenumber } = req.body;
 
-    if(email == "" || password == "" || name == "" || phonenumber == ""){
-        res.json({
+    // Trim input fields if they exist, otherwise set them to an empty string to avoid TypeError
+    email = email ? email.trim() : "";
+    password = password ? password.trim() : "";
+    name = name ? name.trim() : "";
+    phonenumber = phonenumber ? phonenumber.trim() : "";
+
+    // Validation
+    if (email === "" || password === "" || name === "" || phonenumber === "") {
+        return res.json({
             status: "FAILED",
-            message: "Empty Input for some fields"
+            message: "Empty input for some fields"
         });
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
-        res.json({
+    } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
+        return res.json({
             status: "FAILED",
-            message: "Invalid Email"
-        })
-    } else if (!/^[a-zA-z]*$/.test(name)){
-        res.json({
+            message: "Invalid email"
+        });
+    } else if (!/^[a-zA-Z\s]*$/.test(name)) { // Modified regex to allow spaces in names
+        return res.json({
             status: "FAILED",
-            message: "Invalid Name"
-        })
-    } else if (!/^\d{10}$/.test(phonenumber)){
-        res.json({
+            message: "Invalid name"
+        });
+    } else if (!/^\d{10}$/.test(phonenumber)) {
+        return res.json({
             status: "FAILED",
-            message: "Invalid PhoneNumber"
-        })
-    } else if (password.length < 8){
-        res.json({
+            message: "Invalid phone number"
+        });
+    } else if (password.length < 8) {
+        return res.json({
             status: "FAILED",
-            message: "Invalid Password"
-        })
-    } else {
-        emailExistsInBoth(email).then(emailExists =>{
-            if (emailExists){
-                res.json({
-                    status: "FAILED",
-                    message: "User with this email already exist as a driver or passenger"
-                });
-            } else{
-                const saltRounds = 10;
-                bcrypt.hash(password, saltRounds).then(hashPassword =>{
-                    const newPassenger = new Passenger({
-                        email,
-                        password: hashPassword,
-                        name,
-                        phonenumber
-                    });
-                    newPassenger.save().then(result =>{
-                        res.json({
-                            status: "SUCCESS",
-                            message: "Registration Successfully",
-                            data: result,
-                        })
-                    })
-                    .catch(err => {
-                        res.json({
-                            status: "FAILED",
-                            message: "Error Occur when trying to save user account"
-                        })
-                    })
-                }).catch(err =>{
-                    res.json({
-                        status: "FAILED",
-                        message: "Error Occur when hashing password"
-                    })
-                })
-            }
-
-        }).catch(err => {
-            console.log(err);
-            res.json({
-                status: "FAILED",
-                message: "Error Occur when trying to check for existing User"
-            })
-        })
+            message: "Password must be at least 8 characters long"
+        });
     }
-})
+
+    try {
+        const emailExists = await emailExistsInBoth(email);
+        if (emailExists) {
+            return res.json({
+                status: "FAILED",
+                message: "User with this email already exists as a driver or passenger"
+            });
+        }
+
+        const hashPassword = await bcrypt.hash(password, 10);
+        const newPassenger = new Passenger({
+            email,
+            password: hashPassword,
+            name,
+            phonenumber
+        });
+
+        const result = await newPassenger.save();
+        res.json({
+            status: "SUCCESS",
+            message: "Registration successful",
+            data: result,
+        });
+    } catch (err) {
+        console.error(err);
+        res.json({
+            status: "FAILED",
+            message: "An error occurred when trying to register"
+        });
+    }
+});
+
 
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
