@@ -3,6 +3,7 @@ const Driverpost = require("../../models/driverpost_model");
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const joinRequest = require('../../models/joinrequest_model');
+const sendEmail = require('../../utils/emailService');
 const { authenticateToken } = require("../middlewares/jwtauthenticate");
 
 const driverpostRouter = express.Router();
@@ -71,6 +72,17 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
           driverPost.passengers.push(JoinRequest.passengerId);
           await driverPost.save();
       }
+
+      // Send email notification to the passenger
+      const passenger = await Passenger.findById(JoinRequest.passengerId)
+      if (!passenger) {
+        console.log('Passenger not found');
+      } else {
+        // console.log('Passenger email:', passenger.email);
+        const subject = 'Ride Share Request Update';
+        const text = `Your ride share request for the post starting at ${driverPost.startingLocation} has been accepted.`;
+        await sendEmail(passenger.email, subject, text);
+      }
       res.json({ message: 'Join request accepted successfully.' });
   } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
@@ -92,6 +104,17 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
       JoinRequest.status = 'declined';
       await JoinRequest.save();
 
+      // Send email notification to the passenger
+      const driverPost = await Driverpost.findById(JoinRequest.driverPostId);
+      const passenger = await Passenger.findById(JoinRequest.passengerId)
+      if (!passenger) {
+        console.log('Passenger not found');
+      } else {
+        // console.log('Passenger email:', passenger.email);
+        const subject = 'Ride Share Request Update';
+        const text = `Your ride share request for the post starting at ${driverPost.startingLocation} has been accepted.`;
+        await sendEmail(passenger.email, subject, text);
+      }
       res.json({ message: 'Join request declined' });
   } catch (error) {
       res.status(500).json({ message: 'Server error', error: error.message });
@@ -196,7 +219,19 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
         $push: { joinrequests: savedJoinRequest._id }
       });
     }
-    //TO DO: send email notification
+    
+    //send email notification
+    const driver = await Driver.findById(existingPost.driverId);
+    if (!driver) {
+      console.error('Driver not found');
+    } else {
+      // Prepare email notification details
+      const subject = 'New Ride Share Join Request';
+      const text = `A new passenger has requested to join your ride share from ${existingPost.startingLocation} to ${existingPost.endingLocation}. Please check your dashboard for more details.`;
+
+      // Send email to the Driver
+      await sendEmail(driver.email, subject, text);
+    }
 
     res.status(201).json({
       message: 'Join request sent successfully',
