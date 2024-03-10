@@ -109,6 +109,7 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
 
       // Send email notification to the passenger
       // Get Passenger
+      const driverPost = await Driverpost.findById(JoinRequest.driverPostId);
       const passenger = await Passenger.findById(JoinRequest.passengerId)
       if (!passenger) {
         console.log('Passenger not found');
@@ -204,6 +205,17 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
       });
     }
     //TO DO: send email notification
+    const driver = await Driver.findById(existingPost.driverId);
+    if (!driver) {
+      console.error('Driver not found');
+    } else {
+      // Prepare email notification details
+      const subject = 'New Ride Share Join Request';
+      const text = `A new passenger has requested to join your ride share from ${existingPost.startingLocation} to ${existingPost.endingLocation}. Please check your dashboard for more details.`;
+
+      // Send email to the Driver
+      await sendEmail(driver.email, subject, text);
+    }
 
     res.status(201).json({
       message: 'Join request sent successfully',
