@@ -61,7 +61,6 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
       if (!driverPost) {
           return res.status(404).json({ message: 'Driver post not found' });
       }
-
       // Assuming driverPost has an array to store passengerIds of accepted passengers
       if (!driverPost.passengers.includes(JoinRequest.passengerId)) {
           driverPost.passengers.push(JoinRequest.passengerId);
