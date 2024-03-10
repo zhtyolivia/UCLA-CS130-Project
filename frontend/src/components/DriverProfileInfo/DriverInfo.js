@@ -6,12 +6,13 @@ import DriverEditPopup from './DriverEditPopup';
 import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
-const DriverInfo = ({name, email, phonenumber}) => {
+const DriverInfo = ({name, email, phonenumber, avatar}) => {
     const [showEditPopup, setShowEditPopup] = useState(false); 
     const [profile, setProfile] = useState({
         name,
         email,
-        phonenumber
+        phonenumber,
+        avatar
       });
     const [showDriverPosts, setShowDriverPosts] = useState(false);
     const [showJoinRequests, setShowJoinRequests] = useState(false);
@@ -22,13 +23,20 @@ const DriverInfo = ({name, email, phonenumber}) => {
         setProfile({
             name: name,
             email: email,
-            phonenumber: phonenumber
+            phonenumber: phonenumber,
+            avatar: avatar
         });
       }, [name, email, phonenumber]); // Depend on props to update state
     
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setProfile(prev => ({ ...prev, [name]: value }));
+      const handleChange = (e) => {
+        const { name, value, files } = e.target; 
+        if (name === 'avatar') {
+            console.log(files[0]);
+            setProfile(prev => ({ ...prev, avatar: files[0]}));
+            console.log('after setProfile, profile: ', profile)
+        } else {
+            setProfile(prev => ({ ...prev, [name]: value }));
+        }
     }
 
     const handleEditClick = () => setShowEditPopup(true);
@@ -46,6 +54,22 @@ const DriverInfo = ({name, email, phonenumber}) => {
                 console.log(data)
                 setShowEditPopup(false); 
                 // window.location.reload();
+            }
+            if (profile.avatar && profile.avatar instanceof File) {
+                console.log('entering if...', profile.avatar)
+                // If there's an avatar, perform a second request to upload avatar 
+                const formData = new FormData(); 
+                formData.append('avatar', profile.avatar); 
+                console.log(formData);
+                console.log('profile.avatar:', profile.avatar)
+                const avatarResponse = await axios.post(`${API_BASE_URL}/passenger/avatar`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+
+                const avatarResult = avatarResponse.data; 
+                console.log('avatar result: ', avatarResult);
             }
         } catch(err) {
             console.error(err)
@@ -96,18 +120,20 @@ const DriverInfo = ({name, email, phonenumber}) => {
         }
     };
     return (
-        <div className="driver-info">
-            <div className="driver-avatar">
-                {/* Display user's avatar or a default avatar */}
-                <img src={defaultAvatar} alt={defaultAvatar} />
-                {/* Show the edit info button */}
+        <div className="driver-info-wrapper">
+            <div className="driver-info">
+                <div className="driver-info-header">
+                    <div className="driver-avatar">
+                        <img src={avatar ? avatar : defaultAvatar} alt={`${name}'s Avatar`} />
+                    </div>
+                    <div className="driver-details">
+                        <h3>User Information</h3>
+                        <p><strong>Username/Email:</strong> {email}</p>
+                        <p><strong>Full Name:</strong> {name}</p>
+                        <p><strong>Phone number:</strong> {phonenumber}</p>
+                    </div>
+                </div>
                 <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
-            </div>
-            <div className="driver-info-content">
-                <h3>Driver Information</h3>
-                <p><strong>Email:</strong> {email}</p>
-                <p><strong>Full Name:</strong> {name}</p>
-                <p><strong>Phone Number:</strong> {phonenumber}</p>
                 <button className="info-button" onClick={toggleDriverPosts}>My Posts</button>
                 <button className="info-button" onClick={toggleJoinRequests}>Join Requests</button>
 

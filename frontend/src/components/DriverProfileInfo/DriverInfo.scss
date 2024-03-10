@@ -17,14 +17,15 @@
     padding: 40px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start; // Align to the start, not center
     width: 100%;
+    margin: auto; // Center the card in the middle of the page
 }
 
 .driver-avatar {
-    margin-bottom: 20px;
+    // Keep the styles for the avatar image
     img {
-        width: 150px;
+        width: 150px; // Control the size of the image to standard 150x150
         height: 150px;
         border-radius: 50%;
         object-fit: cover;
@@ -34,20 +35,45 @@
 
 .driver-info-content {
     width: 100%;
+    padding-left: 20px; // Add padding to align with the image
 }
 
 .driver-info-header {
+    display: flex;
+    flex-direction: row; // Ensure the header is a row for avatar and info to be side by side
+    align-items: center; // Align items vertically in the center
     margin-bottom: 20px;
+
+    .driver-avatar {
+        margin-right: 20px; // Add space between the avatar and the text
+    }
+
     h3 {
         color: $text-color-dark;
         font-size: 1.5rem;
         margin: 0;
+        flex-grow: 1; // Allow the title to take up remaining space
+    }
+}
+
+.edit-button {
+    background-color: $driver-primary-color;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    align-self: center; // Align button by itself to the center horizontally
+    &:hover {
+        background-color: darken($driver-primary-color, 10%);
     }
 }
 
 .driver-details {
-    text-align: left;
     width: 100%;
+    text-align: left; // Align text to the left
+
     p {
         font-size: 1rem;
         color: $text-color-light;
@@ -58,32 +84,22 @@
     }
 }
 
-.edit-button {
-    background-color: $driver-primary-color;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    margin-top: 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    &:hover {
-        background-color: darken($driver-primary-color, 10%);
-    }
-}
-
+// Adapt responsiveness
 @media (max-width: 768px) {
     .driver-info-wrapper {
         padding: 10px;
     }
     .driver-info {
         padding: 20px;
+        flex-direction: column; // Stack elements on smaller screens
     }
-    .driver-avatar img {
-        width: 120px;
-        height: 120px;
+    .driver-info-header {
+        flex-direction: column;
+        .driver-avatar {
+            margin-bottom: 20px; // Space below the avatar on smaller screens
+        }
     }
-    .driver-info-header h3 {
-        font-size: 1.2rem;
+    .edit-button {
+        align-self: stretch; // Stretch button to fit the container width
     }
 }
