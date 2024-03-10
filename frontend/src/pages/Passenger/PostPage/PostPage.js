@@ -36,7 +36,7 @@ function PostPage() {
         // console.log('driverPost:', data.driverPost); 
         setRequested(data.hasJoined); // whether there is a join request sent previously 
         setStatus(data.joinRequestStatus)
-        console.log('requested:', requested)
+        // console.log('requested:', requested)
       } catch(err) {
         console.error(err); 
       }
@@ -83,7 +83,7 @@ function PostPage() {
 
     try {
       await axios.post(`${API_BASE_URL}/driverpost/${id}/join`, body); 
-      console.log("Join request sent.");
+      // console.log("Join request sent.");
       setShowRequestPopup(false);
       window.location.reload();
     } catch  (err) {
