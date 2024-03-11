@@ -1,122 +1,15 @@
-# Getting Started with Create React App
+# Motivation/Concept
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+In California, especially in Los Angeles, there exists a pressing need for ridesharing as an efficient, cost-effective, and environmentally friendly transportation option. There are several existing solutions to the problem. Ride-hailing companies – most notably Uber Technologies, Inc. and Lyft, Inc. – provide shared rides by connecting riders who share similar routes and offering them a discounted price. However, these services are not flexible enough, and traveling for a long distance is still expensive and in some cases impossible. Our proposed application, Swift Link, aims to address these challenges. This website will enable users to connect with others for shared rides. The core premise is simple yet powerful: facilitate ride sharing for people traveling to or from Los Angeles from other parts of California, especially benefiting those who do not own a car, who need more riders to use the carpool lanes, and/or who seek people to split fuel expenses.
 
-## Available Scripts
+There are two types of accounts--driver account and passenger account. A driver can initiate a rideshare, and passengers can request to join a rideshare.
 
-In the project directory, you can run:
+After initiating a rideshare, a driver will be notifed when a passenger requests to join. Then the driver will be able to accept/decline the request. Upen accepting, the driver will have access to the passenger's contact information.
 
-### `npm start`
+After identifying a rideshare to join, a passenger can send a join request and cancel the request. After the request is accepted, the passenger can view further information about the ride and the driver, therefore making the rideshare possible.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+We believe Swift Link is able to bridge the gap in the current ride-sharing landscape by offering a user-friendly solution. It caters specifically to the needs of Californians, especially those in and around Los Angeles, who are looking for ridesharing. Our team has been focusing on implementing this idea by building an MVP of the product, thereby offering a solution to the ridesharing need in California.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+# Installation
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
-
-
-
-# Project File Structure
-Frontend
-The frontend project structure may vary depending on the framework used (such as React, Vue, Angular, etc.), but the basic principles are similar. Here is an example structure based on React:
-```
-/frontend
-  /node_modules
-  /public
-  /src
-    /components
-    /pages
-    /services
-    /hooks
-    /utils
-    /assets
-      /images
-      /styles
-    App.js
-    index.js
-  package.json
-```
-- `public`: This directory is usually used for static assets like HTML files, icons, and images that don't go through Webpack processing.
-
-- `src`: This is the main container for all the code that runs your application.
-
-- `assets`: Store static assets like images, fonts, and shared CSS that are not component-specific.
-
-- `components`: This is where you keep all your React components. It looks like Post.js and TestComponent.js should be here. If you have components that are very specific to a page and are not reused anywhere else, they might be better placed within a subdirectory of the specific page within pages.
-
-- `hooks`: Custom React hooks should be placed here.
-
-- `pages`: Each page or route in your application should have its own directory within pages. For instance, PassengerHome.js and its corresponding CSS file PassengerHome.css should be in a folder named PassengerHome within pages. The same goes for PassengerProfile.js and PostPage.js along with their corresponding CSS files.
-
-- `services`: This directory should contain files related to external services. For example, API calls should be encapsulated here. mockAPI.js seems like it would belong here.
-
-- `utils`: Utility functions that are used across different components or pages should be stored here. If test.js is a utility file, it should be in utils.
-
-- `index.js`: This is the entry point of your React application.
-
-- `index.css`: This is the global stylesheet for your application.
-
-- `reportWebVitals.js`: This file is used for measuring the performance of your app and is usually part of the default React app setup.
-
-Other files at the root level:
-
-- `package.json`: Contains metadata about the project and the list of dependency packages.
-
-- `package-lock.json`: Automatically generated file to lock down the versions of a package’s dependencies.
-
-- `.gitignore`: This file tells Git which files or folders to ignore in a project.
+to be added

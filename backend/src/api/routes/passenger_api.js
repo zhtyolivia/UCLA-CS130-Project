@@ -11,7 +11,7 @@ const Passengerpost = require('../../models/passengerpost_model');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {authenticateToken} = require('../middlewares/jwtauthenticate');
-
+const {verifyGoogleToken} = require('../../services/authHelpers.js')
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
     const driverExists = await Driver.findOne({ email }).exec();
@@ -344,5 +344,44 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
     res.status(400).send({ error: error.message });
 });
 
+
+
+// THIRD PARTY SIGN UP 
+router.post('/google-signup', async (req, res) => {
+    const { token } = req.body; // This is the ID token from Google
+    try {
+        const payload = await verifyGoogleToken(token);
+
+        const email = payload['email'];
+        const name = payload['name'];
+        // Google does not provide a phone number, so it will be null initially
+        // You might prompt the user to add it later in their profile settings
+
+        // Check if the user already exists
+        let user = await emailExistsInBoth(email);
+        if (!user) {
+            // User doesn't exist, create a new one
+            user = new Passenger({
+                email,
+                name,
+                // Set password to null or a hashed random string since it won't be used for Google signups
+                password: await bcrypt.hash(`${Math.random()*1000000}`, 10),
+                phonenumber: '', // Consider making phonenumber optional in your model or setting a placeholder
+                // Additional fields like Google ID or a flag to indicate this user signed up with Google
+            });
+            await user.save();
+        } else {
+            // User already exists. Here you can handle user login instead.
+        }
+
+        // Generate a token for the user (optional, depends on your auth flow)
+        const authToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
+
+        res.status(200).json({ message: "User authenticated successfully", token: authToken, user });
+    } catch (error) {
+        console.error('Error verifying Google token:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 module.exports = router;
