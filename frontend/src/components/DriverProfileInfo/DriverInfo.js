@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './DriverEditPopup.scss'; 
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 import DriverEditPopup from './DriverEditPopup';
-
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
@@ -18,6 +18,8 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
     const [showJoinRequests, setShowJoinRequests] = useState(false);
     const [driverPosts, setDriverPosts] = useState([]);
     const [joinRequests, setJoinRequests] = useState([]);
+    const navigate = useNavigate();
+
 
     useEffect(() => {
         setProfile({
@@ -96,17 +98,54 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
     // Toggle driver posts dropdown
     const toggleDriverPosts = () => {
+        setShowJoinRequests(false); // Hide Join Requests when showing My Posts
         setShowDriverPosts(!showDriverPosts);
         if (!showDriverPosts && !driverPosts.length) {
             fetchMyDriverPosts();
         }
     };
+    const handlePostClick = (post) => {
+        navigate('/driver-post-detail', { state: { post } });
+      };
 
+    
     // Toggle join requests dropdown
     const toggleJoinRequests = () => {
+        setShowDriverPosts(false); // Hide My Posts when showing Join Requests
         setShowJoinRequests(!showJoinRequests);
         if (!showJoinRequests && !joinRequests.length) {
             fetchJoinRequests();
+        }
+    };
+    // Function to accept a join request
+    const acceptJoinRequest = async (requestId) => {
+        try {
+            const response = await axios.patch(`${API_BASE_URL}/driverpost/join-requests/${requestId}/accept`);
+            console.log('Accept Join Response:', response.data);
+            // Optionally, refetch the join requests or update state here
+            setJoinRequests(current =>
+                current.map(request => 
+                    request.requestId === requestId ? { ...request, status: 'accepted' } : request
+                )
+            );
+        } catch (error) {
+            console.error('Error accepting join request:', error.response ? error.response.data : error.message);
+        }
+    };
+
+    // Function to decline a join request
+    const declineJoinRequest = async (requestId) => {
+        try {
+            const response = await axios.patch(`${API_BASE_URL}/driverpost/join-requests/${requestId}/decline`);
+            console.log('Decline Join Response:', response.data);
+            // Optionally, refetch the join requests or update state here
+            setJoinRequests(current =>
+                current.map(request => 
+                    request.requestId === requestId ? { ...request, status: 'declined' } : request
+                )
+            );
+        } catch (error) {
+            console.error('Error declining join request:', error.response ? error.response.data : error.message);
         }
     };
     return (
@@ -133,28 +172,40 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
 
                 {showDriverPosts && (
-                    <div className="dropdown-content">
+                    <div className="posts-container">
                         {driverPosts.map((post, index) => (
-                            <div key={index} className="post-detail">
-                                <p><strong>Title:</strong> {post.title}</p>
-                                <p><strong>Starting Location:</strong> {post.startingLocation}</p>
-                                <p><strong>Ending Location:</strong> {post.endingLocation}</p>
-                                <p><strong>Start Time:</strong> {new Date(post.startTime).toLocaleString()}</p>
-                                <p><strong>Seats Available:</strong> {post.numberOfSeats}</p>
-                                <p><strong>License Number:</strong> {post.licensenumber}</p>
-                                <p><strong>Car Model:</strong> {post.model}</p>
-                                <p><strong>Additional Notes:</strong> {post.additionalNotes}</p>
-                                {/* Add any other details you wish to display here */}
+                            <div key={post._id} className="post-card" onClick={() => handlePostClick(post)}>
+                                <div key={index} className="post-card">
+                                    <h4>{post.title}</h4>
+                                    <p><strong>Starting Location:</strong> {post.startingLocation}</p>
+                                    <p><strong>Ending Location:</strong> {post.endingLocation}</p>
+                                    <p><strong>Start Time:</strong> {new Date(post.startTime).toLocaleString()}</p>
+                                    <p><strong>Seats Available:</strong> {post.numberOfSeats}</p>
+                                    <p><strong>License Number:</strong> {post.licensenumber}</p>
+                                    <p><strong>Car Model:</strong> {post.model}</p>
+                                    <p><strong>Additional Notes:</strong> {post.additionalNotes}</p>
+                                </div>
                             </div>
                         ))}
                     </div>
                 )}
                 {showJoinRequests && (
-                    <div className="dropdown-content">
-                        {joinRequests.map((request, index) => (
-                            <div key={index}>
-                                <p>{request.message}</p>
-                                {/* Render additional request details */}
+                    <div className="requests-container">
+                        {joinRequests.filter(request => request.status !== 'accepted' && request.status !== 'declined').map((request, index) => (
+                            <div key={index} className="request-card">
+                                <h4>Request from {request.passengerName}</h4>
+                                <p><strong>Starting Location:</strong> {request.startingLocation}</p>
+                                <p><strong>Ending Location:</strong> {request.endingLocation}</p>
+                                <p><strong>Start Time:</strong> {new Date(request.startTime).toLocaleString()}</p>
+                                <p><strong>Message:</strong> {request.message}</p>
+                                <div className="request-actions">
+                                    <button onClick={() => acceptJoinRequest(request.requestId)} className="accept-button">
+                                        Accept
+                                    </button>
+                                    <button onClick={() => declineJoinRequest(request.requestId)} className="decline-button">
+                                        Decline
+                                    </button>
+                                </div>
                             </div>
                         ))}
                     </div>

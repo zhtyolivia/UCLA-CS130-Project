@@ -26,7 +26,61 @@
   padding: 8px 10px;
   font-size: 1rem;
 }
+.button-container {
+    display: flex;
+    flex-direction: column; // Stack the buttons on top of each other
+    align-items: stretch; // Stretch buttons to fill the width
+    width: 100%;
+    margin-top: 20px;
+  
+    .info-button,
+    .edit-button {
+      background-color: $driver-primary-color;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      padding: 15px 30px;
+      cursor: pointer;
+      font-size: 1rem;
+      text-transform: uppercase;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      margin-bottom: 10px; // Add space between buttons
+  
+      &:hover {
+        background-color: darken($driver-primary-color, 15%);
+      }
+    }
+  }
 
+  // Additional styles for the buttons within .post-request-buttons
+.post-request-buttons {
+    display: flex;
+    justify-content: space-between; // This ensures there is space between the buttons
+    width: 100%; // This ensures the container takes the full width
+  
+    .info-button {
+      width: calc(50% - 10px); // Adjust the width of each button to take half of the container minus the gap
+      margin-bottom: 10px; // Space between the buttons and the content below
+    }
+  }
+  
+  @media (max-width: 768px) {
+    // In a small screen, if you want the buttons to stack
+    .post-request-buttons {
+      flex-direction: column;
+  
+      .info-button {
+        width: auto; // Allow buttons to fill the space
+        margin-bottom: 10px;
+      }
+  
+      .my-posts, .join-requests {
+        width: 100%; // Take the full width on small screens
+      }
+    }
+  }
+  
 .driver-info-header {
   display: flex;
   justify-content: space-between;
@@ -60,3 +114,76 @@
 .edit-popup form button {
   margin-top: 10px;
 }
+.posts-container, .requests-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+  }
+  
+  .request-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+  }
+  
+  .accept-button, .decline-button {
+    padding: 10px 20px;
+    margin: 5px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+  
+  .accept-button {
+    background-color: #4CAF50; // Green color for accept
+    color: white;
+  
+    &:hover {
+      background-color: darken(#4CAF50, 10%);
+    }
+  }
+  
+  .decline-button {
+    background-color: #F44336; // Red color for decline
+    color: white;
+  
+    &:hover {
+      background-color: darken(#F44336, 10%);
+    }
+  }
+
+  .post-card, .request-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 20px;
+    transition: box-shadow 0.3s ease;
+  
+    &:hover {
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+  
+    h4 {
+      margin-top: 0;
+      color: $driver-primary-color;
+    }
+  
+    p {
+      margin: 10px 0;
+      line-height: 1.4;
+      &:first-child {
+        margin-top: 0;
+      }
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+  }
+  

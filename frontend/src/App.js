@@ -11,6 +11,8 @@ import DriverSignup from './pages/Login/DriverSignup';
 import NotFoundPage from './pages/Login/NotFoundPage';
 import Success from './pages/Login/Success';
 import DriverHome from './pages/Driver/Home/DriverHome';
+import PassengerPostDetail from './pages/Driver/Home/PassengerPostDetail';
+import DriverPostDetail from './pages/Driver/Home/DriverPostDetail';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
 import PassengerPost from './pages/Passenger/PassengerPost/PassengerPost';
 import DriverProfile from './pages/Driver/Profile/DriverProfile';
@@ -47,8 +49,9 @@ function App() {
           <Route path="/initiate-ride" element={<InitiateRide />} />
           <Route path="/passenger-post" element={<PassengerPost />} />
           <Route path="/driver-profile/:id" element={<DriverProfile />} />
+          <Route path="/passenger-post/:postId" element={<PassengerPostDetail />} />
+          <Route path="/driver-post-detail" element={<DriverPostDetail />} />
           <Route path="*" element={<NotFoundPage />} />
-          
         </Routes>
       </div>
     </Router>

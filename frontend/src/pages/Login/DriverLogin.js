@@ -46,6 +46,9 @@ const DriverLogin = () => {
 
     return (
         <div className="login-page">
+            <div className="p-log-in-top-stripe">
+                <span className="brand-text">SwiftLink</span>
+            </div>
             <div className="login-container">
                 <div className="login-card">
                     <Link to="/" className="back-btn">Back</Link>
@@ -79,11 +82,9 @@ const DriverLogin = () => {
                         </div>
                         <button type="submit" className="login-btn">Login</button>
                     </form>
-                    <Link to="/forgot-password" className="forgot-password-link">Forgot password?</Link>
                     <p className="sign-up-text">
                         Don't have an account? <Link to="/driver-signup">Sign up</Link>
                     </p>
-                    <Link to="/driver-home" className="go-home-link">Go to Driver Home</Link>
                 </div>
             </div>
         </div>
