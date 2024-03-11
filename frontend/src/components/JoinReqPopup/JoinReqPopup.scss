@@ -10,7 +10,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's above other content */
+  z-index: 1000; // Ensure it's above other content
 }
 
 .popup-content {
@@ -19,22 +19,59 @@
   border-radius: 5px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
   width: 90%;
-  max-width: 400px; 
+  max-width: 400px;
+}
 
-  .popup-textarea {
-    width: 100%; // Makes the textarea take up the full width of its parent
-    padding: 10px; // Adds some padding inside the textarea for better text visibility
-    margin-top: 20px; // Adds margin at the top for spacing from previous elements
-    margin-bottom: 20px; // Adds margin at the bottom before action buttons
-    border-radius: 4px; // Gives the textarea slightly rounded corners
-    border: 1px solid #ccc; // Sets a light border for the textarea
-    font-family: 'Arial', sans-serif; // Ensures the font inside the textarea matches your design
-    font-size: 14px; // Sets a readable default font size
-    line-height: 1.5; // Adjusts the line height for better readability
-    resize: vertical; // Allows the user to resize the textarea vertically
-    min-height: 80px; // Sets a minimum height so there's enough room to type a message
+// Common style for both textarea and input
+.input-common {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-family: 'Arial', sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  // Input specific
+  &:not(textarea) {
+    resize: none;
   }
-  
+  // Textarea specific
+  &.popup-textarea {
+    resize: vertical;
+    min-height: 80px;
+  }
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: space-between; // Ensure buttons are spread out
+  button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    // Specific styles for different buttons if needed
+    &.popup-button {
+      cursor: pointer;
+      padding-left: 10px;
+      padding-right: 10px; 
+      padding-top: 5px;
+      padding-bottom: 5px;
+      background-color: $passenger-primary-color;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      margin-top: 15px;
+      margin-bottom: 5px;
+      &:hover {
+        background-color: $passenger-hover-color;
+      }
+  }
+}
 }
 
 .h2 {
@@ -47,22 +84,22 @@
   gap: 20px; 
 }
 
-.popup-button {
-  cursor: pointer;
-  padding-left: 10px;
-  padding-right: 10px; 
-  padding-top: 5px;
-  padding-bottom: 5px;
-  background-color: $passenger-primary-color;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  margin-top: 15px;
-  margin-bottom: 5px;
-  &:hover {
-    background-color: $passenger-hover-color;
-  }
-}
+// .popup-button {
+//   cursor: pointer;
+//   padding-left: 10px;
+//   padding-right: 10px; 
+//   padding-top: 5px;
+//   padding-bottom: 5px;
+//   background-color: $passenger-primary-color;
+//   color: white;
+//   border: none;
+//   border-radius: 5px;
+//   margin-top: 15px;
+//   margin-bottom: 5px;
+//   &:hover {
+//     background-color: $passenger-hover-color;
+//   }
+// }
 
 .secondary-popup-button {
   cursor: pointer;

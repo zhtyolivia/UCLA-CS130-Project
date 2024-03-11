@@ -27,6 +27,7 @@ function PostPage() {
   const { id } = useParams();
   const [status, setStatus] = useState(''); 
   const [msg, setMsg] = useState(''); 
+  const [numSeats, setNumSeats] = useState(); 
   const [requested, setRequested] = useState(); 
 
   useEffect( () => {
@@ -37,7 +38,7 @@ function PostPage() {
         console.log('data:', data);
         setPost(data.driverPost);
         setRequested(data.hasJoined); // whether there is a join request sent previously 
-        setStatus(data.joinRequestStatus)
+        setStatus(data.joinRequestStatus);
       } catch(err) {
         console.error(err); 
       }
@@ -79,7 +80,8 @@ function PostPage() {
     
     const body = {
       postId: id, 
-      message: msg
+      message: msg, 
+      seatsNeeded: numSeats
     }; 
 
     try {
@@ -127,7 +129,7 @@ function PostPage() {
           <p><strong>Start Location:</strong> {post.startingLocation}</p>
           <p><strong>End Location:</strong> {post.endingLocation}</p>
           <p><strong>Date & Time:</strong> {convertDate2Readable(post.startTime)}</p>
-          <p><strong>Remaining Seats:</strong> {post.remainingSeats}</p>
+          <p><strong>Remaining Seats:</strong> {post.numberOfSeats}</p>
           <p><strong>Description:</strong> {post.additionalNotes}</p>
 
           {!requested && 
@@ -163,7 +165,7 @@ function PostPage() {
         {status === 'accepted' && <InitiatorInfo post={post}/>}
 
       </div>
-      {showRequestPopup &&  <JoinReqPopup onClose={handleClosePopup} onSubmit={handleSubmit} />}
+      {showRequestPopup &&  <JoinReqPopup onClose={handleClosePopup} onSubmit={handleSubmit} maxSeats={post.numberOfSeats}/>}
       {showCancelPopup &&  <CancelJoinReq onClose={handleCloseCancel} onSubmit={handleCancelSubmit} />}
       {showAcceptedPopup &&  <CancelJoinReq onClose={handleCloseAccepted} onSubmit={handleCancelSubmit} />}
     </div>
