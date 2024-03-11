@@ -211,7 +211,9 @@ router.get('/profile', authenticateToken, async (req, res) => {
 // Updated /register endpoint to call the appropriate function based on the request
 router.post('/register', async (req, res) => {
     console.log(req.body); // Add this line to log the request body
-    const { email, password, name, phonenumber, code, accountType } = req.body;
+    const code = req.headers.authorization;
+    console.log('Authorization Code:', code);
+    const { email, password, name, phonenumber, accountType } = req.body;
     console.log("Signup attempt:", code ? "Google Signup" : "Traditional Signup");
     // Decide between Google signup and traditional signup based on the presence of a token
     if (code) {
