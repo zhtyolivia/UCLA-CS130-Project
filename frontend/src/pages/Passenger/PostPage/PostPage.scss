@@ -14,7 +14,7 @@
     color: $text-color-dark;
   }
 
-  .join-container {
+  .p-join-container {
     display: flex;
     flex-direction: column;
     justify-content: center; 
@@ -91,8 +91,9 @@
     color: $text-color-light;
   }
 
-  .button-container{
+  .p-button-container{
     display: block;
+    text-align: ccenter;
   }
 
   .button-text {

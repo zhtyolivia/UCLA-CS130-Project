@@ -8,10 +8,12 @@ import { fetchPostById } from '../../services/mockAPI'; // Import the mock API f
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 
 const InitiatorInfo = ({post}) => {
+    console.log(post.avatar)
     return (
         <div className="user-info">
             <div className="user-avatar">
-                <img src={post.avatar} alt={defaultAvatar} />
+                {post.avatar === undefined && <img src={defaultAvatar} alt={defaultAvatar} />}
+                {!post.avatar === undefined && <img src={post.avatar} alt={defaultAvatar} />}
             </div>
             <div>
                 <div className="user-info-header"> 
