@@ -96,7 +96,14 @@ function PostPage() {
 
   const handleCancelSubmit = async (e) => {
     e.preventDefault();
-    // Backend API in development... 
+    
+    try {
+      const response = await axios.post(`${API_BASE_URL}/driverpost/${id}/cancel`); 
+      setShowCancelPopup(false); 
+      window.location.reload();
+    } catch (err)  {
+      console.error(err);
+    }
   }; 
 
   if (!post) {
@@ -145,7 +152,8 @@ function PostPage() {
 
           {requested && status=== 'accepted' &&  
             <div className='join-container'>
-              <button className="accepted-button" onClick={handleAcceptedClick} onChange={handleInputChange}>Request accepted</button>
+               <div className='button-text'>Driver accepted your request. </div> 
+              <button className="accepted-button" onClick={handleAcceptedClick} onChange={handleInputChange}>Cancel join request</button>
             </div>
           }
 
@@ -159,7 +167,7 @@ function PostPage() {
       </div>
       {showRequestPopup &&  <JoinReqPopup onClose={handleClosePopup} onSubmit={handleSubmit} />}
       {showCancelPopup &&  <CancelJoinReq onClose={handleCloseCancel} onSubmit={handleCancelSubmit} />}
-      {showAcceptedPopup &&  <AcceptedPopup onClose={handleCloseAccepted} />}
+      {showAcceptedPopup &&  <CancelJoinReq onClose={handleCloseAccepted} onSubmit={handleCancelSubmit} />}
     </div>
   );
 }

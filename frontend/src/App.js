@@ -8,6 +8,7 @@ import PassengerLogin from './pages/Login/PassengerLogin';
 import DriverLogin from './pages/Login/DriverLogin';
 import WelcomePage from './pages/Login/WelcomePage';
 import DriverSignup from './pages/Login/DriverSignup';
+import NotFoundPage from './pages/Login/NotFoundPage';
 import Success from './pages/Login/Success';
 import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
@@ -45,6 +46,7 @@ function App() {
           <Route path="/initiate-ride" element={<InitiateRide />} />
           <Route path="/passenger-post" element={<PassengerPost />} />
           <Route path="/driver-profile/:id" element={<DriverProfile />} />
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </div>
     </Router>

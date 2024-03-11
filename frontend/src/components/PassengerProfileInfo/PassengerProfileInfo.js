@@ -32,9 +32,9 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
     const handleChange = (e) => {
         const { name, value, files } = e.target; 
         if (name === 'avatar') {
-            console.log(files[0]);
+            // console.log(files[0]);
             setProfile(prev => ({ ...prev, avatar: files[0]}));
-            console.log('after setProfile, profile: ', profile)
+            // console.log('after setProfile, profile: ', profile)
         } else {
             setProfile(prev => ({ ...prev, [name]: value }));
         }
@@ -72,12 +72,12 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
             }
             
             if (profile.avatar && profile.avatar instanceof File) {
-                console.log('entering if...', profile.avatar)
+                // console.log('entering if...', profile.avatar)
                 // If there's an avatar, perform a second request to upload avatar 
                 const formData = new FormData(); 
                 formData.append('avatar', profile.avatar); 
-                console.log(formData);
-                console.log('profile.avatar:', profile.avatar)
+                // console.log(formData);
+                // console.log('profile.avatar:', profile.avatar)
                 const avatarResponse = await axios.post(`${API_BASE_URL}/passenger/avatar`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -85,7 +85,7 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
                 });
 
                 const avatarResult = avatarResponse.data; 
-                console.log('avatar result: ', avatarResult);
+                // console.log('avatar result: ', avatarResult);
             }
         } catch(err) {
             console.error(err)

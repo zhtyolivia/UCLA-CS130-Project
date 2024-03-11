@@ -10,10 +10,10 @@ const WelcomePage = () => {
                 <h1>Swift Link</h1>
                 <p>Welcome to Swift Link, your go-to ridesharing app!</p>
                 <div className='log-in-btn-container'>
-                    <Link to="/driver-login" className="welcome-login-button">Driver Login</Link>
+                    <Link to="/driver-login" className="welcome-login-button">I'm a Driver</Link>
                 </div>
                 <div className='log-in-btn-container'>
-                    <Link to="/passenger-login" className="welcome-login-button">Passenger Login</Link>
+                    <Link to="/passenger-login" className="welcome-login-button">I'm a Passenger</Link>
                 </div>
                 
             </div>
