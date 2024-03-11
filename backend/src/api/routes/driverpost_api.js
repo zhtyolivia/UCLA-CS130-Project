@@ -219,7 +219,7 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
         $push: { joinrequests: savedJoinRequest._id }
       });
     }
-    
+
     //send email notification
     const driver = await Driver.findById(existingPost.driverId);
     if (!driver) {
@@ -277,6 +277,18 @@ driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => 
     }
     // Remove the join request
     await joinRequest.findByIdAndDelete(JoinRequest._id);
+
+    // Send Email
+    const driver = await Driver.findById(existingPost.driverId);
+    if (driver) {
+      // Email details
+      const subject = 'Ride Share Join Request Cancelled';
+      const text = `A passenger has cancelled their request to join your ride share from ${existingPost.startingLocation} to ${existingPost.endingLocation}.`;
+
+      // Send email notification
+      await sendEmail(driver.email, subject, text);
+    }
+
     res.json({ message: 'Join request cancelled successfully' });
   } catch (error) {
     console.error(error);
