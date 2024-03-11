@@ -4,14 +4,13 @@ const sharp = require("sharp");
 const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
+
 const { authenticateToken } = require('../middlewares/jwtauthenticate');
 const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/signupHelpers');
-const { createUser, generateAuthToken, verifyGoogleToken} = require('../../services/authHelpers');
 
 //Data Module
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
-
 const Passengerpost = require('../../models/passengerpost_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require("../../models/driverpost_model");
@@ -220,6 +219,12 @@ router.post('/register/google', async (req, res) => {
     const { accountType } = req.body;
     console.log('Google Signup attempt with Authorization Code:', code);
     await handleGoogleSignup(req, res, code, accountType);
+});
+
+// Logout route
+router.get('/logout', (req, res) => {
+  // Code to handle user logout
+  res.redirect('/login');
 });
 
 /**

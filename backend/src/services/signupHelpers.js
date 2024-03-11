@@ -1,14 +1,15 @@
 //signupHelper.js
 const bcrypt = require('bcrypt');
-//const { emailExistsInBoth } = require('./validationHelpers');
-const { createUser, generateAuthToken, verifyGoogleToken} = require('./authHelpers');
+const {OAuth2Client} = require('google-auth-library');
+const axios = require('axios');
 const jwt = require('jsonwebtoken'); // Assuming jwt is being used
+const { createUser, generateAuthToken, verifyGoogleToken} = require('./authHelpers');
 const Driver = require('../models/driver_model');
 const Passenger = require('../models/passenger_model');
+
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET; // Ensure this is secure
-const REDIRECT_URL = 'http://localhost:3000'; // The path in your frontend app where Google redirects to after auth
-const axios = require('axios');
+const REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI; // The path in your frontend app where Google redirects to after auth
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -92,15 +93,14 @@ const handleTraditionalSignup = async (req, res, email, password, name, phonenum
 // Function for handling traditional signup
 // Function for handling Google signup
 const handleGoogleSignup = async (req, res, code, accountType) => {
-
-
     try {
+        console.log("code has been fetched and passed to the backend:", code)
         // Exchange the authorization code for tokens
         const params = new URLSearchParams({
             code,
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
-            redirect_url: REDIRECT_URL,
+            redirect_uri: REDIRECT_URI,
             grant_type: 'authorization_code',
         });
 
@@ -115,18 +115,26 @@ const handleGoogleSignup = async (req, res, code, accountType) => {
         // Verify the ID token and extract the user's Google profile
         const payload = await verifyGoogleToken(id_token);
         const emailFromGoogle = payload['email'];
+        const emailExists = await emailExistsInBoth(emailFromGoogle);
+        if (emailExists) {
+            return res.status(409).json({ // Use HTTP status code 409 for conflict
+                message: 'Email already exists. Please log in instead.',
+            });
+        }
+        
         const nameFromGoogle = payload['name'];
-
+        console.log("email:", emailFromGoogle);
         let Model = accountType === 'driver' ? Driver : Passenger;
         let user = await Model.findOne({ email: emailFromGoogle });
 
         // If the user does not exist in our database, create a new one
         if (!user) {
+            console.log("not exist");
             user = await createUser(Model, {
                 email: emailFromGoogle,
                 name: nameFromGoogle,
                 password: null, // Google users might not have a password
-                phonenumber: '', // Optional: Prompt for phone number later
+                phonenumber: '0000000000', // Optional: Prompt for phone number later
             });
         }
 
