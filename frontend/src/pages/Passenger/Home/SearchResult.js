@@ -26,7 +26,7 @@ function SearchResults() {
     return <Navigate to="/welcome" />;
   }
 
-  if (posts.length == 0) {
+  if (posts.length === 0) {
     return (
       <div className="Home">
         <header>
@@ -49,8 +49,15 @@ function SearchResults() {
         <Navigation searchQuery={searchQuery} />
       </header>
       <main className="posts-grid">
-        {posts.map(post => ( // Iterate over posts array
-          <Post key={post.id} {...post} />
+        {posts.map(post => (
+          <Post 
+            id={post._id} 
+            startingLocation={post.startingLocation} 
+            endingLocation={post.endingLocation} 
+            availableSeats={post.numberOfSeats}
+            startTime={post.startTime}
+            content={post.additionalNotes} 
+          />
         ))}
       </main>
     </div>

@@ -19,6 +19,24 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
+
+/**
+ * @api {get} /profile Get Passenger Profile
+ * @apiName GetPassengerProfile
+ * @apiGroup Passenger
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Retrieve the profile information for the authenticated passenger, including their rideshare join requests and posts.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * 
+ * @apiSuccess {Object} user User profile information including avatar, rideshares, and passenger posts.
+ * 
+ * @apiError UserNotFound The user could not be found.
+ * @apiError ServerError Unexpected server error.
+ */
+
+
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
         const user = await Passenger.findById(req.user.userId);
@@ -76,6 +94,22 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @api {get} /my-join-requests Get My Join Requests
+ * @apiName GetMyJoinRequests
+ * @apiGroup Passenger
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Retrieve all join requests made by the authenticated passenger.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * 
+ * @apiSuccess {Array} rideshares List of rideshare details associated with join requests.
+ * 
+ * @apiError ServerError Unexpected server error.
+ */
+
+
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
     const passengerId = req.user.userId; // Assuming the passenger's ID is stored in req.user.userId
 
@@ -111,7 +145,25 @@ router.get('/my-join-requests', authenticateToken, async (req, res) => {
     }
 });
 
-module.exports = router;
+/**
+ * @api {post} /register Register New User
+ * @apiName RegisterUser
+ * @apiGroup Authentication
+ * @apiPermission none
+ * 
+ * @apiDescription Register a new passenger.
+ * 
+ * @apiParam {String} email User's email.
+ * @apiParam {String} password User's password.
+ * @apiParam {String} name User's name.
+ * @apiParam {String} phonenumber User's phone number.
+ * 
+ * @apiSuccess {String} status Registration status.
+ * @apiSuccess {String} message Success message.
+ * 
+ * @apiError ValidationError Validation error for inputs.
+ * @apiError EmailExists Error if the email already exists.
+ */
 
 router.post('/register', (req, res) =>{
     let{email, password, name, phonenumber} = req.body;
@@ -192,6 +244,25 @@ router.post('/register', (req, res) =>{
     }
 })
 
+/**
+ * @api {post} /signin User Sign In
+ * @apiName UserSignIn
+ * @apiGroup Authentication
+ * @apiPermission none
+ * 
+ * @apiDescription Sign in for an existing passenger.
+ * 
+ * @apiParam {String} email User's email.
+ * @apiParam {String} password User's password.
+ * 
+ * @apiSuccess {String} status Sign in status.
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} token Auth token for the user.
+ * 
+ * @apiError LoginError Error during login process.
+ */
+
+
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
     email = email.trim();
@@ -243,6 +314,29 @@ router.post('/signin', (req, res) =>{
     }
 });
 
+/**
+ * @api {put} /update Update User Profile
+ * @apiName UpdateUserProfile
+ * @apiGroup Passenger
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Update the profile information for the authenticated passenger.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * 
+ * @apiParam {String} [name] New name of the passenger.
+ * @apiParam {String} [phonenumber] New phone number of the passenger.
+ * @apiParam {String} [email] New email of the passenger.
+ * @apiParam {String} [newPassword] New password for the passenger.
+ * 
+ * @apiSuccess {String} status Update status.
+ * @apiSuccess {String} message Success message.
+ * 
+ * @apiError UserNotFound The user could not be found.
+ * @apiError ValidationError Validation error for inputs.
+ */
+
+
 router.put('/update', authenticateToken, async (req, res) => {
     const userId = req.user.userId;
     const { name, phonenumber, email, newPassword } = req.body;
@@ -289,6 +383,22 @@ router.put('/update', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @api {get} /driverposts Get All Driver Posts
+ * @apiName GetAllDriverPosts
+ * @apiGroup DriverPost
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Retrieve all driver posts available for passengers to view.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * 
+ * @apiSuccess {Array} driverPosts List of all driver posts.
+ * 
+ * @apiError ServerError Unexpected server error.
+ */
+
+
 // GET all driver posts for passengers to view
 router.get('/driverposts', authenticateToken, async (req, res) => {
     try {
@@ -310,6 +420,24 @@ const upload = multer({
       cb(undefined, true);
     },
 });
+
+/**
+ * @api {post} /avatar Upload/Update Avatar
+ * @apiName UploadUpdateAvatar
+ * @apiGroup Passenger
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Upload or update the avatar for the authenticated passenger.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * @apiParam {File} avatar The avatar image file to upload.
+ * 
+ * @apiSuccess {String} message Success message indicating the avatar was updated.
+ * 
+ * @apiError BadRequest The file uploaded is not an image or exceeds the size limit.
+ * @apiError PassengerNotFound The authenticated passenger was not found.
+ */
+
 
 // API endpoint to upload and update the passenger's avatar
 router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
@@ -344,6 +472,25 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
     res.status(400).send({ error: error.message });
 });
 
+/**
+ * @api {post} /google-signup Google Signup
+ * @apiName GoogleSignup
+ * @apiGroup Authentication
+ * @apiPermission none
+ * 
+ * @apiDescription Sign up or log in a user using Google OAuth. This endpoint expects an ID token from Google, verifies it, and either creates a new user or logs in an existing one.
+ * 
+ * @apiParam {String} token Google ID token.
+ * 
+ * @apiSuccess {String} message Success message indicating the user was authenticated.
+ * @apiSuccess {String} token JWT token for the authenticated session.
+ * @apiSuccess {Object} user User object containing user details.
+ * @apiSuccess {String} user.email User's email address.
+ * @apiSuccess {String} user.name User's name.
+ * @apiSuccess {String} [user.phonenumber] User's phone number (optional).
+ * 
+ * @apiError InternalServerError An error occurred during the Google token verification or user registration process.
+ */
 
 
 // THIRD PARTY SIGN UP 
