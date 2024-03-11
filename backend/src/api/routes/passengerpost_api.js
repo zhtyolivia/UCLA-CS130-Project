@@ -50,7 +50,7 @@ passengerpostRouter.get("/search", async (req, res) => {
 
 
 // Given post id, show all the post info.
-passengerpostRouter.get('/:postId', authenticateToken, async (req, res) => {
+passengerpostRouter.get('/:postId', async (req, res) => {
   const { postId } = req.params; // Extract the postId from the URL parameters
 
   try {
