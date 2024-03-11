@@ -42,17 +42,26 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
     const handleEditClick = () => setShowEditPopup(true);
 
     const handleClosePopup = () => setShowEditPopup(false);
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault(); 
 
+        const profileData = {
+            'name': profile.name, 
+            'email': profile.email, 
+            'phonenumber': profile.phonenumber
+        }; 
+
         try{
-            const data = await axios.put(`${API_BASE_URL}/driver/update`, profile).then((res) => res.data);
+            console.log('profileData:', profileData)
+            const data = await axios.put(`${API_BASE_URL}/driver/update`, profileData).then((res) => res.data);
             if (data.status === 'SUCCESS') {
                 setProfile(profile)
                 setShowEditPopup(false); 
-                // window.location.reload();
+                window.location.reload();
             }
+            console.log('Data:', data)
+
             if (profile.avatar && profile.avatar instanceof File) {
                 // If there's an avatar, perform a second request to upload avatar 
                 const formData = new FormData(); 
@@ -64,6 +73,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 });
 
                 const avatarResult = avatarResponse.data; 
+                console.log('avatar result: ', avatarResult);
             }
         } catch(err) {
             console.error(err)

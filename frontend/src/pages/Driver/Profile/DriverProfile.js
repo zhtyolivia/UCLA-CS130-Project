@@ -18,6 +18,7 @@ const DriverProfile = () => {
             const getDriverProfile = async () => {
                 try {
                     const data = await axios.get(`${API_BASE_URL}/driver/profile`).then((res) => res.data);
+                    console.log("Fetched driver profile data:", data);
                     setRideHistory(data.driverposts || []); 
                     setEmail(data.email); 
                     setPhonenumber(data.phonenumber); 
