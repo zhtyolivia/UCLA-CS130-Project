@@ -33,6 +33,13 @@ const DriverEditPopup = ({ onClose, profile, onSubmit, onChange }) => {
                         value={profile.phonenumber}
                         onChange={onChange}
                     />
+                    <label htmlFor="avatar">Avatar</label>
+                    <input
+                        type="file"
+                        id="avatar"
+                        name="avatar"
+                        onChange={onChange}
+                    />
 
                     <div className="edit-popup-actions">
                         <button type="button" className="edit-popup-button" onClick={onClose}>Cancel</button>
