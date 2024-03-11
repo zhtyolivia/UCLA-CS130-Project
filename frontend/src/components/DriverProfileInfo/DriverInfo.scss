@@ -54,33 +54,6 @@
   }
 }
 
-.button-container {
-    display: flex;
-    flex-direction: column; // Stack the buttons on top of each other
-    align-items: stretch; // Stretch buttons to fill the width
-    width: 100%;
-    margin-top: 20px;
-  
-    .info-button,
-    .edit-button {
-      background-color: $driver-primary-color;
-      color: white;
-      border: none;
-      border-radius: 20px;
-      padding: 15px 30px;
-      cursor: pointer;
-      font-size: 1rem;
-      text-transform: uppercase;
-      font-weight: bold;
-      transition: all 0.3s ease;
-      margin-bottom: 10px; // Add space between buttons
-  
-      &:hover {
-        background-color: darken($driver-primary-color, 15%);
-      }
-    }
-  }
-
 .driver-details {
   text-align: left;
   width: 100%;
@@ -103,22 +76,6 @@
     .info-button {
       width: calc(50% - 10px); // Adjust the width of each button to take half of the container minus the gap
       margin-bottom: 10px; // Space between the buttons and the content below
-    }
-  }
-  
-  @media (max-width: 768px) {
-    // In a small screen, if you want the buttons to stack
-    .post-request-buttons {
-      flex-direction: column;
-  
-      .info-button {
-        width: auto; // Allow buttons to fill the space
-        margin-bottom: 10px;
-      }
-  
-      .my-posts, .join-requests {
-        width: 100%; // Take the full width on small screens
-      }
     }
   }
   

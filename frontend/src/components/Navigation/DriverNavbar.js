@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './DriverNavbar.scss';
-import Notification from "../Notification";
 import { IconButton, Tooltip } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 const getCurrentUserId = (token) => {
@@ -72,10 +70,6 @@ const DriverNav = () => {
               <AddIcon />
             </IconButton>
           </Tooltip>
-        </li>
-
-        <li className="d-nav-item">
-          <Notification />
         </li>
 
         <li className="p-nav-item">

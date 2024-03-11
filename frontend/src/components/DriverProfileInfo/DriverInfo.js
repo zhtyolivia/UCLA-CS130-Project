@@ -106,6 +106,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
     // Toggle driver posts dropdown
     const toggleDriverPosts = () => {
+        setShowJoinRequests(false); // Hide Join Requests when showing My Posts
         setShowDriverPosts(!showDriverPosts);
         if (!showDriverPosts && !driverPosts.length) {
             fetchMyDriverPosts();
@@ -114,6 +115,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
     // Toggle join requests dropdown
     const toggleJoinRequests = () => {
+        setShowDriverPosts(false); // Hide My Posts when showing Join Requests
         setShowJoinRequests(!showJoinRequests);
         if (!showJoinRequests && !joinRequests.length) {
             fetchJoinRequests();
@@ -143,10 +145,10 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
 
                 {showDriverPosts && (
-                    <div className="dropdown-content">
+                    <div className="posts-container">
                         {driverPosts.map((post, index) => (
-                            <div key={index} className="post-detail">
-                                <p><strong>Title:</strong> {post.title}</p>
+                            <div key={index} className="post-card">
+                                <h4>{post.title}</h4>
                                 <p><strong>Starting Location:</strong> {post.startingLocation}</p>
                                 <p><strong>Ending Location:</strong> {post.endingLocation}</p>
                                 <p><strong>Start Time:</strong> {new Date(post.startTime).toLocaleString()}</p>
@@ -154,20 +156,18 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                                 <p><strong>License Number:</strong> {post.licensenumber}</p>
                                 <p><strong>Car Model:</strong> {post.model}</p>
                                 <p><strong>Additional Notes:</strong> {post.additionalNotes}</p>
-                                {/* Add any other details you wish to display here */}
                             </div>
                         ))}
                     </div>
                 )}
                 {showJoinRequests && (
-                    <div className="dropdown-content">
-                        {joinRequests.map((request, index) => (
-                            <div key={index}>
-                                <p>{request.message}</p>
-                                {/* Render additional request details */}
-                            </div>
-                        ))}
+                <div className="requests-container">
+                    {joinRequests.map((request, index) => (
+                    <div key={index} className="request-card">
+                        <p>{request.message}</p>
                     </div>
+                    ))}
+                </div>
                 )}
             </div>
             {showEditPopup && 
