@@ -11,7 +11,7 @@ const InitiatorInfo = ({post}) => {
     return (
         <div className="user-info">
             <div className="user-avatar">
-                <img src={defaultAvatar} alt={defaultAvatar} />
+                <img src={post.avatar} alt={defaultAvatar} />
             </div>
             <div>
                 <div className="user-info-header"> 

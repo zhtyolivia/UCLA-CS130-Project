@@ -37,7 +37,7 @@ const SignupForm = ({ onSubmit, errors, userRole }) => {
                 </div>
                 <div className="input-group">
                     <input type={values.showPassword ? "text" : "password"} placeholder="Password" value={values.password} onChange={handleChange('password')} required />
-                    <FontAwesomeIcon icon={values.showPassword ? faEyeSlash : faEye} onClick={handleClickShowPassword} className="password-icon" />
+                    <FontAwesomeIcon className="password-icon" icon={values.showPassword ? faEyeSlash : faEye} onClick={handleClickShowPassword} className="password-icon" />
                     {errors.password && <div className="error-text">{errors.password}</div>}
                 </div>
                 <div className="input-group">
