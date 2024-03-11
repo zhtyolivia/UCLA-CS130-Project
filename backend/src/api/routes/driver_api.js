@@ -2,15 +2,19 @@ const express = require('express');
 const multer = require("multer");
 const sharp = require("sharp");
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const { authenticateToken } = require('../middlewares/jwtauthenticate');
+const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/signupHelpers');
+const { createUser, generateAuthToken, verifyGoogleToken} = require('../../services/authHelpers');
 
+//Data Module
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
+
 const Passengerpost = require('../../models/passengerpost_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require("../../models/driverpost_model");
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate');
 
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
@@ -20,7 +24,7 @@ async function emailExistsInBoth(email) {
 }
 
 router.get('/my-driver-posts', authenticateToken, async (req, res) => {
-    const driverId = req.user.userId; 
+    const driverId = req.user.userId;
     try {
         const driverWithPosts = await Driver.findById(driverId)
             .populate({
@@ -32,7 +36,7 @@ router.get('/my-driver-posts', authenticateToken, async (req, res) => {
                 }
             })
             .exec();
-  
+
       res.json(driverWithPosts.driverposts);
     } catch (error) {
       console.error(error);
@@ -51,7 +55,7 @@ router.get('/my-join-requests', authenticateToken, async (req, res) => {
         }
 
         const joinRequestsDetails = await joinRequest.find({
-            '_id': { $in: driver.joinrequests }}).populate('driverPostId passengerId'); 
+            '_id': { $in: driver.joinrequests }}).populate('driverPostId passengerId');
 
         const detailedRequests = joinRequestsDetails.map(request => ({
             requestId: request._id,
@@ -96,86 +100,18 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
-
-router.post('/register', (req, res) =>{
-    let{email, password, name, phonenumber} = req.body;
-    email = email.trim();
-    password = password.trim();
-    name = name.trim();
-    phonenumber = phonenumber.trim();
-
-    if(email == "" || password == "" || name == "" || phonenumber == ""){
-        res.json({
-            status: "FAILED",
-            message: "Empty Input for some fields"
-        });
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
-        res.json({
-            status: "FAILED",
-            message: "Invalid Email"
-        })
-    } else if (!/^[a-zA-z]*$/.test(name)){
-        res.json({
-            status: "FAILED",
-            message: "Invalid Name"
-        })
-    } else if (!/^\d{10}$/.test(phonenumber)){
-        res.json({
-            status: "FAILED",
-            message: "Invalid PhoneNumber"
-        })
-    } else if (password.length < 8){
-        res.json({
-            status: "FAILED",
-            message: "Invalid Password"
-        })
+// Updated /register endpoint to call the appropriate function based on the request
+router.post('/register', async (req, res) => {
+    console.log(req.body); // Add this line to log the request body
+    const { email, password, name, phonenumber, code, accountType } = req.body;
+    console.log("Signup attempt:", code ? "Google Signup" : "Traditional Signup");
+    // Decide between Google signup and traditional signup based on the presence of a token
+    if (code) {
+        await handleGoogleSignup(req, res, code, accountType);
     } else {
-        emailExistsInBoth(email).then(emailExists =>{
-            if (emailExists){
-                res.json({
-                    status: "FAILED",
-                    message: "User with this email already exist as a driver or passenger"
-                });
-            } else{
-                const saltRounds = 10;
-                bcrypt.hash(password, saltRounds).then(hashPassword =>{
-                    const newDriver = new Driver({
-                        email,
-                        password: hashPassword,
-                        name,
-                        phonenumber
-                    });
-                    newDriver.save().then(result =>{
-                        res.json({
-                            status: "SUCCESS",
-                            message: "Registration Successfully",
-                            data: result,
-                        })
-                    })
-                    .catch(err => {
-                        res.json({
-                            status: "FAILED",
-                            message: "Error Occur when trying to save user account"
-                        })
-                    })
-                }).catch(err =>{
-                    res.json({
-                        status: "FAILED",
-                        message: "Error Occur when hashing password"
-                    })
-                })
-            }
-
-        }).catch(err => {
-            console.log(err);
-            res.json({
-                status: "FAILED",
-                message: "Error Occur when trying to check for existing User"
-            })
-        })
+        await handleTraditionalSignup(req, res, email, password, name, phonenumber, accountType);
     }
-})
-
+});
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
     email = email.trim();
@@ -228,53 +164,46 @@ router.post('/signin', (req, res) =>{
           });
     }
 });
-
-router.put('/update', authenticateToken, async (req, res) => {
-    const userId = req.user.userId;
-    const { name, phonenumber, email, newPassword } = req.body;
+/*
+router.post('/updateProfile', async (req, res) => {
+    const { userId, name, phonenumber, email, newPassword } = req.body;
 
     try {
         const user = await Driver.findById(userId);
         if (!user) {
-            return res.status(404).send({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Update name and phone number
         if (name) user.name = name.trim();
         if (phonenumber) user.phonenumber = phonenumber.trim();
 
-        // Update email after validation
-        if (email && email !== user.email) {
-            // Validate and check for existing email
-            const emailTaken = await emailExistsInBoth(email);
+        if (email && email.trim() !== user.email) {
+            const emailTaken = await emailExistsInBoth(email.trim());
             if (emailTaken) {
-                return res.status(400).send({ message: "Email already in use" });
+                return res.status(400).json({ message: "Email already in use" });
             }
             user.email = email.trim();
-            // Optional: Implement email verification
         }
 
-        // Update password
         if (newPassword) {
-            // Validate new password strength here
-
-            // Hash new password and update
+            // Optionally, validate new password strength here
             const hashPassword = await bcrypt.hash(newPassword, 10);
             user.password = hashPassword;
         }
 
         await user.save();
-        res.status(200).send({
+        res.status(200).json({
             status: "SUCCESS",
             message: "Profile updated successfully",
-            data: user
+            userId: user._id // Consider what data needs to be returned to the user
         });
 
     } catch (err) {
-        res.status(500).send({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
+*/
 router.get('/passengerposts', authenticateToken, async (req, res) => {
     try {
         const passengerPosts = await Passengerpost.find({});
@@ -329,6 +258,6 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
     // Error handling middleware for Multer
     res.status(400).send({ error: error.message });
 });
-  
+
 
 module.exports = router;
