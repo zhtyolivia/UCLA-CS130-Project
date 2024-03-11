@@ -12,6 +12,7 @@ const DriverProfile = () => {
     const [email, setEmail] = useState(''); 
     const [name, setName] = useState(''); 
     const [phonenumber, setPhonenumber] = useState(''); 
+    const [avatar, setAvatar] = useState('');
 
     useEffect(() => {
             const getDriverProfile = async () => {
@@ -21,6 +22,7 @@ const DriverProfile = () => {
                     setEmail(data.email); 
                     setPhonenumber(data.phonenumber); 
                     setName(data.name); 
+                    setAvatar(data.avatar);
     
                 } catch (err) {
                     console.error(err);
@@ -37,7 +39,7 @@ const DriverProfile = () => {
         <>
             <DriverNav />
             <div className="DriverProfile">
-                <DriverInfo name={name} email={email} phonenumber={phonenumber} />
+                <DriverInfo name={name} email={email} phonenumber={phonenumber} avatar={avatar} />
             </div>
         </>
     );

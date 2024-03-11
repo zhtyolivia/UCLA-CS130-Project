@@ -39,6 +39,7 @@ const EditInfoPopup = ({ onClose, onSubmit, onChange, profile}) => {
             type="file"
             id="avatar"
             name="avatar"
+            onChange={onChange}
           />
 
           <div className="edit-popup-actions">

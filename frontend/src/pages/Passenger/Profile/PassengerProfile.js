@@ -5,7 +5,6 @@ import PassengerInfo from '../../../components/PassengerProfileInfo/PassengerPro
 import { getCurrentUserId, getUserRideHistory } from '../../../services/mockAPI';
 import './PassengerProfile.scss';
 import { isLoggedIn } from '../../../utils/LoginActions'; 
-
 import { convertDate2Readable } from '../../../utils/util'; 
 import axios from "axios";
 export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
@@ -17,6 +16,7 @@ const PassengerProfile = () => {
     const [joinRequests, setJoinRequests] = useState([]); 
     const [email, setEmail] = useState(''); 
     const [name, setName] = useState(''); 
+    const [avatar, setAvatar] = useState('');
     const [phonenumber, setPhonenumber] = useState(''); 
     const [passengerPosts, setPassengerPosts] = useState([])
 
@@ -30,6 +30,7 @@ const PassengerProfile = () => {
                 setName(data.name); 
                 setJoinRequests(data.rideshares);
                 setPassengerPosts(data.passengerPosts);
+                setAvatar(data.avatar);
                 console.log(data)
             } catch (err) {
                 console.error(err);
@@ -47,7 +48,7 @@ const PassengerProfile = () => {
                 <Navigation />
             </header>
             <div className="ProfilePage">
-                <PassengerInfo name={name} email={email} phonenumber={phonenumber}/>
+                <PassengerInfo name={name} email={email} phonenumber={phonenumber} avatar={avatar}/>
                 <div className="ride-history">
                     <h3>Join Request History</h3>
                     <div className="section-divider"></div>

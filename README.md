@@ -1,55 +1,13 @@
-The frontend project structure may vary depending on the framework used (such as React, Vue, Angular, etc.), but the basic principles are similar. Here is an example structure based on React:
-```
-/frontend
-  /node_modules
-  /public
-  /src
-    /components
-    /pages
-    /services
-    /hooks
-    /utils
-    /assets
-      /images
-      /styles
-    App.js
-    index.js
-  package.json
-  ```
-/components: Reusable UI components. 
+## Motivation/Concept
+In California, especially in Los Angeles, there exists a pressing need for ridesharing as an efficient, cost-effective, and environmentally friendly transportation option. There are several existing solutions to the problem. Ride-hailing companies – most notably Uber Technologies, Inc. and Lyft, Inc. – provide shared rides by connecting riders who share similar routes and offering them a discounted price. However, these services are not flexible enough, and traveling for a long distance is still expensive and in some cases impossible. Our proposed application, **Swift Link**, aims to address these challenges. This website will enable users to connect with others for shared rides. The core premise is simple yet powerful: facilitate ride sharing for people traveling to or from Los Angeles from other parts of California, especially benefiting those who do not own a car, who need more riders to use the carpool lanes, and/or who seek people to split fuel expenses. 
 
-/pages: The application's page components, usually corresponding to a route.
+There are two types of accounts--driver account and passenger account. A driver can initiate a rideshare, and passengers can request to join a rideshare. 
 
- /services: Services for communicating with the backend API. 
- 
- /hooks: Custom React hooks. 
- 
- /utils: Utility functions. /assets: Static resources, such as images and style files. App.js and index.js: Application entry files.
+After initiating a rideshare, a driver will be notifed when a passenger requests to join. Then the driver will be able to accept/decline the request. Upen accepting, the driver will have access to the passenger's contact information. 
 
-Backend File Structure
-```
-/backend
-  /node_modules
-  /src
-    /api
-      /controllers
-      /middlewares
-      /routes
-    /config
-    /models
-    /services
-    /utils
-  /tests
-  server.js (或 app.js)
-  package.json
-  .env (或其他环境配置文件)
-  ```
-/api: Holds routes, controllers, and middleware. These define how to receive and respond to HTTP requests. 
+After identifying a rideshare to join, a passenger can send a join request and cancel the request. After the request is accepted, the passenger can view further information about the ride and the driver, therefore making the rideshare possible. 
 
-/config: Configuration files and constants, such as database configurations. 
+We believe Swift Link is able to bridge the gap in the current ride-sharing landscape by offering a user-friendly solution. It caters specifically to the needs of Californians, especially those in and around Los Angeles, who are looking for ridesharing. Our team has been focusing on implementing this idea by building an MVP of the product, thereby offering a solution to the ridesharing need in California. 
 
-/models: Data models or database schema definitions (e.g., using Mongoose to define MongoDB schemas). /services: The business logic layer, usually containing code that interacts with the database. 
-
-/utils: Utility functions, such as date processing, encryption tools, etc. 
-
-/tests: Contains test scripts. server.js or app.js: The application entry file, configuring the server and middleware.
+## Installation 
+to be added 
