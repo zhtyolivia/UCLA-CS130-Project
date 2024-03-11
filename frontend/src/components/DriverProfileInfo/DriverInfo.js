@@ -33,9 +33,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
       const handleChange = (e) => {
         const { name, value, files } = e.target; 
         if (name === 'avatar') {
-            console.log(files[0]);
             setProfile(prev => ({ ...prev, avatar: files[0]}));
-            console.log('after setProfile, profile: ', profile)
         } else {
             setProfile(prev => ({ ...prev, [name]: value }));
         }
@@ -52,18 +50,13 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
             const data = await axios.put(`${API_BASE_URL}/driver/update`, profile).then((res) => res.data);
             if (data.status === 'SUCCESS') {
                 setProfile(profile)
-                console.log(profile)
-                console.log(data)
                 setShowEditPopup(false); 
                 // window.location.reload();
             }
             if (profile.avatar && profile.avatar instanceof File) {
-                console.log('entering if...', profile.avatar)
                 // If there's an avatar, perform a second request to upload avatar 
                 const formData = new FormData(); 
                 formData.append('avatar', profile.avatar); 
-                console.log(formData);
-                console.log('profile.avatar:', profile.avatar)
                 const avatarResponse = await axios.post(`${API_BASE_URL}/driver/avatar`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
@@ -71,7 +64,6 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 });
 
                 const avatarResult = avatarResponse.data; 
-                console.log('avatar result: ', avatarResult);
             }
         } catch(err) {
             console.error(err)
@@ -85,7 +77,6 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 headers: { 'Authorization': token },
             });
             setDriverPosts(response.data);
-            console.log('Fetched Driver Posts:', response.data);
 
         } catch (error) {
             console.error('Error fetching driver posts:', error.response ? error.response.data : error.message);
@@ -99,7 +90,6 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 headers: { 'Authorization': token },
             });
             setJoinRequests(response.data);
-            console.log('Fetched Join Requests:', response.data);
 
         } catch (error) {
             console.error('Error fetching join requests:', error.response ? error.response.data : error.message);

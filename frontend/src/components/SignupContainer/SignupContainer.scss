@@ -5,42 +5,42 @@ html, body {
     padding: 0;
 }
 
-.p-login-page, .login-page * {
+.login-page, .login-page * {
     box-sizing: border-box;
 }
 
-.p-login-page {
+.login-page {
     height: 100%;
     margin: 0;
     padding: 0;
     background-color: #000000; /* Black background */
 }
 
-.p-log-in-top-stripe {
+.log-in-top-stripe {
     width: 100%;
     height: 60px;
-    background-color: $passenger-primary-color;
+    background-color: $driver-primary-color;
     display: flex;
     align-items: center;
     padding-left: 16px; /* Adjust as needed for padding on the left */
 }
 
 /* Style for the brand text */
-.p-brand-text {
+.brand-text {
     font-size: 40px; /* Adjust as needed for font size */
     font-weight: bold;
     color: white;
 }
 
-.p-login-container {
+.login-container {
     display: flex;
     justify-content: center;
     align-items: center;
     height: calc(100vh - 60px);
-    background-color: $passenger-background-color; 
+    background-color: $driver-background-color; 
 }
 
-.p-login-card {
+.login-card {
     background: #fff; /* White background for the card */
     padding: 2rem;
     border-radius: 10px;
@@ -48,72 +48,72 @@ html, body {
     width: 100%;
     max-width: 400px;
     position: relative;
-    margin-top: -20px; 
+    margin-top: -20px; /* Optional: to slightly overlap the top stripe */
 }
 
-.p-login-title {
-    font-size: 2rem; 
-    color: #000; 
-    margin-bottom: 1rem; 
+
+/* Add a title to the login card for "Book your rides with SwiftLink" */
+.login-title {
+    font-size: 2rem; /* Large text size for the title */
+    color: #000; /* Black text */
+    margin-bottom: 1rem; /* Space below the title */
     text-align: center;
 }
 
-.p-back-btn {
-    // position: absolute;
-    position: relative;
-    // top: 2rem;
-    // left: 2rem;
-    color: $passenger-primary-color;
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: $driver-primary-color;
     text-decoration: none;
     font-size: 1rem;
-    margin-bottom: 100px;
 }
 
-.p-login-form h2 {
+.login-form h2 {
     color: $text-color-dark;
     margin-bottom: 1rem;
     text-align: center;
 }
 
-.p-input-group {
+.input-group {
     margin-bottom: 1rem;
 }
 
-.p-input-group input {
+.input-group input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
 
-.p-login-btn {
+.login-btn {
     width: 100%;
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background-color: $passenger-primary-color;
+    background-color: $driver-primary-color;
     color: white;
     cursor: pointer;
     margin-bottom: 1rem;
     font-size: 1rem;
 }
 
-.p-login-btn:hover {
-    background-color: $passenger-hover-color;
+.login-btn:hover {
+    background-color: $driver-hover-color;
 }
 
-.p-forgot-password, .p-sign-up-text {
+.forgot-password, .sign-up-text {
     text-align: center;
     margin-bottom: 1rem;
     color: #2ebf91;
     cursor: pointer;
 }
 
-.p-social-login {
+.social-login {
     text-align: center;
 }
 
-.p-social-btn {
+.social-btn {
     background: transparent;
     border: none;
     cursor: pointer;
@@ -126,61 +126,37 @@ html, body {
     transition: background-color 0.3s;
 }
 
-.p-social-btn.google {
-    background-color: $passenger-secondary-color;
+.social-btn.google {
+    background-color: $driver-secondary-color;
 }
 
-.p-social-btn:hover {
+.social-btn:hover {
     opacity: 0.9;
 }
 
-.p-social-btn i {
+.social-btn i {
     margin-right: 8px;
 }
 
-.p-sign-up {
-    color: $passenger-secondary-color;
+.sign-up {
+    color: $driver-secondary-color;
     text-decoration: none;
 }
-.p-password-group {
+.password-group {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.p-password-group input {
-    padding-right: 40px;
+.password-group input {
+    padding-right: 40px; /* Adjust padding to ensure text does not overlap button */
 }
 
-.p-toggle-password {
+.toggle-password {
     position: absolute;
-    right: 10px; 
+    right: 10px; /* Adjust based on your design */
     border: none;
     background: none;
     cursor: pointer;
-    color: #717171; 
-    margin-left: 8px;
-}
-
-.p-password-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.p-password-action-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.p-login-error {
-    display: block; 
-    color: red; 
-    font-size: 0.875rem; 
-    margin-top: 2px; 
-}
-
-.p-password-error {
-    margin-top: -10px;
+    color: #717171; /* Adjust color as needed */
 }

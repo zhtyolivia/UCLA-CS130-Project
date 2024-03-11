@@ -164,7 +164,7 @@ router.post('/signin', (req, res) =>{
           });
     }
 });
-/*
+
 router.post('/updateProfile', async (req, res) => {
     const { userId, name, phonenumber, email, newPassword } = req.body;
 
@@ -203,7 +203,7 @@ router.post('/updateProfile', async (req, res) => {
     }
 });
 
-*/
+
 router.get('/passengerposts', authenticateToken, async (req, res) => {
     try {
         const passengerPosts = await Passengerpost.find({});

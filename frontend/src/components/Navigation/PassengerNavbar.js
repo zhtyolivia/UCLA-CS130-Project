@@ -33,7 +33,7 @@ function Navigation() {
 
   const signoutaction = () => {
     window.localStorage.clear();
-    console.log(window,localStorage)
+    // console.log(window,localStorage)
     navigate('/welcome');
   };
 

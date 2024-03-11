@@ -1,5 +1,5 @@
 import '../../Driver/InitiateRide/InitiateRide.scss';
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import SuccessPopup from '../../../components/SuccessPopup/SuccessPopup';
@@ -13,9 +13,9 @@ const PassengerPost = () => {
     const [startLocation, setStartLocation] = useState('');
     const [endLocation, setEndLocation] = useState('');
     const [seats, setSeats] = useState('');
-    const [email, setEmail] = useState('');
+    //const [email, setEmail] = useState('');
     const [description, setDescription] = useState('');
-    const [avatar, setAvatar] = useState(null);
+    //const [avatar, setAvatar] = useState(null);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false); 
     const [showFailPopup, setShowFailPopup] = useState(false); 
     const [successMsg, setSuccessMsg] = useState(''); 
@@ -86,24 +86,29 @@ const PassengerPost = () => {
                         placeholder="Start Location"
                         value={startLocation}
                         onChange={(e) => setStartLocation(e.target.value)}
+                        required
                     />
                     <input
                         type="text"
                         placeholder="End Location"
                         value={endLocation}
                         onChange={(e) => setEndLocation(e.target.value)}
+                        required
                     />
                     <input
                         type="number"
                         placeholder="Number of people you have"
                         value={seats}
                         onChange={(e) => setSeats(e.target.value)}
+                        min="1"
+                        required
                     />
                     <input
-                        type="date"
-                        placeholder="Date you're looking for"
+                        type="datetime-local"
+                        placeholder="Date and time you're looking for"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
+                        required
                     />
                     <textarea
                         type="text"
