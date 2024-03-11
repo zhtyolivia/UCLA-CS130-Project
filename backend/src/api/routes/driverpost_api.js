@@ -270,10 +270,18 @@ driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => 
     });
 
     // Optionally, update the DriverPost document to remove this join request
-    await Driverpost.findByIdAndUpdate(postId, {
-      $pull: { joinrequests: JoinRequest._id ,passengers: passengerId},
-      $inc:{numberOfSeats: JoinRequest.seatsneeded}
-    });
+    if (JoinRequest.status === 'accepted') {
+      // Only update the DriverPost document to increment numberOfSeats if join request was accepted
+      await Driverpost.findByIdAndUpdate(postId, {
+        $pull: { joinrequests: JoinRequest._id, passengers: passengerId },
+        $inc: { numberOfSeats: JoinRequest.seatsneeded }
+      });
+    } else {
+      // If the join request was not accepted, just remove it from the join requests list
+      await Driverpost.findByIdAndUpdate(postId, {
+        $pull: { joinrequests: JoinRequest._id, passengers: passengerId }
+      });
+    }
 
     // If the post belongs to a driver, you might also want to remove this join request from the Driver document
     const existingPost = await Driverpost.findById(postId);
