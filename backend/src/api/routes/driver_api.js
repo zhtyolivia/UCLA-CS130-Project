@@ -6,7 +6,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { authenticateToken } = require('../middlewares/jwtauthenticate');
 const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/signupHelpers');
-//const { emailExistsInBoth } = require('../../services/validationHelpers');
 const { createUser, generateAuthToken, verifyGoogleToken} = require('../../services/authHelpers');
 
 //Data Module
@@ -17,6 +16,12 @@ const Passengerpost = require('../../models/passengerpost_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require("../../models/driverpost_model");
 
+async function emailExistsInBoth(email) {
+    const passengerExists = await Passenger.findOne({ email }).exec();
+    const driverExists = await Driver.findOne({ email }).exec();
+
+    return passengerExists || driverExists ? true : false;
+}
 
 router.get('/my-driver-posts', authenticateToken, async (req, res) => {
     const driverId = req.user.userId;
@@ -107,8 +112,6 @@ router.post('/register', async (req, res) => {
         await handleTraditionalSignup(req, res, email, password, name, phonenumber, accountType);
     }
 });
-
-
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
     email = email.trim();
@@ -161,50 +164,46 @@ router.post('/signin', (req, res) =>{
           });
     }
 });
-
+/*
+router.post('/updateProfile', async (req, res) => {
+    const { userId, name, phonenumber, email, newPassword } = req.body;
 
     try {
         const user = await Driver.findById(userId);
         if (!user) {
-            return res.status(404).send({ message: "User not found" });
+            return res.status(404).json({ message: "User not found" });
         }
 
-        // Update name and phone number
         if (name) user.name = name.trim();
         if (phonenumber) user.phonenumber = phonenumber.trim();
 
-        // Update email after validation
-        if (email && email !== user.email) {
-            // Validate and check for existing email
-            const emailTaken = await emailExistsInBoth(email);
+        if (email && email.trim() !== user.email) {
+            const emailTaken = await emailExistsInBoth(email.trim());
             if (emailTaken) {
-                return res.status(400).send({ message: "Email already in use" });
+                return res.status(400).json({ message: "Email already in use" });
             }
             user.email = email.trim();
-            // Optional: Implement email verification
         }
 
-        // Update password
         if (newPassword) {
-            // Validate new password strength here
-
-            // Hash new password and update
+            // Optionally, validate new password strength here
             const hashPassword = await bcrypt.hash(newPassword, 10);
             user.password = hashPassword;
         }
 
         await user.save();
-        res.status(200).send({
+        res.status(200).json({
             status: "SUCCESS",
             message: "Profile updated successfully",
-            data: user
+            userId: user._id // Consider what data needs to be returned to the user
         });
 
     } catch (err) {
-        res.status(500).send({ message: err.message });
+        res.status(500).json({ message: err.message });
     }
 });
 
+*/
 router.get('/passengerposts', authenticateToken, async (req, res) => {
     try {
         const passengerPosts = await Passengerpost.find({});
