@@ -1,0 +1,96 @@
+@import '../../../styles/variables';
+
+
+.back-button {
+  background: $driver-secondary-color; // Choose a background color that suits your design
+  color: white; // Choose a text color that is readable on the button background
+  border: 1px solid white; // Optional border color
+  border-radius: 4px; // Rounded corners for the button
+  cursor: pointer;
+  padding: 10px 20px; // Bigger padding for a larger button
+  font-size: 1rem; // Larger font size for the button text
+  margin-top: 20px; // Adjust margin-top to move below the top bar
+  margin-left: 20px; // Add margin-left to align with the brand text if needed
+  align-self: flex-start;
+  text-decoration: none; // Remove underline from link
+  display: inline-block; // Needed to apply padding and margin correctly
+  &:hover {
+    background: darken($driver-primary-color, 10%); // Darken the button on hover for better UX
+  }
+}
+
+// .driver-post-detail {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center; // Center children vertically
+//     padding: 2rem;
+    
+//     .post-details {
+//       max-width: 800px;
+//       width: 100%;
+//       margin-bottom: 2rem;
+//       padding: 1rem;
+//       border-bottom: 2px solid #dee2e6;
+//       text-align: center; // Center the text within the post details
+.driver-post-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; // Align to the top after navigation bar
+    padding: 0.5rem 2rem; // Reduced top padding
+    
+    .post-details {
+      max-width: 800px;
+      width: 100%;
+      margin: 1rem 0; 
+      padding: 1rem;
+      border-bottom: 2px solid #dee2e6;
+      text-align: center; // Center the text within the post details
+  
+      h1 {
+        font-size: 2.5rem;
+        color: #343a40;
+        margin-bottom: 0.5rem;
+      }
+      
+      // You can add more styles for other details here
+    }
+  
+    .passenger-cards-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      width: 100%;
+      max-width: 800px;
+  
+      .passenger-card {
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.25rem;
+        padding: 1rem;
+        box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+        transition: transform 0.2s;
+  
+        &:hover {
+          transform: translateY(-0.25rem);
+          box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+  
+        p {
+          font-size: 1rem;
+          color: #495057;
+          margin-bottom: 0.5rem;
+  
+          &:last-child {
+            margin-bottom: 0;
+          }
+        }
+        
+        // Add styles for buttons or other elements if needed
+      }
+    }
+  
+    // You can add media queries for responsive design as needed
+  }
+  

@@ -13,7 +13,6 @@ const getCurrentUserId = (token) => {
 };
 const DriverNav = () => {
   const [userId, setUserId] = useState(null);
-  const [searchValue, setSearchValue] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,13 +21,7 @@ const DriverNav = () => {
     setUserId(token);
   }, []);
 
-  const handleSearchInputChange = (event) => {
-    setSearchValue(event.target.value);
-  };
 
-  const handleSearch = () => {
-    navigate(`/search?query=${searchValue}`);
-  };
 
   const handleLogout = () => {
     localStorage.clear();
@@ -43,16 +36,6 @@ const DriverNav = () => {
     <nav className="d-navbar">
       <div className="d-navbar-brand">
         <Link to="/" className="d-navbar-logo">Swift Link</Link>
-      </div>
-      
-      <div className="d-search-bar">
-        <input
-          type="text"
-          placeholder="Search posts..."
-          value={searchValue}
-          onChange={handleSearchInputChange}
-        />
-        <button onClick={handleSearch}>Search</button>
       </div>
 
       <ul className="d-navbar-nav">

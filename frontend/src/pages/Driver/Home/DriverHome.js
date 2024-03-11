@@ -28,12 +28,10 @@ const DriverHome = () => {
       fetchPassengerPosts();
   }, []);
   
-
-    const handlePostClick = (postId) => {
-        // Navigate to the post detail page when a post is clicked
-        // You will need to create this route and component
-        navigate(`/post/${postId}`);
-    };
+  const handlePostClick = (postId) => {
+    navigate(`/passenger-post/${postId}`);
+    console.log("postid: ", postId)
+  };
 
     return (
         <div className="Home">

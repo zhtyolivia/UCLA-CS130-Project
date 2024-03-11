@@ -1,0 +1,31 @@
+// PassengerPostDetail.scss
+
+.detail-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  
+    .detail-header {
+      margin-bottom: 20px;
+    }
+  
+    .detail-content {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+      h1 {
+        font-size: 2rem;
+        color: #333;
+      }
+  
+      p {
+        color: #666;
+        line-height: 1.6;
+      }
+      
+      // Other styles for your detail page
+    }
+  }
+  
