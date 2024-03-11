@@ -14,7 +14,7 @@ import DriverHome from './pages/Driver/Home/DriverHome';
 import InitiateRide from './pages/Driver/InitiateRide/InitiateRide';
 import PassengerPost from './pages/Passenger/PassengerPost/PassengerPost';
 import DriverProfile from './pages/Driver/Profile/DriverProfile';
-
+import PassengerSignup from './pages/Login/PassengerSignup';
 
 import axios from "axios";
 
@@ -37,6 +37,7 @@ function App() {
           <Route path="/success" element={<Success />} />
           <Route path="/passenger-login" element={<PassengerLogin />} />
           <Route path="/driver-signup" element={<DriverSignup />} />
+          <Route path="/passenger-signup" element={<PassengerSignup />} />
           <Route path="/home" element={<PassengerHome />} />
           <Route path="/posts" element={<PassengerHome />} />
           <Route path="/search" element={<SearchResults />} /> 
@@ -47,6 +48,7 @@ function App() {
           <Route path="/passenger-post" element={<PassengerPost />} />
           <Route path="/driver-profile/:id" element={<DriverProfile />} />
           <Route path="*" element={<NotFoundPage />} />
+          
         </Routes>
       </div>
     </Router>

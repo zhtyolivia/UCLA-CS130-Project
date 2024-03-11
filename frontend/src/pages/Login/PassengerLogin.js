@@ -113,7 +113,7 @@ const PassengerLogin = () => {
                         </div>
                         <button type="submit" className="p-login-btn">Login</button>
                     </form>
-                    <p className="p-sign-up-text">Don't have an account? <Link to="/signup" className="sign-up">Sign up</Link></p>
+                    <p className="p-sign-up-text">Don't have an account? <Link to="/passenger-signup" className="sign-up">Sign up</Link></p>
                     <div className="p-social-login">
                         <button type="button" className="p-social-btn google">
                             <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
