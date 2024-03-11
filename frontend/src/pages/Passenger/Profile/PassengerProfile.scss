@@ -1,0 +1,50 @@
+@import '../../../styles/variables';
+
+.ProfilePage {
+  margin: 0 auto; /* Center the content horizontally */
+  max-width: 800px; /* Set max-width for the content */
+  padding: 0 20px; /* Add padding to ensure some space on the left and right */
+}
+
+.profile-layout {
+  display: flex;
+  align-items: flex-start; /* Align items at the start of the container */
+}
+
+.left-section {
+  text-align: center; /* Center the button below the avatar */
+}
+
+
+.ride-history-item {
+  position: relative; // This makes it the reference for the absolutely positioned child
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin-bottom: 10px;
+
+  .view-detail-button {
+    position: absolute; // Position the button absolutely within the ride-history-item
+    top: 10px; // Distance from the top of the container
+    right: 10px; // Distance from the right of the container
+    display: inline-block;
+    margin-top: 0; // Remove the margin-top as it's now positioned absolutely
+    background-color: $passenger-secondary-color;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: $button-font-size;
+
+    &:hover {
+      background-color: darken($passenger-secondary-color, 10%);
+    }
+  }
+}
+
+.section-divider {
+  height: 1px; /* Thickness of the bar */
+  background-color: #cccccc; /* Gray color */
+  margin-top: 2px; 
+  margin-bottom: 10px;
+}

@@ -1,0 +1,188 @@
+@import '../../styles/variables';
+
+/* Add a top stripe with the specified color, similar to the login page */
+.top-stripe {
+    width: 100%;
+    height: 60px;
+    background-color: $passenger-primary-color;
+    display: flex;
+    align-items: center;
+    padding-left: 16px; /* Adjust as needed for padding on the left */
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.signup-page, .signup-page * {
+    box-sizing: border-box;
+}
+
+/* Style the signup container */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 60px);
+    padding-top: 40px; /* Make space for the top stripe */
+}
+
+/* Style the signup card */
+.signup-card {
+    background: #fff; /* White background for the card */
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Adjusted for a darker shadow */
+    width: 100%;
+    max-width: 400px;
+    position: relative;
+    text-align: center;
+    margin-top: -20px;
+}
+/* Style the form and its elements */
+.signup-form {
+    margin-bottom: 1rem;
+}
+
+.back-btn {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    color: $driver-secondary-color;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+/* Style for input fields */
+.input-group input {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Style for the signup button */
+.signup-btn {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: $driver-primary-color; /* Using the color of the top stripe */
+    color: white;
+}
+
+/* Hover effect for the signup button */
+.signup-btn:hover {
+    background-color: $driver-hover-color; /* A slightly lighter shade for hover effect */
+}
+
+/* Link to switch to the login page */
+.login-link {
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+/* Separator with 'Or' text */
+.separator {
+    font-size: 0.9rem;
+    color: #aaa;
+    margin: 20px 0;
+    position: relative;
+}
+
+.separator::before,
+.separator::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc; /* Light grey border for the lines */
+    margin: auto;
+}
+
+.separator::before {
+    margin-right: 10px;
+}
+
+.separator::after {
+    margin-left: 10px;
+}
+
+/* Social buttons just like in the login page */
+.social-btn {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 4px;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    text-align: center;
+    transition: background-color 0.3s;
+}
+.social-btn.google {
+    background-color: #db4437;
+}
+
+/* Hover effect for social buttons */
+.social-btn:hover {
+    opacity: 0.9;
+}
+
+/* If you have icons in your social buttons */
+.social-btn i {
+    margin-right: 8px;
+}
+
+/* Additional link at the bottom for sign up or other actions */
+.bottom-link {
+    display: block;
+    color: #fff;
+    margin-top: 20px;
+    text-decoration: none;
+}
+
+.bottom-link:hover {
+    text-decoration: underline;
+}
+
+.account-type-btn {
+    background-color: #f0f0f0;
+    color: #333;
+    padding: 10px 20px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+    outline: none;
+}
+
+.account-type-btn.selected {
+    background-color: $driver-primary-color;
+    color: white;
+    border-color: $driver-primary-color;
+}
+.password-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-group input {
+    padding-right: 40px; /* Adjust padding to ensure text does not overlap button */
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px; /* Adjust based on your design */
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: #717171; /* Adjust color as needed */
+}
