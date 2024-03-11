@@ -22,9 +22,16 @@ async function emailExistsInBoth(email) {
 router.get('/my-driver-posts', authenticateToken, async (req, res) => {
     const driverId = req.user.userId; 
     try {
-      const driverWithPosts = await Driver.findById(driverId)
-                                          .populate('driverposts') // This will populate all the driverPost documents based on their IDs stored in driverPosts array
-                                          .exec();
+        const driverWithPosts = await Driver.findById(driverId)
+            .populate({
+                path: 'driverposts', // Populating driver posts
+                populate: {
+                    path: 'passengers', // Nested population for passengers within each driver post
+                    model: 'Passenger', // Specify the model name if not automatically inferred
+                    select: 'name email phonenumber' // Adjust according to the details you want to include (e.g., name, email)
+                }
+            })
+            .exec();
   
       res.json(driverWithPosts.driverposts);
     } catch (error) {
