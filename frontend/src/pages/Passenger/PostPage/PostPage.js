@@ -36,10 +36,8 @@ function PostPage() {
         const data = response.data; 
         console.log('data:', data);
         setPost(data.driverPost);
-        // console.log('driverPost:', data.driverPost); 
         setRequested(data.hasJoined); // whether there is a join request sent previously 
         setStatus(data.joinRequestStatus)
-        // console.log('requested:', requested)
       } catch(err) {
         console.error(err); 
       }

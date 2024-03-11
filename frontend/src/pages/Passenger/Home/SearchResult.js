@@ -13,9 +13,9 @@ function SearchResults() {
 
   useEffect(() => {
     fetchSearchResults(searchQuery).then(data => {
-      console.log('Feteched search results:', data); 
+      // console.log('Feteched search results:', data); 
       setPosts(data); 
-      console.log('State updated'); 
+      // console.log('State updated'); 
     }).catch(error => {
       console.error('Error fetching search results:', error)
     })
