@@ -2,6 +2,7 @@ import '../../Driver/InitiateRide/InitiateRide.scss';
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
+import SuccessPopup from '../../../components/SuccessPopup/SuccessPopup';
 import { isLoggedIn } from '../../../utils/LoginActions'; 
 import axios from 'axios';
 import { API_BASE_URL } from '../../../services/api';
@@ -15,6 +16,11 @@ const PassengerPost = () => {
     const [email, setEmail] = useState('');
     const [description, setDescription] = useState('');
     const [avatar, setAvatar] = useState(null);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false); 
+    const [showFailPopup, setShowFailPopup] = useState(false); 
+    const [successMsg, setSuccessMsg] = useState(''); 
+    const [failMsg, setFailMsg] = useState(''); 
+
     const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
@@ -33,16 +39,34 @@ const PassengerPost = () => {
             const res = await axios.post(`${API_BASE_URL}/passengerpost/newpost`, body);
             console.log(res)
             const data = res.data;
-            if (data.status === 'Success') {
-                console.log(data)
+            if (data.status === 'Success' || data.status === 'SUCCESS') {
+                // console.log(data)
+                // Display success message 
+                setSuccessMsg('Successfully sent to drivers!'); 
+                setShowSuccessPopup(true); 
+                // Reset form fields 
+                setDate('');
+                setStartLocation('');
+                setEndLocation('');
+                setSeats('');
+                setDescription('');
             } else if (data.status === 'FAILED') {
-                console.log(data)
+                setShowFailPopup(true); 
+                setFailMsg('At least one required field is empty.')
+                console.log("Passenger post request failed:", data)
             }
         } catch(err) {
             console.error(err);
         }
-        // TODO: give user some response when correctly posted
     };
+
+    const handleCloseSuccessPopup = () => {
+        setShowSuccessPopup(false); 
+    }
+
+    const handleCloseFailPopup = () => {
+        setShowFailPopup(false); 
+    }
 
     // If the user hasn't logged in, navigate to welcome page.
     if (!isLoggedIn()) {
@@ -59,25 +83,25 @@ const PassengerPost = () => {
                 <form onSubmit={handleSubmit} className="initiate-ride-form">
                     <input
                         type="text"
-                        placeholder="Start Location (required)"
+                        placeholder="Start Location"
                         value={startLocation}
                         onChange={(e) => setStartLocation(e.target.value)}
                     />
                     <input
                         type="text"
-                        placeholder="End Location (required)"
+                        placeholder="End Location"
                         value={endLocation}
                         onChange={(e) => setEndLocation(e.target.value)}
                     />
                     <input
                         type="number"
-                        placeholder="Number of people you have (required)"
+                        placeholder="Number of people you have"
                         value={seats}
                         onChange={(e) => setSeats(e.target.value)}
                     />
                     <input
                         type="date"
-                        placeholder="Date you're looking for (required)"
+                        placeholder="Date you're looking for"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
                     />
@@ -91,6 +115,8 @@ const PassengerPost = () => {
                     <button class="passenger-button" type="submit">Submit Ride</button>
                 </form>
             </div>
+            {showSuccessPopup && <SuccessPopup onClose={handleCloseSuccessPopup} msg={successMsg} />}
+            {showFailPopup && <SuccessPopup onClose={handleCloseFailPopup} msg={failMsg} />}
         </div>
     );
 };

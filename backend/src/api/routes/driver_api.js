@@ -9,20 +9,90 @@ const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/
 //const { emailExistsInBoth } = require('../../services/validationHelpers');
 const { createUser, generateAuthToken, verifyGoogleToken} = require('../../services/authHelpers');
 
+//Data Module
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 
+const Passengerpost = require('../../models/passengerpost_model');
+const joinRequest = require('../../models/joinrequest_model');
+const Driverpost = require("../../models/driverpost_model");
 
-// Encapsulate the API
-router.get('/profile', authenticateToken, (req, res) => {
-    Driver.findById(req.user.userId)
-    .then(user => {
+
+router.get('/my-driver-posts', authenticateToken, async (req, res) => {
+    const driverId = req.user.userId;
+    try {
+        const driverWithPosts = await Driver.findById(driverId)
+            .populate({
+                path: 'driverposts', // Populating driver posts
+                populate: {
+                    path: 'passengers', // Nested population for passengers within each driver post
+                    model: 'Passenger', // Specify the model name if not automatically inferred
+                    select: 'name email phonenumber' // Adjust according to the details you want to include (e.g., name, email)
+                }
+            })
+            .exec();
+
+      res.json(driverWithPosts.driverposts);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  });
+
+router.get('/my-join-requests', authenticateToken, async (req, res) => {
+    const driverId = req.user.userId; // Assuming the driver's ID is stored in req.user.userId
+
+    try {
+        const driver = await Driver.findById(driverId);
+
+        if (!driver) {
+            return res.status(404).json({ message: "Driver not found" });
+        }
+
+        const joinRequestsDetails = await joinRequest.find({
+            '_id': { $in: driver.joinrequests }}).populate('driverPostId passengerId');
+
+        const detailedRequests = joinRequestsDetails.map(request => ({
+            requestId: request._id,
+            postId: request.driverPostId._id,
+            passengerName: request.passengerId.name,
+            startingLocation: request.driverPostId.startingLocation,
+            endingLocation: request.driverPostId.endingLocation,
+            startTime: request.driverPostId.startTime,
+            status: request.status,
+            message: request.message,
+        }));
+
+        res.json(detailedRequests);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+});
+
+router.get('/profile', authenticateToken, async (req, res) => {
+    try {
+        const user = await Driver.findById(req.user.userId);
         if (!user) {
             return res.status(404).send({ message: "User not found" });
         }
-        res.json(user);
-    })
-    .catch(err => res.status(500).send({ message: err.message }));
+
+        // Initialize the user profile object with user details
+        let userProfile = {
+            ...user._doc, // Spread the user document to include all user info
+            avatar: undefined, // Initialize avatar field
+        };
+
+        // Convert avatar buffer to base64 string if exists
+        if (user.avatar && user.avatar.data) {
+            userProfile.avatar = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
+        }
+
+        res.json(userProfile);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send({ message: error.message });
+    }
 });
 
 // Updated /register endpoint to call the appropriate function based on the request
@@ -90,6 +160,104 @@ router.post('/signin', (req, res) =>{
             });
           });
     }
+});
+
+
+    try {
+        const user = await Driver.findById(userId);
+        if (!user) {
+            return res.status(404).send({ message: "User not found" });
+        }
+
+        // Update name and phone number
+        if (name) user.name = name.trim();
+        if (phonenumber) user.phonenumber = phonenumber.trim();
+
+        // Update email after validation
+        if (email && email !== user.email) {
+            // Validate and check for existing email
+            const emailTaken = await emailExistsInBoth(email);
+            if (emailTaken) {
+                return res.status(400).send({ message: "Email already in use" });
+            }
+            user.email = email.trim();
+            // Optional: Implement email verification
+        }
+
+        // Update password
+        if (newPassword) {
+            // Validate new password strength here
+
+            // Hash new password and update
+            const hashPassword = await bcrypt.hash(newPassword, 10);
+            user.password = hashPassword;
+        }
+
+        await user.save();
+        res.status(200).send({
+            status: "SUCCESS",
+            message: "Profile updated successfully",
+            data: user
+        });
+
+    } catch (err) {
+        res.status(500).send({ message: err.message });
+    }
+});
+
+router.get('/passengerposts', authenticateToken, async (req, res) => {
+    try {
+        const passengerPosts = await Passengerpost.find({});
+        res.status(200).json(passengerPosts);
+    } catch (error) {
+        console.error('Failed to fetch passenger posts:', error);
+        res.status(500).json({ message: 'Failed to fetch passenger posts' });
+    }
+});
+
+// ======================================== Avatar ==========================================
+// Multer setup for file handling
+const upload = multer({
+    limits: { fileSize: 16 * 1024 * 1024 }, // 16MB limit
+    fileFilter(req, file, cb) {
+      if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
+        return cb(new Error("Please upload an image file (jpg, jpeg, or png)."));
+      }
+      cb(undefined, true);
+    },
+});
+
+// API endpoint to upload and update the driver's avatar
+router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
+    if (!req.file) { // Check if the file is not uploaded
+        return res.status(400).send({ message: "Avatar is required." });
+    }
+
+    try {
+        // Use the authenticated driver's ID from the token
+        const driver = await Driver.findById(req.user.userId);
+        if (!driver) {
+            return res.status(404).send({ error: "Driver not found" });
+        }
+
+        // Proceed with resizing and saving the avatar
+        const buffer = await sharp(req.file.buffer)
+            .resize(250, 250, {
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+            })
+            .png()
+            .toBuffer();
+
+        driver.avatar = { data: buffer, contentType: "image/png" };
+        await driver.save();
+        res.send({ message: "Avatar updated successfully" });
+    } catch (error) {
+        res.status(400).send({ error: error.message });
+    }
+}, (error, req, res, next) => {
+    // Error handling middleware for Multer
+    res.status(400).send({ error: error.message });
 });
 
 

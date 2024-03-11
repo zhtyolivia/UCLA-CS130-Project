@@ -26,6 +26,19 @@ function SearchResults() {
     return <Navigate to="/welcome" />;
   }
 
+  if (posts.length == 0) {
+    return (
+      <div className="Home">
+        <header>
+          <Navigation searchQuery={searchQuery} />
+        </header>
+        <div style={{ marginTop: '30px' }}> 
+          <h3>No results found</h3>
+      </div>
+        
+      </div>
+    )
+  }
   return (
     <div className="Home">
       <header>

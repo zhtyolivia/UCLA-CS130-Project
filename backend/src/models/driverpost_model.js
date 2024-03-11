@@ -15,9 +15,21 @@ const DriverpostSchema = new Schema({
     type: Date,
     // required: true,
   },
+  licensenumber:{
+    type: String
+  },
+  model:{
+    type: String
+  },
   numberOfSeats: {
     type: Number,
     // required: true,
+  },
+  phonenumber:{
+    type: String
+  },
+  email:{
+    type: String
   },
   additionalNotes: {
     type: String,
