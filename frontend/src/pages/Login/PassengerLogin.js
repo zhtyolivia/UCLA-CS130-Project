@@ -49,9 +49,7 @@ const PassengerLogin = () => {
     };
         
     const handleSubmit = (event) => {
-        console.log(values)
         event.preventDefault();
-        console.log('Form submitted');
         loginAction(values);
         
     };

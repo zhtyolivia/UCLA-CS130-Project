@@ -1,7 +1,7 @@
 // JoinReqPopup.js
 import './JoinReqPopup.scss'; // Importing the CSS for the Popup
 
-const JoinReqPopup = ({ onClose, onSubmit, onChange, msg, maxSeats}) => {
+const JoinReqPopup = ({ onClose, onSubmit, onChange, maxSeats}) => {
   return (
     <div className="popup-overlay">
       <div className="popup-content">
@@ -10,17 +10,21 @@ const JoinReqPopup = ({ onClose, onSubmit, onChange, msg, maxSeats}) => {
           <p>Are you sure you want to send a join request?</p>
           <textarea className="input-common popup-textarea"
             placeholder="Your message (required)" 
-            value={msg}
-            onChange={onChange}
+            name='message'
+            id='message'
             required
+            onChange={onChange}
           ></textarea>
           <input className="input-common"
             type="number"
             placeholder="Number of people you have"
             max={maxSeats}
-            onChange={onChange}
+            
             min="1"
+            name='seats'
+            id='seats'
             required
+            onChange={onChange}
         />
           <div className="popup-actions">
             <button type="button" className="popup-button" onClick={onClose}>Cancel</button>
