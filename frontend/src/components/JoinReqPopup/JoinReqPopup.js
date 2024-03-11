@@ -13,6 +13,7 @@ const JoinReqPopup = ({ onClose, onSubmit, onChange, msg}) => {
             value={msg}
             onChange={onChange}
             className="popup-textarea"
+            required
           ></textarea>
           <div className="popup-actions">
             <button type="button" className="popup-button" onClick={onClose}>Cancel</button>
