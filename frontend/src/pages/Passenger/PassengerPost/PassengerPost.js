@@ -1,5 +1,5 @@
 import '../../Driver/InitiateRide/InitiateRide.scss';
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import SuccessPopup from '../../../components/SuccessPopup/SuccessPopup';
@@ -13,9 +13,9 @@ const PassengerPost = () => {
     const [startLocation, setStartLocation] = useState('');
     const [endLocation, setEndLocation] = useState('');
     const [seats, setSeats] = useState('');
-    const [email, setEmail] = useState('');
+    //const [email, setEmail] = useState('');
     const [description, setDescription] = useState('');
-    const [avatar, setAvatar] = useState(null);
+    //const [avatar, setAvatar] = useState(null);
     const [showSuccessPopup, setShowSuccessPopup] = useState(false); 
     const [showFailPopup, setShowFailPopup] = useState(false); 
     const [successMsg, setSuccessMsg] = useState(''); 
