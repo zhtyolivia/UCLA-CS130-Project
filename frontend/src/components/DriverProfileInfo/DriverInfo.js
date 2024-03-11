@@ -26,7 +26,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
             phonenumber: phonenumber,
             avatar: avatar
         });
-      }, [name, email, phonenumber]); // Depend on props to update state
+      }, [name, email, phonenumber, avatar]); // Depend on props to update state
     
       const handleChange = (e) => {
         const { name, value, files } = e.target; 
@@ -62,7 +62,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 formData.append('avatar', profile.avatar); 
                 console.log(formData);
                 console.log('profile.avatar:', profile.avatar)
-                const avatarResponse = await axios.post(`${API_BASE_URL}/passenger/avatar`, formData, {
+                const avatarResponse = await axios.post(`${API_BASE_URL}/driver/avatar`, formData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -124,7 +124,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
             <div className="driver-info">
                 <div className="driver-info-header">
                     <div className="driver-avatar">
-                        <img src={avatar ? avatar : defaultAvatar} alt={`${name}'s Avatar`} />
+                        <img src={profile.avatar ? (profile.avatar instanceof File ? URL.createObjectURL(profile.avatar) : profile.avatar) : defaultAvatar} alt="Avatar" />
                     </div>
                     <div className="driver-details">
                         <h3>User Information</h3>
@@ -133,9 +133,14 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                         <p><strong>Phone number:</strong> {phonenumber}</p>
                     </div>
                 </div>
-                <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
-                <button className="info-button" onClick={toggleDriverPosts}>My Posts</button>
-                <button className="info-button" onClick={toggleJoinRequests}>Join Requests</button>
+                <div className="button-container">
+                    <button className="edit-button" onClick={handleEditClick}>Edit Profile</button>
+                    <div className="post-request-buttons">
+                        <button className="info-button" onClick={toggleDriverPosts}>My Posts</button>
+                        <button className="info-button" onClick={toggleJoinRequests}>Join Requests</button>
+                    </div>
+                </div>
+
 
                 {showDriverPosts && (
                     <div className="dropdown-content">
