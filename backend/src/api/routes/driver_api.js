@@ -23,6 +23,34 @@ async function emailExistsInBoth(email) {
     return passengerExists || driverExists ? true : false;
 }
 
+
+/**
+ * @api {get} /my-driver-posts Get My Driver Posts
+ * @apiName GetMyDriverPosts
+ * @apiGroup Driver
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Fetch all posts created by the authenticated driver.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiSuccess {Object[]} driverposts List of driver posts.
+ * @apiSuccess {String} driverposts._id Post ID.
+ * @apiSuccess {String} driverposts.title Post title.
+ * @apiSuccess {Object[]} driverposts.passengers List of passengers in the post.
+ * @apiSuccess {String} driverposts.passengers.name Passenger name.
+ * @apiSuccess {String} driverposts.passengers.email Passenger email.
+ * @apiSuccess {String} driverposts.passengers.phonenumber Passenger phone number.
+ * 
+ * @apiError ServerError Internal server error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Server error",
+ *       "error": "Detailed error message"
+ *     }
+ */
+
 router.get('/my-driver-posts', authenticateToken, async (req, res) => {
     const driverId = req.user.userId;
     try {
@@ -43,6 +71,35 @@ router.get('/my-driver-posts', authenticateToken, async (req, res) => {
       res.status(500).json({ message: 'Server error', error: error.message });
     }
   });
+
+/**
+ * @api {get} /my-join-requests Get My Join Requests
+ * @apiName GetMyJoinRequests
+ * @apiGroup Driver
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Fetch all join requests to the driver's posts.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiSuccess {Object[]} joinRequests List of join requests.
+ * @apiSuccess {String} joinRequests.requestId Request ID.
+ * @apiSuccess {String} joinRequests.postId Driver post ID related to the request.
+ * @apiSuccess {String} joinRequests.passengerName Name of the requesting passenger.
+ * @apiSuccess {String} joinRequests.startingLocation Starting location of the ride.
+ * @apiSuccess {String} joinRequests.endingLocation Ending location of the ride.
+ * @apiSuccess {String} joinRequests.startTime Time when the ride starts.
+ * @apiSuccess {String} joinRequests.status Request status (e.g., pending, accepted, rejected).
+ * @apiSuccess {String} joinRequests.message Optional message from the passenger.
+ * 
+ * @apiError ServerError Internal server error.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 500 Internal Server Error
+ *     {
+ *       "message": "Server error",
+ *       "error": "Detailed error message"
+ *     }
+ */
 
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
     const driverId = req.user.userId; // Assuming the driver's ID is stored in req.user.userId
@@ -75,6 +132,31 @@ router.get('/my-join-requests', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @api {get} /profile Get Driver Profile
+ * @apiName GetDriverProfile
+ * @apiGroup Driver
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Fetch the profile of the authenticated driver.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiSuccess {Object} profile Driver's profile information.
+ * @apiSuccess {String} profile._id Driver's ID.
+ * @apiSuccess {String} profile.name Driver's name.
+ * @apiSuccess {String} profile.email Driver's email.
+ * @apiSuccess {String} [profile.avatar] Driver's avatar in base64 encoding.
+ * @apiSuccess {String} profile.phonenumber Driver's phone number.
+ * 
+ * @apiError UserNotFound The id of the User was not found.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "User not found"
+ *     }
+ */
+
 router.get('/profile', authenticateToken, async (req, res) => {
     try {
         const user = await Driver.findById(req.user.userId);
@@ -100,6 +182,32 @@ router.get('/profile', authenticateToken, async (req, res) => {
     }
 });
 
+/**
+ * @api {post} /register Register Driver
+ * @apiName RegisterDriver
+ * @apiGroup Driver
+ * @apiPermission none
+ * 
+ * @apiDescription Register a new driver or passenger.
+ * 
+ * @apiParam {String} email Driver's email.
+ * @apiParam {String} password Driver's password.
+ * @apiParam {String} name Driver's name.
+ * @apiParam {String} phonenumber Driver's phone number.
+ * @apiParam {String} [code] Authentication code for Google signup.
+ * @apiParam {String} accountType Type of account (driver or passenger).
+ * 
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} token JWT token for the newly registered driver.
+ * 
+ * @apiError EmailInUse The email address is already in use.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 400 Bad Request
+ *     {
+ *       "message": "Email already in use"
+ *     }
+ */
+
 // Updated /register endpoint to call the appropriate function based on the request
 router.post('/register', async (req, res) => {
     console.log(req.body); // Add this line to log the request body
@@ -112,6 +220,32 @@ router.post('/register', async (req, res) => {
         await handleTraditionalSignup(req, res, email, password, name, phonenumber, accountType);
     }
 });
+
+/**
+ * @api {post} /signin Driver Sign-in
+ * @apiName DriverSignIn
+ * @apiGroup Driver
+ * @apiPermission none
+ * 
+ * @apiDescription Sign in for existing drivers.
+ * 
+ * @apiParam {String} email Driver's email.
+ * @apiParam {String} password Driver's password.
+ * 
+ * @apiSuccess {String} status Operation status.
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {Object} data Driver's data.
+ * @apiSuccess {String} token JWT token for the authenticated driver.
+ * 
+ * @apiError InvalidCredentials The credentials provided were invalid.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 401 Unauthorized
+ *     {
+ *       "status": "FAILED",
+ *       "message": "Invalid credential"
+ *     }
+ */
+
 router.post('/signin', (req, res) =>{
     let{email, password} = req.body;
     email = email.trim();
@@ -165,6 +299,36 @@ router.post('/signin', (req, res) =>{
     }
 });
 
+
+/**
+ * @api {post} /updateProfile Update Driver Profile
+ * @apiName UpdateDriverProfile
+ * @apiGroup Driver
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Update the profile information of the authenticated driver.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiParam {String} userId Driver's user ID.
+ * @apiParam {String} [name] Driver's new name.
+ * @apiParam {String} [phonenumber] Driver's new phone number.
+ * @apiParam {String} [email] Driver's new email.
+ * @apiParam {String} [newPassword] Driver's new password.
+ * 
+ * @apiSuccess {String} status Operation status.
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {String} userId Updated driver's ID.
+ * 
+ * @apiError UserNotFound The id of the User was not found.
+ * @apiError EmailInUse The email address is already in use by another account.
+ * @apiErrorExample {json} Error-Response:
+ *     HTTP/1.1 404 Not Found
+ *     {
+ *       "message": "User not found"
+ *     }
+ */
+
 router.post('/updateProfile', async (req, res) => {
     const { userId, name, phonenumber, email, newPassword } = req.body;
 
@@ -203,6 +367,22 @@ router.post('/updateProfile', async (req, res) => {
     }
 });
 
+/**
+ * @api {get} /passengerposts Get Passenger Posts
+ * @apiName GetPassengerPosts
+ * @apiGroup Passenger
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Fetch all posts created by passengers.
+ * 
+ * @apiHeader {String} Authorization Passenger's unique access token.
+ * 
+ * @apiSuccess {Object[]} passengerPosts List of passenger posts.
+ * 
+ * @apiError ServerError Failed to fetch passenger posts.
+ */
+
+
 
 router.get('/passengerposts', authenticateToken, async (req, res) => {
     try {
@@ -225,6 +405,25 @@ const upload = multer({
       cb(undefined, true);
     },
 });
+
+/**
+ * @api {post} /avatar Upload/Update Avatar
+ * @apiName UploadUpdateAvatar
+ * @apiGroup Driver
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Upload or update the avatar for the authenticated driver.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiParam {File} avatar The avatar image file to upload (jpg, jpeg, or png).
+ * 
+ * @apiSuccess {String} message A message indicating the avatar was updated successfully.
+ * 
+ * @apiError BadRequest The file uploaded is not an image or exceeds the size limit.
+ * @apiError DriverNotFound The authenticated driver was not found.
+ * @apiError ServerError Unexpected server error.
+ */
 
 // API endpoint to upload and update the driver's avatar
 router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {

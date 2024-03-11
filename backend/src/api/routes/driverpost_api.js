@@ -10,6 +10,25 @@ const driverpostRouter = express.Router();
 
 // Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
+
+/**
+ * @api {get} /search Search Driver Posts
+ * @apiName SearchDriverPosts
+ * @apiGroup DriverPost
+ * @apiPermission none
+ * 
+ * @apiDescription Search for driver posts based on starting or ending location.
+ * 
+ * @apiParam {String} term Search term for starting or ending location.
+ * 
+ * @apiSuccess {Object[]} posts List of matching driver posts.
+ * @apiSuccess {String} posts.startingLocation Starting location of the driver post.
+ * @apiSuccess {String} posts.endingLocation Ending location of the driver post.
+ * 
+ * @apiError (Error 500) ServerError Internal server error during the search operation.
+ */
+
+
 driverpostRouter.get("/search", async (req, res) => {
   let searchTerm = req.query.term;
 
@@ -51,6 +70,26 @@ driverpostRouter.get("/search", async (req, res) => {
   }
 });
 
+
+
+/**
+ * @api {patch} /join-requests/:requestId/accept Accept Join Request
+ * @apiName AcceptJoinRequest
+ * @apiGroup JoinRequest
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Accept a passenger's join request for a driver post.
+ * 
+ * @apiParam {String} requestId ID of the join request to accept.
+ * 
+ * @apiSuccess {String} message Confirmation message.
+ * 
+ * @apiError (Error 400) BadRequest Join request is not pending or already processed.
+ * @apiError (Error 404) NotFound Driver post not found.
+ * @apiError (Error 500) ServerError Internal server error.
+ */
+
+
 driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, async (req, res) => {
   const { requestId } = req.params;
   try {
@@ -90,6 +129,23 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
   }
 });
 
+/**
+ * @api {patch} /join-requests/:requestId/decline Decline Join Request
+ * @apiName DeclineJoinRequest
+ * @apiGroup JoinRequest
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Decline a passenger's join request for a driver post.
+ * 
+ * @apiParam {String} requestId ID of the join request to decline.
+ * 
+ * @apiSuccess {String} message Confirmation message.
+ * 
+ * @apiError (Error 400) BadRequest Join request is not pending or already processed.
+ * @apiError (Error 404) NotFound Join request not found.
+ * @apiError (Error 500) ServerError Internal server error.
+ */
+
 driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, async (req, res) => {
   const { requestId } = req.params;
   try {
@@ -121,6 +177,24 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
       res.status(500).json({ message: 'Server error', error: error.message });
   }
 });
+
+/**
+ * @api {get} /:postId Get Driver Post Details
+ * @apiName GetDriverPostDetails
+ * @apiGroup DriverPost
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Get detailed information about a specific driver post.
+ * 
+ * @apiParam {String} postId ID of the driver post to retrieve.
+ * 
+ * @apiSuccess {Object} driverPost Detailed information about the driver post.
+ * @apiSuccess {Boolean} hasJoined Indicates if the user has joined the post.
+ * @apiSuccess {String} joinRequestStatus Status of the join request if any.
+ * 
+ * @apiError (Error 404) NotFound Driver post not found.
+ * @apiError (Error 500) ServerError Internal server error.
+ */
 
 driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
   const { postId } = req.params;
@@ -178,6 +252,27 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
     res.status(500).json({ message: 'Server error' });
   }
 });
+
+
+/**
+ * @api {post} /:postId/join Send Join Request
+ * @apiName SendJoinRequest
+ * @apiGroup JoinRequest
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Send a join request to a driver post.
+ * 
+ * @apiParam {String} postId ID of the driver post to join.
+ * @apiParam {Number} seatsneeded Number of seats needed.
+ * @apiParam {String} [message] Optional message to the driver.
+ * 
+ * @apiSuccess {String} message Confirmation message.
+ * @apiSuccess {Object} joinRequest Details of the created join request.
+ * 
+ * @apiError (Error 400) BadRequest Not enough seats available or join request already sent.
+ * @apiError (Error 404) NotFound Rideshare post not found.
+ * @apiError (Error 500) ServerError Internal server error.
+ */
 
 driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
   try {
@@ -248,6 +343,22 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
   }
 });
 
+/**
+ * @api {post} /:postId/cancel Cancel Join Request
+ * @apiName CancelJoinRequest
+ * @apiGroup JoinRequest
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Cancel a previously sent join request for a driver post.
+ * 
+ * @apiParam {String} postId ID of the driver post associated with the join request to cancel.
+ * 
+ * @apiSuccess {String} message Confirmation message.
+ * 
+ * @apiError (Error 404) NotFound Join request not found or already cancelled.
+ * @apiError (Error 500) ServerError Internal server error.
+ */
+
 driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => {
   const passengerId = req.user.userId; // Assuming `req.user` is populated by your authentication middleware
   const { postId } = req.params;
@@ -303,6 +414,33 @@ driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => 
   }
 });
 
+/**
+ * @api {post} /newpost Create New Driver Post
+ * @apiName CreateNewDriverPost
+ * @apiGroup DriverPost
+ * @apiPermission authenticated
+ * 
+ * @apiDescription Create a new driver post for a ride share.
+ * 
+ * @apiHeader {String} Authorization Driver's unique access token.
+ * 
+ * @apiParam {String} startingLocation Starting location of the ride.
+ * @apiParam {String} endingLocation Ending location of the ride.
+ * @apiParam {String} startTime Start time of the ride.
+ * @apiParam {String} licensenumber License number of the vehicle.
+ * @apiParam {String} model Vehicle model.
+ * @apiParam {Number} numberOfSeats Number of seats offered.
+ * @apiParam {String} additionalNotes Additional notes about the ride.
+ * 
+ * @apiSuccess {String} status Operation status.
+ * @apiSuccess {String} message Success message.
+ * @apiSuccess {Object} data Created driver post details.
+ * 
+ * @apiError DriverNotFound The driver creating the post could not be found.
+ * @apiError FailedPostCreation An error occurred during the creation of the driver post.
+ */
+
+
 driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
   const driverId = req.user.userId;
   let{startingLocation, endingLocation, startTime, licensenumber, model, numberOfSeats, additionalNotes} = req.body;
@@ -355,6 +493,28 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
     });
   }
 });
+
+
+/**
+ * @api {get} / Get All Posts
+ * @apiName GetAllPosts
+ * @apiGroup DriverPost
+ * @apiPermission none
+ * 
+ * @apiDescription Retrieve all driver posts available in the system.
+ * 
+ * @apiSuccess {Object[]} posts Array containing all driver posts.
+ * @apiSuccess {String} posts._id ID of the driver post.
+ * @apiSuccess {String} posts.startingLocation Starting location of the ride.
+ * @apiSuccess {String} posts.endingLocation Ending location of the ride.
+ * @apiSuccess {String} posts.startTime Start time of the ride.
+ * @apiSuccess {Number} posts.numberOfSeats Number of seats offered.
+ * @apiSuccess {String} posts.licensenumber License number of the vehicle.
+ * @apiSuccess {String} posts.model Vehicle model.
+ * @apiSuccess {String} posts.additionalNotes Additional notes about the ride.
+ * 
+ * @apiError InternalServerError An error occurred on the server while fetching the posts.
+ */
 
 // for getting all posts
 driverpostRouter.get("/", async (req, res) => {
