@@ -45,7 +45,7 @@ function PostPage() {
     }; 
     getPost();
     
-  }, []); 
+  }, [status]); 
 
   const handleRequestClick = () => {
     setShowRequestPopup(true);
@@ -72,22 +72,32 @@ function PostPage() {
   }
 
   const handleInputChange = (e) => {
-    setMsg(e.target.value); 
+    const { name, value } = e.target; 
+   
+    if (name === 'message') {
+      setMsg(value); 
+      // console.log('msg:', msg)
+    } else if (name === 'seats') {
+      setNumSeats(value);
+    }
+    
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     
     const body = {
-      postId: id, 
       message: msg, 
-      seatsNeeded: numSeats
+      seatsneeded: numSeats
     }; 
 
     try {
-      await axios.post(`${API_BASE_URL}/driverpost/${id}/join`, body); 
+      console.log('body:', body)
+      const response = await axios.post(`${API_BASE_URL}/driverpost/${id}/join`, body); 
       // console.log("Join request sent.");
+      console.log(response.data)
       setShowRequestPopup(false);
+
       window.location.reload();
     } catch  (err) {
       console.error(err); 
@@ -98,6 +108,8 @@ function PostPage() {
     e.preventDefault();
     
     try {
+      console.log(window.localStorage.getItem("AuthToken"));
+      console.log(`${API_BASE_URL}/driverpost/${id}/cancel`);
       const response = await axios.post(`${API_BASE_URL}/driverpost/${id}/cancel`); 
       setShowCancelPopup(false); 
       window.location.reload();
@@ -136,7 +148,7 @@ function PostPage() {
             <div className='join-container'>
               <div className='button-text'>Send a join request to the driver</div> 
               <div className='button-container'>
-                <button className="join-button" onClick={handleRequestClick} onChange={handleInputChange}>Request</button>
+                <button className="join-button" onClick={handleRequestClick} >Request</button>
               </div>
             </div>
           }
@@ -145,7 +157,7 @@ function PostPage() {
             <div className='join-container'>
               <div className='button-text'>Request sent to the driver</div> 
               <div className='button-container'>
-                <button className="cancel-button" onClick={handleCancelClick} onChange={handleInputChange}>Cancel join request</button>
+                <button className="cancel-button" onClick={handleCancelClick} >Cancel join request</button>
               </div>
             </div>
           }
@@ -153,7 +165,7 @@ function PostPage() {
           {requested && status=== 'accepted' &&  
             <div className='join-container'>
                <div className='button-text'>Driver accepted your request. </div> 
-              <button className="accepted-button" onClick={handleAcceptedClick} onChange={handleInputChange}>Cancel join request</button>
+              <button className="accepted-button" onClick={handleAcceptedClick} >Cancel join request</button>
             </div>
           }
 
@@ -165,9 +177,9 @@ function PostPage() {
         {status === 'accepted' && <InitiatorInfo post={post}/>}
 
       </div>
-      {showRequestPopup &&  <JoinReqPopup onClose={handleClosePopup} onSubmit={handleSubmit} maxSeats={post.numberOfSeats}/>}
-      {showCancelPopup &&  <CancelJoinReq onClose={handleCloseCancel} onSubmit={handleCancelSubmit} />}
-      {showAcceptedPopup &&  <CancelJoinReq onClose={handleCloseAccepted} onSubmit={handleCancelSubmit} />}
+      {showRequestPopup &&  <JoinReqPopup onClose={handleClosePopup} onChange={handleInputChange} onSubmit={handleSubmit} maxSeats={post.numberOfSeats}/>}
+      {showCancelPopup &&  <CancelJoinReq onClose={handleCloseCancel} onChange={handleInputChange} onSubmit={handleCancelSubmit} />}
+      {showAcceptedPopup &&  <CancelJoinReq onClose={handleCloseAccepted} onChange={handleInputChange} onSubmit={handleCancelSubmit} />}
     </div>
   );
 }
