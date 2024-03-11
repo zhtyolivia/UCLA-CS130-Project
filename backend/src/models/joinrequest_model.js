@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const joinRequestSchema = new Schema({
   passengerId: { type: Schema.Types.ObjectId, ref: 'Passenger' },
   driverPostId: { type: mongoose.Schema.Types.ObjectId, ref: 'Driverpost' },
+  seatsneeded:{type: Number},
   message:{type: String},
   status: { type: String, enum: ['pending', 'accepted', 'declined'], default: 'pending' },
   requestedAt: { type: Date, default: Date.now }
