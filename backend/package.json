@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@react-oauth/google": "^0.12.1",
+    "apidoc": "^1.2.0",
     "axios": "^1.6.7",
     "bcrypt": "^5.1.1",
     "bcryptjs": "^2.4.3",

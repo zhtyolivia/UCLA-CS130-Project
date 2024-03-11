@@ -7,7 +7,7 @@ const Driver = require('../models/driver_model');
 const Passenger = require('../models/passenger_model');
 const CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET; // Ensure this is secure
-const REDIRECT_URI = 'http://localhost:3000/signup'; // The path in your frontend app where Google redirects to after auth
+const REDIRECT_URL = 'http://localhost:3000'; // The path in your frontend app where Google redirects to after auth
 const axios = require('axios');
 
 async function emailExistsInBoth(email) {
@@ -18,91 +18,81 @@ async function emailExistsInBoth(email) {
 }
 
 const handleTraditionalSignup = async (req, res, email, password, name, phonenumber, accountType) => {
-    if (email == "" || password == "" || name == "" || phonenumber == "") {
-        return res.json({
+    if(email == "" || password == "" || name == "" || phonenumber == ""){
+        res.json({
             status: "FAILED",
-            message: "Empty input for some fields"
+            message: "Empty Input for some fields"
         });
-    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-        return res.json({
+    } else if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)){
+        res.json({
             status: "FAILED",
-            message: "Invalid email"
-        });
-    } else if (!/^[a-zA-Z]*$/.test(name)) {
-        return res.json({
+            message: "Invalid Email"
+        })
+    } else if (!/^[a-zA-z]*$/.test(name)){
+        res.json({
             status: "FAILED",
-            message: "Invalid name"
-        });
-    } else if (!/^\d{10}$/.test(phonenumber)) {
-        return res.json({
+            message: "Invalid Name"
+        })
+    } else if (!/^\d{10}$/.test(phonenumber)){
+        res.json({
             status: "FAILED",
-            message: "Invalid phone number"
-        });
-    } else if (password.length < 8) {
-        return res.json({
+            message: "Invalid PhoneNumber"
+        })
+    } else if (password.length < 8){
+        res.json({
             status: "FAILED",
-            message: "Password must be at least 8 characters"
-        });
+            message: "Invalid Password"
+        })
     } else {
-        emailExistsInBoth(email).then(exists => {
-            if (exists) {
-                return res.json({
+        emailExistsInBoth(email).then(emailExists =>{
+            if (emailExists){
+                res.json({
                     status: "FAILED",
-                    message: "User with this email already exists"
+                    message: "User with this email already exist as a driver or passenger"
                 });
-            } else {
+            } else{
                 const saltRounds = 10;
-                bcrypt.hash(password, saltRounds).then(hashPassword => {
-                    let newUser;
-                    if (accountType === 'driver') {
-                        newUser = new Driver({
-                            email,
-                            password: hashPassword,
-                            name,
-                            phonenumber
-                        });
-                    } else { // Default to Passenger if accountType is not specified or is 'passenger'
-                        newUser = new Passenger({
-                            email,
-                            password: hashPassword,
-                            name,
-                            phonenumber
-                        });
-                    }
-                    newUser.save().then(result => {
-                        return res.json({
+                bcrypt.hash(password, saltRounds).then(hashPassword =>{
+                    const newDriver = new Driver({
+                        email,
+                        password: hashPassword,
+                        name,
+                        phonenumber
+                    });
+                    newDriver.save().then(result =>{
+                        res.json({
                             status: "SUCCESS",
-                            message: "Registration successful",
+                            message: "Registration Successfully",
                             data: result,
-                        });
-                    }).catch(err => {
-                        console.error("Error saving user account:", err);
-                        return res.json({
+                        })
+                    })
+                    .catch(err => {
+                        res.json({
                             status: "FAILED",
-                            message: "Error saving user account"
-                        });
-                    });
-                }).catch(err => {
-                    console.error("Error hashing password:", err);
-                    return res.json({
+                            message: "Error Occur when trying to save user account"
+                        })
+                    })
+                }).catch(err =>{
+                    res.json({
                         status: "FAILED",
-                        message: "Error hashing password"
-                    });
-                });
+                        message: "Error Occur when hashing password"
+                    })
+                })
             }
+
         }).catch(err => {
-            console.error("Error checking for existing user:", err);
-            return res.json({
+            console.log(err);
+            res.json({
                 status: "FAILED",
-                message: "Error checking for existing user"
-            });
-        });
+                message: "Error Occur when trying to check for existing User"
+            })
+        })
     }
 };
 // Function for handling traditional signup
 // Function for handling Google signup
-const handleGoogleSignup = async (req, res, accountType) => {
-    const { code } = req.body;
+const handleGoogleSignup = async (req, res, code, accountType) => {
+
 
     try {
         // Exchange the authorization code for tokens
@@ -110,7 +100,7 @@ const handleGoogleSignup = async (req, res, accountType) => {
             code,
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
-            redirect_uri: REDIRECT_URI,
+            redirect_url: REDIRECT_URL,
             grant_type: 'authorization_code',
         });
 

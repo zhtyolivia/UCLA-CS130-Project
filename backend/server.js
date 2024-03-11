@@ -1,7 +1,6 @@
 require("dotenv").config();
 const connectDB = require("./src/config/db");
 connectDB();
-var testAPIRouter = require("./src/api/routes/testAPI");
 
 const express = require("express");
 const app = express();
@@ -23,11 +22,10 @@ app.get("/", (req, res) => {
 });
 
 
-//
 app.use('/passenger', PassengerRouter);
 app.use('/driver', DriverRouter);
 app.use('/driverpost',DriverPostRouter);
-app.use("/testAPI", testAPIRouter);
+//app.use("/testAPI", testAPIRouter);
 app.use("/passengerpost", PassengerPostRouter);
 
 
