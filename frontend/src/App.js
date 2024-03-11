@@ -47,7 +47,7 @@ function App() {
           <Route path="/initiate-ride" element={<InitiateRide />} />
           <Route path="/passenger-post" element={<PassengerPost />} />
           <Route path="/driver-profile/:id" element={<DriverProfile />} />
-          <Route path="/passenger-post/:id" element={<PassengerPostDetail />} />
+          <Route path="/passenger-post/:postId" element={<PassengerPostDetail />} />
           <Route path="/driver-post-detail" element={<DriverPostDetail />} />
         </Routes>
       </div>
