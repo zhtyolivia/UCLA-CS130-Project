@@ -210,17 +210,16 @@ router.get('/profile', authenticateToken, async (req, res) => {
 
 // Updated /register endpoint to call the appropriate function based on the request
 router.post('/register', async (req, res) => {
-    console.log(req.body); // Add this line to log the request body
-    const code = req.headers.authorization;
-    console.log('Authorization Code:', code);
     const { email, password, name, phonenumber, accountType } = req.body;
-    console.log("Signup attempt:", code ? "Google Signup" : "Traditional Signup");
-    // Decide between Google signup and traditional signup based on the presence of a token
-    if (code) {
-        await handleGoogleSignup(req, res, code, accountType);
-    } else {
-        await handleTraditionalSignup(req, res, email, password, name, phonenumber, accountType);
-    }
+    console.log("Traditional Signup attempt");
+    await handleTraditionalSignup(req, res, email, password, name, phonenumber, accountType);
+});
+
+router.post('/register/google', async (req, res) => {
+    const code = req.body.code; 
+    const { accountType } = req.body;
+    console.log('Google Signup attempt with Authorization Code:', code);
+    await handleGoogleSignup(req, res, code, accountType);
 });
 
 /**
