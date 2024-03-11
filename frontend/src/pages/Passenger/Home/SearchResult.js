@@ -26,7 +26,7 @@ function SearchResults() {
     return <Navigate to="/welcome" />;
   }
 
-  if (posts.length == 0) {
+  if (posts.length === 0) {
     return (
       <div className="Home">
         <header>
