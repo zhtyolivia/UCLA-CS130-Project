@@ -7,19 +7,20 @@ import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
+    console.log("Token response from Google:", tokenResponse);
       try {
         // Construct the endpoint URL based on accountType
         const endpoint = accountType === 'driver' ? '/driver/register' : '/passenger/register';
-
+        const payload = {
+            code: tokenResponse.code,
+            accountType,
+          };
         // Make a POST request to the appropriate endpoint
-        const response = await axios.post(`http://localhost:3001${endpoint}`, {
-            token: tokenResponse.access_token,
-        });
+        const response = await axios.post(`http://localhost:3001${endpoint}`, payload);
         
 
         // If the request is successful, handle success (e.g., navigate to a dashboard or show a success message)
         if (onSuccess) onSuccess(response.data);
-        console.log("Sign up success");
       } catch (error) {
         console.error('Error during login with Google:', error);
         // If the request fails, handle failure (e.g., show an error message)
