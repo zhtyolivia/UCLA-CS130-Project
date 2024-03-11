@@ -1,7 +1,7 @@
 // JoinReqPopup.js
 import './JoinReqPopup.scss'; // Importing the CSS for the Popup
 
-const CancelJoinReq = ({ onClose, onSubmit, onChange, msg}) => {
+const CancelJoinReq = ({ onClose, onSubmit}) => {
   return (
     <div className="popup-overlay">
       <div className="popup-content">

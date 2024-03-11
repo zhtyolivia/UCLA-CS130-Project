@@ -112,7 +112,6 @@ const PassengerLogin = () => {
                             {errors.password && <p className="p-login-error">{errors.password}</p>} {/* Display error message below input and button */}
                         </div>
                         <button type="submit" className="p-login-btn">Login</button>
-                        <p className="p-forgot-password">Forgot password?</p>
                     </form>
                     <p className="p-sign-up-text">Don't have an account? <Link to="/signup" className="sign-up">Sign up</Link></p>
                     <div className="p-social-login">
@@ -120,7 +119,6 @@ const PassengerLogin = () => {
                             <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
                         </button>
                     </div>
-                    <Link to="/home">Go to Home</Link>
                 </div>
             </div>
         </div>

@@ -59,12 +59,14 @@ html, body {
 }
 
 .p-back-btn {
-    position: absolute;
-    top: 1rem;
-    left: 1rem;
+    // position: absolute;
+    position: relative;
+    // top: 2rem;
+    // left: 2rem;
     color: $passenger-primary-color;
     text-decoration: none;
     font-size: 1rem;
+    margin-bottom: 100px;
 }
 
 .p-login-form h2 {

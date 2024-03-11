@@ -39,6 +39,10 @@ function SearchResults() {
       </div>
     )
   }
+
+  if (searchQuery === "") {
+    return <Navigate to="/home" />;
+  }
   return (
     <div className="Home">
       <header>

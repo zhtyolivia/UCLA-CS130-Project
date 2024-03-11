@@ -86,24 +86,29 @@ const PassengerPost = () => {
                         placeholder="Start Location"
                         value={startLocation}
                         onChange={(e) => setStartLocation(e.target.value)}
+                        required
                     />
                     <input
                         type="text"
                         placeholder="End Location"
                         value={endLocation}
                         onChange={(e) => setEndLocation(e.target.value)}
+                        required
                     />
                     <input
                         type="number"
                         placeholder="Number of people you have"
                         value={seats}
                         onChange={(e) => setSeats(e.target.value)}
+                        min="1"
+                        required
                     />
                     <input
-                        type="date"
-                        placeholder="Date you're looking for"
+                        type="datetime-local"
+                        placeholder="Date and time you're looking for"
                         value={date}
                         onChange={(e) => setDate(e.target.value)}
+                        required
                     />
                     <textarea
                         type="text"

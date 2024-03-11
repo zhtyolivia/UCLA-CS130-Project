@@ -14,7 +14,7 @@ function PassengerHome() {
 
   useEffect(() => {
     fetchDriverPosts().then(data => {
-      // console.log('Fetched posts:', data);
+      console.log('Fetched posts:', data);
       setPosts(data);
       // console.log('State updated');
     }).catch(error => {
