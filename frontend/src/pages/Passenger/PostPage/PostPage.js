@@ -97,7 +97,6 @@ function PostPage() {
       // console.log("Join request sent.");
       console.log(response.data)
       setShowRequestPopup(false);
-
       window.location.reload();
     } catch  (err) {
       console.error(err); 
@@ -145,29 +144,38 @@ function PostPage() {
           <p><strong>Description:</strong> {post.additionalNotes}</p>
 
           {!requested && 
-            <div className='join-container'>
+            <div className='p-join-container'>
               <div className='button-text'>Send a join request to the driver</div> 
-              <div className='button-container'>
+              <div className='p-button-container'>
                 <button className="join-button" onClick={handleRequestClick} >Request</button>
               </div>
             </div>
           }
 
           {requested && status=== 'pending' &&  
-            <div className='join-container'>
+            <div className='p-join-container'>
               <div className='button-text'>Request sent to the driver</div> 
-              <div className='button-container'>
+              <div className='p-button-container'>
                 <button className="cancel-button" onClick={handleCancelClick} >Cancel join request</button>
               </div>
             </div>
           }
 
-          {requested && status=== 'accepted' &&  
-            <div className='join-container'>
+          {/* {requested && status=== 'accepted' &&  
+          <div className='p-join-container'>
+            <div className='p-join-button'>
                <div className='button-text'>Driver accepted your request. </div> 
               <button className="accepted-button" onClick={handleAcceptedClick} >Cancel join request</button>
             </div>
-          }
+            </div>
+          } */}
+
+          {requested && status=== 'accepted' &&  
+            <div className='p-join-container'>
+                <div className='button-text'>Driver accepted your request. </div> 
+                <button className="accepted-button" onClick={handleAcceptedClick} >Cancel join request</button>
+              </div>
+            }
 
           <div className="post-content">
             <p>{post.content}</p>
