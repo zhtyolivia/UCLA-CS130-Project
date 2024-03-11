@@ -9,23 +9,15 @@ import useSignup from '../../hooks/useSignup';
 
 
 const DriverSignup = () => {
-    const navigate = useNavigate();
-    const [errors, setErrors] = useState({});
-
     const handleGoogleSuccess = (googleData) => {
-        // Handle the successful Google signup
         console.log('Google signup successful:', googleData);
-        // Here, you might send the googleData to your backend for verification
-        // and then navigate to the driver's main page or dashboard
     };
 
     const handleGoogleFailure = (error) => {
-        // Handle the Google signup failure
         console.error('Google signup failed:', error);
-        // You might want to display an error message to the user
     };
 
-    const { handleSubmit, error } = useSignup('Driver', `${API_BASE_URL}/driver/register`, '/driver-login');
+    const { handleSubmit, errors } = useSignup('Driver', `${API_BASE_URL}/driver/register`, '/driver-login');
 
 
     return (
