@@ -28,7 +28,7 @@ const PassengerSignup = () => {
                     <h2>Passenger Signup</h2>
                     <SignupForm onSubmit={handleSubmit} errors={errors} userRole="Passenger" />
                     <div className="social-signup">
-                        <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} />
+                        <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} accountType={"passenger"} />
                     </div>
                     <p className="login-link">Already have an account? <Link to="/passenger-login">Login here</Link></p>
                 </div>
