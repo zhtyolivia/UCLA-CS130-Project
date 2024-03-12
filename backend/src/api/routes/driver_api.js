@@ -335,8 +335,9 @@ router.post('/signin', (req, res) =>{
  *     }
  */
 
-router.post('/updateProfile', async (req, res) => {
-    const { userId, name, phonenumber, email, newPassword } = req.body;
+router.put('/update', authenticateToken, async (req, res) => {
+    const userId = req.user.userId;
+    const { name, phonenumber, email, newPassword } = req.body;
 
     try {
         const user = await Driver.findById(userId);
