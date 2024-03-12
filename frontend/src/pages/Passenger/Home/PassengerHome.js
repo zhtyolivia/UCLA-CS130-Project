@@ -33,7 +33,8 @@ function PassengerHome() {
       <main className="posts-grid">
         {posts.map(post => (
           <Post 
-            id={post._id} 
+            key={post._id} // Add the key prop here using post._id as its value
+            id={post._id}
             startingLocation={post.startingLocation} 
             endingLocation={post.endingLocation} 
             availableSeats={post.numberOfSeats}
@@ -42,6 +43,8 @@ function PassengerHome() {
           />
         ))}
       </main>
+
+
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './DriverLogin.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,78 +6,52 @@ import {faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { API_BASE_URL } from '../../services/api';
+import { isLoggedIn } from '../../utils/LoginActions';
+import useLogin from '../../hooks/useLogin'; // Ensure this path matches where you save the hook
+
 
 const DriverLogin = () => {
     const navigate = useNavigate();
-    const [values, setValues] = useState({
-        email: '',
-        password: '',
-        showPassword: false,
-    });
-    const [errors, setErrors] = useState({});
+    const { login, errors } = useLogin('driver'); // Assuming your useLogin hook can accept 'driver' as an argument for accountType
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordShown, setPasswordShown] = useState(false);
 
-    const handleChange = prop => event => {
-        setValues({ ...values, [prop]: event.target.value });
-        setErrors({ ...errors, [prop]: '' }); // Optionally clear errors
-    };
+    const handleEmailChange = (event) => setEmail(event.target.value);
+    const handlePasswordChange = (event) => setPassword(event.target.value);
+    const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
-    const handleClickShowPassword = () => {
-        setValues({ ...values, showPassword: !values.showPassword });
-    };
-
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const res = await axios.post(`${API_BASE_URL}/driver/signin`, {
-                email: values.email,
-                password: values.password,
-            });
-            if (res.data.status === 'Success') {
-                window.localStorage.setItem('AuthToken', `Bearer ${res.data.token}`);
-                navigate('/driver-home'); // Navigate to the Driver Home page
-            } else {
-                setErrors({ ...errors, form: res.data.message });
-            }
-        } catch (error) {
-            console.error('Error when logging in:', error);
-            setErrors({ ...errors, form: 'An error occurred. Please try again.' });
+    useEffect(() => {
+        // Assuming isLoggedIn checks auth token validity and determines if it's a driver's token
+        if (isLoggedIn()) {
+            navigate("/driver-home");
         }
+    }, [navigate]);
+
+    const handleSubmit = (event) => {
+        event.preventDefault();
+        login(email, password, 'driver'); // Now, explicitly passing 'driver' as the accountType
     };
 
     return (
         <div className="login-page">
-            <div className="p-log-in-top-stripe">
+            <div className="log-in-top-stripe">
                 <span className="brand-text">SwiftLink</span>
             </div>
             <div className="login-container">
                 <div className="login-card">
                     <Link to="/" className="back-btn">Back</Link>
                     <h2>Driver Login</h2>
-                    {errors.form && <div className="error-text">{errors.form}</div>}
                     <form className="login-form" onSubmit={handleSubmit}>
                         <div className="input-group">
-                            <input
-                                type="email"
-                                placeholder="Email"
-                                value={values.email}
-                                onChange={handleChange('email')}
-                                required
-                            />
+                            <input type="email" placeholder="Email" value={email} required onChange={handleEmailChange} />
                             {errors.email && <div className="error-text">{errors.email}</div>}
                         </div>
                         <div className="input-group password-group">
-                            <input
-                                type={values.showPassword ? "text" : "password"}
-                                placeholder="Password"
-                                value={values.password}
-                                onChange={handleChange('password')}
-                                required
-                            />
-                            <FontAwesomeIcon
-                                icon={values.showPassword ? faEyeSlash : faEye}
-                                onClick={handleClickShowPassword}
-                                className="password-icon inside"
-                            />
+                            <input type={passwordShown ? "text" : "password"} placeholder="Password" value={password} required onChange={handlePasswordChange} />
+                            <button type="button" className="toggle-password" onClick={togglePasswordVisibility}>
+                                <FontAwesomeIcon icon={passwordShown ? faEyeSlash : faEye} />
+                            </button>
                             {errors.password && <div className="error-text">{errors.password}</div>}
                         </div>
                         <button type="submit" className="login-btn">Login</button>
@@ -85,6 +59,11 @@ const DriverLogin = () => {
                     <p className="sign-up-text">
                         Don't have an account? <Link to="/driver-signup">Sign up</Link>
                     </p>
+                    <div className="social-login">
+                        <button type="button" className="social-btn google">
+                            <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
