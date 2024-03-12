@@ -5,7 +5,7 @@ import DriverNav from '../../../components/Navigation/DriverNavbar';
 import './InitiateRide.scss';
 
 // Replace the API_BASE_URL with the actual base URL of your API
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+import { API_BASE_URL } from '../../../services/api';
 
 const InitiateRide = () => {
     // State variables for form inputs

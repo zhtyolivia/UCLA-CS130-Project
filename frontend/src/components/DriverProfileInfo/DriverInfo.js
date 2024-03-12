@@ -4,7 +4,7 @@ import defaultAvatar from '../../assets/default_avatar.jpeg';
 import DriverEditPopup from './DriverEditPopup';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
+import { API_BASE_URL } from '../../services/api';
 
 const DriverInfo = ({name, email, phonenumber, avatar}) => {
     const [showEditPopup, setShowEditPopup] = useState(false); 

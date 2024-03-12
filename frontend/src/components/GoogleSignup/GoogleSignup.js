@@ -17,7 +17,7 @@ const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
           accountType,
         };
         // Make a POST request to the appropriate endpoint
-        const response = await axios.post(`http://localhost:3001${endpoint}`, payload);
+        const response = await axios.post(`https://cs130-swift-link-f88aab47b45c.herokuapp.com${endpoint}`, payload);
         
         // If the request is successful, handle success
         if (onSuccess) onSuccess(response.data);
