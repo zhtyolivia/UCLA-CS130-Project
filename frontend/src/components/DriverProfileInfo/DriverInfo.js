@@ -28,9 +28,9 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
             phonenumber: phonenumber,
             avatar: avatar
         });
-      }, [name, email, phonenumber, avatar]); // Depend on props to update state
+    }, [name, email, phonenumber, avatar]); // Depend on props to update state
     
-      const handleChange = (e) => {
+    const handleChange = (e) => {
         const { name, value, files } = e.target; 
         if (name === 'avatar') {
             setProfile(prev => ({ ...prev, avatar: files[0]}));
@@ -84,7 +84,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
     const fetchMyDriverPosts = async () => {
         try {
-            const token = localStorage.getItem('AuthToken');
+            const token = window.localStorage.getItem('AuthToken');
             const response = await axios.get(`${API_BASE_URL}/driver/my-driver-posts`, {
                 headers: { 'Authorization': token },
             });
@@ -97,7 +97,7 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
     
     const fetchJoinRequests = async () => {
         try {
-            const token = localStorage.getItem('AuthToken');
+            const token = window.localStorage.getItem('AuthToken');
             const response = await axios.get(`${API_BASE_URL}/driver/my-join-requests`, {
                 headers: { 'Authorization': token },
             });

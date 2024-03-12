@@ -33,7 +33,7 @@ const InitiateRide = () => {
             additionalNotes: description,
         };
     
-        const token = localStorage.getItem('AuthToken'); // Ensure token is stored correctly in localStorage
+        const token = window.localStorage.getItem('AuthToken'); // Ensure token is stored correctly in localStorage
     
         try {
             const response = await axios.post(`${API_BASE_URL}/driverpost/newpost`, rideData, {

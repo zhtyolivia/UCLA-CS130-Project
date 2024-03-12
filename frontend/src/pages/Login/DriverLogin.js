@@ -34,6 +34,7 @@ const DriverLogin = () => {
             });
             if (res.data.status === 'Success') {
                 window.localStorage.setItem('AuthToken', `Bearer ${res.data.token}`);
+                window.location.reload();
                 navigate('/driver-home'); // Navigate to the Driver Home page
             } else {
                 setErrors({ ...errors, form: res.data.message });

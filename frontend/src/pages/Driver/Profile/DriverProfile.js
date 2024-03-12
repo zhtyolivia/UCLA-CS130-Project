@@ -15,27 +15,28 @@ const DriverProfile = () => {
     const [avatar, setAvatar] = useState('');
 
     useEffect(() => {
-            const getDriverProfile = async () => {
-                try {
-                    const data = await axios.get(`${API_BASE_URL}/driver/profile`).then((res) => res.data);
-                    console.log("Fetched driver profile data:", data);
-                    setRideHistory(data.driverposts || []); 
-                    setEmail(data.email); 
-                    setPhonenumber(data.phonenumber); 
-                    setName(data.name); 
-                    setAvatar(data.avatar);
-    
-                } catch (err) {
-                    console.error(err);
-                }
-            };
-            getDriverProfile();
+        const getDriverProfile = async () => {
+            try {
+                const data = await axios.get(`${API_BASE_URL}/driver/profile`).then((res) => res.data);
+                console.log("Fetched driver profile data:", data);
+                console.log(window.localStorage.getItem('AuthToken'))
+                setRideHistory(data.driverposts || []); 
+                setEmail(data.email); 
+                setPhonenumber(data.phonenumber); 
+                setName(data.name); 
+                setAvatar(data.avatar);
+
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        getDriverProfile();
     }, []);
 
     if (!isLoggedIn()) {
         return <Navigate to="/welcome" />;
     }
-
+    console.log(email)
     return (
         <>
             <DriverNav />

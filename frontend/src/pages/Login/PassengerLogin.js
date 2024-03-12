@@ -65,7 +65,6 @@ const PassengerLogin = () => {
 
           if (res.data.status === 'Success') {
             window.localStorage.setItem('AuthToken', `Bearer ${res.data.token}`);
-            // window.localStorage.setItem('AuthToken', `${res.data.token}`);
             window.location.reload();
             navigate('/home');
           } else if (res.data.status === 'FAILED') {

@@ -17,14 +17,14 @@ const DriverNav = () => {
 
   useEffect(() => {
     // Fetch current user ID
-    const token = localStorage.getItem('AuthToken');
+    const token = window.localStorage.getItem('AuthToken');
     setUserId(token);
   }, []);
 
 
 
   const handleLogout = () => {
-    localStorage.clear();
+    window.localStorage.clear();
     navigate('/welcome');
   };
 
