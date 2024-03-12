@@ -61,19 +61,21 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
                 window.location.reload();
             }
             console.log('Data:', data)
+            if (data.status === 200) {
+                if (profile.avatar && profile.avatar instanceof File) {
+                    // If there's an avatar, perform a second request to upload avatar 
+                    const formData = new FormData(); 
+                    formData.append('avatar', profile.avatar); 
+                    const avatarResponse = await axios.post(`${API_BASE_URL}/driver/avatar`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    });
 
-            if (profile.avatar && profile.avatar instanceof File) {
-                // If there's an avatar, perform a second request to upload avatar 
-                const formData = new FormData(); 
-                formData.append('avatar', profile.avatar); 
-                const avatarResponse = await axios.post(`${API_BASE_URL}/driver/avatar`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-
-                const avatarResult = avatarResponse.data; 
-                console.log('avatar result: ', avatarResult);
+                    const avatarResult = avatarResponse.data; 
+                    console.log('avatar result: ', avatarResult);
+                }
+                window.location.reload(); // Refresh the page to reflect changes
             }
         } catch(err) {
             console.error(err)
