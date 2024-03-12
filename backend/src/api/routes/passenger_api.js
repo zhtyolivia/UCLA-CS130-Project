@@ -2,23 +2,25 @@ const express = require('express');
 const multer = require("multer");
 const sharp = require("sharp");
 const router = express.Router();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const {authenticateToken} = require('../middlewares/jwtauthenticate');
+const {verifyGoogleToken} = require('../../services/authHelpers.js');
+const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/signupHelpers');
 
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const joinRequest = require('../../models/joinrequest_model');
 const Driverpost = require('../../models/driverpost_model');
 const Passengerpost = require('../../models/passengerpost_model');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcrypt');
-const {authenticateToken} = require('../middlewares/jwtauthenticate');
-const {verifyGoogleToken} = require('../../services/authHelpers.js')
+
 async function emailExistsInBoth(email) {
     const passengerExists = await Passenger.findOne({ email }).exec();
     const driverExists = await Driver.findOne({ email }).exec();
 
     return passengerExists || driverExists ? true : false;
 }
-
 
 /**
  * @api {get} /profile Get Passenger Profile
@@ -243,6 +245,13 @@ router.post('/register', (req, res) =>{
         })
     }
 })
+
+router.post('/register/google', async (req, res) => {
+    const code = req.body.code; 
+    const { accountType } = req.body;
+    console.log('Google Signup attempt with Authorization Code:', code);
+    await handleGoogleSignup(req, res, code, accountType);
+});
 
 /**
  * @api {post} /signin User Sign In
@@ -472,63 +481,5 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
     res.status(400).send({ error: error.message });
 });
 
-/**
- * @api {post} /google-signup Google Signup
- * @apiName GoogleSignup
- * @apiGroup Authentication
- * @apiPermission none
- * 
- * @apiDescription Sign up or log in a user using Google OAuth. This endpoint expects an ID token from Google, verifies it, and either creates a new user or logs in an existing one.
- * 
- * @apiParam {String} token Google ID token.
- * 
- * @apiSuccess {String} message Success message indicating the user was authenticated.
- * @apiSuccess {String} token JWT token for the authenticated session.
- * @apiSuccess {Object} user User object containing user details.
- * @apiSuccess {String} user.email User's email address.
- * @apiSuccess {String} user.name User's name.
- * @apiSuccess {String} [user.phonenumber] User's phone number (optional).
- * 
- * @apiError InternalServerError An error occurred during the Google token verification or user registration process.
- */
-
-
-// THIRD PARTY SIGN UP 
-router.post('/google-signup', async (req, res) => {
-    const { token } = req.body; // This is the ID token from Google
-    try {
-        const payload = await verifyGoogleToken(token);
-
-        const email = payload['email'];
-        const name = payload['name'];
-        // Google does not provide a phone number, so it will be null initially
-        // You might prompt the user to add it later in their profile settings
-
-        // Check if the user already exists
-        let user = await emailExistsInBoth(email);
-        if (!user) {
-            // User doesn't exist, create a new one
-            user = new Passenger({
-                email,
-                name,
-                // Set password to null or a hashed random string since it won't be used for Google signups
-                password: await bcrypt.hash(`${Math.random()*1000000}`, 10),
-                phonenumber: '', // Consider making phonenumber optional in your model or setting a placeholder
-                // Additional fields like Google ID or a flag to indicate this user signed up with Google
-            });
-            await user.save();
-        } else {
-            // User already exists. Here you can handle user login instead.
-        }
-
-        // Generate a token for the user (optional, depends on your auth flow)
-        const authToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
-
-        res.status(200).json({ message: "User authenticated successfully", token: authToken, user });
-    } catch (error) {
-        console.error('Error verifying Google token:', error);
-        res.status(500).json({ message: 'Internal server error' });
-    }
-});
 
 module.exports = router;
