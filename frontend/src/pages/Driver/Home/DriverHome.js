@@ -12,7 +12,10 @@ const DriverHome = () => {
   useEffect(() => {
       const fetchPassengerPosts = async () => {
           try {
-              const response = await axios.get('http://localhost:3001/driver/passengerposts');
+            const token = localStorage.getItem('AuthToken');
+              const response = await axios.get('http://localhost:3001/driver/passengerposts', {
+                headers: { 'Authorization': token },
+            });
               const formattedPosts = response.data.map(post => ({
                   ...post,
                   startTime: new Date(post.startTime).toLocaleString('default', { 
