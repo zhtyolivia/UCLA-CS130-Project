@@ -13,7 +13,7 @@ const DriverHome = () => {
       const fetchPassengerPosts = async () => {
           try {
             const token = localStorage.getItem('AuthToken');
-              const response = await axios.get('http://localhost:3001/driver/passengerposts', {
+              const response = await axios.get('https://cs130-swift-link-f88aab47b45c.herokuapp.com/driver/passengerposts', {
                 headers: { 'Authorization': token },
                 });
               const formattedPosts = response.data.map(post => ({
