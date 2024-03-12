@@ -24,7 +24,7 @@ const DriverNav = () => {
 
 
   const handleLogout = () => {
-    localStorage.clear();
+    window.localStorage.clear();
     navigate('/welcome');
   };
 
