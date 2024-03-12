@@ -34,14 +34,14 @@ const DriverLogin = () => {
         console.log('Google signup successful:', googleData);
         if(googleData.token) {
             window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
-            navigate('/home'); 
+            navigate('/driver-home'); 
         }
     };
 
     const handleGoogleFailure = (error) => {
         console.error('Google signup failed:', error);
     };
-    
+
     const handleSubmit = (event) => {
         event.preventDefault();
         login(email, password, 'driver'); // Now, explicitly passing 'driver' as the accountType
