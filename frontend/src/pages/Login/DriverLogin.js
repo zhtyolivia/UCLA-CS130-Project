@@ -4,8 +4,6 @@ import './DriverLogin.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios';
-import { API_BASE_URL } from '../../services/api';
 import { isLoggedIn } from '../../utils/LoginActions';
 import useLogin from '../../hooks/useLogin'; // Ensure this path matches where you save the hook
 import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
@@ -25,6 +23,7 @@ const DriverLogin = () => {
     useEffect(() => {
         // Assuming isLoggedIn checks auth token validity and determines if it's a driver's token
         if (isLoggedIn()) {
+
             navigate("/driver-home");
         }
     }, [navigate]);
@@ -74,7 +73,7 @@ const DriverLogin = () => {
                         Don't have an account? <Link to="/driver-signup">Sign up</Link>
                     </p>
                     <div className="social-login">
-                    <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} accountType={"passenger"} />
+                    <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} accountType={"driver"} />
                     </div>
                 </div>
             </div>

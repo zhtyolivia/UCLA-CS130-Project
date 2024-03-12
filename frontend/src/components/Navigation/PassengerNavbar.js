@@ -33,6 +33,8 @@ function Navigation() {
 
   const signoutaction = () => {
     window.localStorage.clear();
+    window.sessionStorage.clear();
+    //console.log("sign out");
     // console.log(window,localStorage)
     navigate('/welcome');
   };
