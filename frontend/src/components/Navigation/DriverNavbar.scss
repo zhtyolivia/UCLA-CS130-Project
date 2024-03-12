@@ -1,0 +1,77 @@
+@import '../../styles/variables';
+
+.d-navbar {
+  background-color: $driver-primary-color;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+
+  .d-navbar-brand {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.5rem;
+  }
+  
+  &-logo {
+    font-size: 2rem;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  &-nav {
+    display: flex;
+    align-items: center;
+    gap: 20px; // Adjust as needed
+
+    .d-nav-item {
+      .d-nav-link {
+        text-decoration: none;
+        color: #fff;
+        font-size: 1.2rem;
+
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
+  }
+}
+
+.d-search-bar {
+  display: flex;
+  flex-grow: 0.5; // Allow the search bar to grow
+  justify-content: center; // Center search bar
+
+  input[type="text"] {
+    padding: 12px 24px; // Bigger padding for larger search bar
+    border-radius: 5px;
+    border: none;
+    margin-right: 10px;
+    font-size: 1rem;
+    flex-grow: 1; // Let input grow as well
+
+    @media screen and (max-width: 768px) {
+      width: auto; // Auto width on smaller screens
+      flex-grow: 1; // Ensure it grows to fill space
+    }
+  }
+
+  button {
+    background-color: #fff;
+    color: $driver-primary-color;
+    border: none;
+    border-radius: 5px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 1rem;
+
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}
+
+// Add other styles for icons, etc. below
