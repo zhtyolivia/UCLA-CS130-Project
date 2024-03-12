@@ -115,15 +115,7 @@ const handleGoogleSignup = async (req, res, code, accountType) => {
         // Verify the ID token and extract the user's Google profile
         const payload = await verifyGoogleToken(id_token);
         const emailFromGoogle = payload['email'];
-        const emailExists = await emailExistsInBoth(emailFromGoogle);
-        if (emailExists) {
-            return res.status(409).json({ // Use HTTP status code 409 for conflict
-                message: 'Email already exists. Please log in instead.',
-            });
-        }
         
-        const nameFromGoogle = payload['name'];
-        console.log("email:", emailFromGoogle);
         let Model = accountType === 'driver' ? Driver : Passenger;
         let user = await Model.findOne({ email: emailFromGoogle });
 

@@ -43,7 +43,7 @@ const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
 
   return (
     <button onClick={() => googleLogin()} className="social-btn google">
-      Sign up using Google
+      Sign In/Up Using Google
     </button>
   );
 };

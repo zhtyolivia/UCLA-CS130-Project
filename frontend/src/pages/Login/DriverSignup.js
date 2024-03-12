@@ -10,9 +10,15 @@ import useSignup from '../../hooks/useSignup';
 const DriverSignup = () => {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
+    const [signupSuccess, setSignupSuccess] = useState(false); // 新增状态来跟踪注册成功
 
     const handleGoogleSuccess = (googleData) => {
+        
         console.log('Google signup successful:', googleData);
+        if(googleData.token) {
+            window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
+            navigate('/driver-home'); 
+        }
     };
     const handleGoogleFailure = (error) => {
         console.error('Google signup failed:', error);

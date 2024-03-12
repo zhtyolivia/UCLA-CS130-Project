@@ -21,7 +21,7 @@ const useSignup = (userRole, apiEndpoint, successRedirect) => {
                 phonenumber: values.phonenumber,
             });
 
-            if (response.data.status === 'Success') {
+            if (response.data.status === 'SUCCESS') {
                 navigate(successRedirect);
             } else {
                 setErrors({ ...errors, form: response.data.message });

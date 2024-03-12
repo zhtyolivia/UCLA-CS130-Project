@@ -12,15 +12,15 @@ const useLogin = () => {
             const body = { email, password };
     
             let endpoint = `${API_BASE_URL}/`;
-            let redirectPath = '/home'; // 默认重定向路径
+            let redirectPath = '/home'; 
             switch (accountType) {
                 case 'passenger':
                     endpoint += 'passenger/signin';
-                    redirectPath = '/passenger-home'; // passenger的主页
+                    redirectPath = '/home'; 
                     break;
                 case 'driver':
                     endpoint += 'driver/signin';
-                    redirectPath = '/driver-home'; // driver的主页
+                    redirectPath = '/driver-home'; 
                     break;
                 default:
                     throw new Error('Invalid account type');
@@ -40,7 +40,7 @@ const useLogin = () => {
             setErrors({ generic: 'An error occurred during login. Please try again.' });
         }
     };
-    
+
     const handleErrors = (errorText) => {
         if (errorText === "No existing User with input email") {
             setErrors({ email: errorText });
