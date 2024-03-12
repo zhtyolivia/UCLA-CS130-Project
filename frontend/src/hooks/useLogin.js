@@ -9,8 +9,8 @@ const useLogin = () => {
 
     const login = async (email, password, accountType) => {
         try {
+
             const body = { email, password };
-    
             let endpoint = `${API_BASE_URL}/`;
             let redirectPath = '/home'; 
             switch (accountType) {
@@ -27,14 +27,17 @@ const useLogin = () => {
             }
     
             const response = await axios.post(endpoint, body);
-    
+
             if (response.data.status === 'Success') {
                 window.localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-                navigate(redirectPath); // 根据账号类型动态重定向
+               
+                navigate(redirectPath);
+                window.location.reload();
             } else if (response.data.status === 'FAILED') {
                 const errorText = response.data.message;
                 handleErrors(errorText);
             }
+
         } catch (error) {
             console.error('Error when logging in: ', error);
             setErrors({ generic: 'An error occurred during login. Please try again.' });

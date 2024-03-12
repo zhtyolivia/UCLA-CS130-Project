@@ -115,7 +115,7 @@ const handleGoogleSignup = async (req, res, code, accountType) => {
         // Verify the ID token and extract the user's Google profile
         const payload = await verifyGoogleToken(id_token);
         const emailFromGoogle = payload['email'];
-        
+        const nameFromGoogle = payload['name'];
         let Model = accountType === 'driver' ? Driver : Passenger;
         let user = await Model.findOne({ email: emailFromGoogle });
 

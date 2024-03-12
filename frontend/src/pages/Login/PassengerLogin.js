@@ -26,7 +26,9 @@ const PassengerLogin = () => {
         console.log('Google signup successful:', googleData);
         if(googleData.token) {
             window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
+            window.location.reload();
             navigate('/home'); 
+        
         }
     };
 
@@ -46,6 +48,7 @@ const PassengerLogin = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
         login(email, password, accountType);
+        
     };
 
     return (
