@@ -115,30 +115,27 @@ const handleGoogleSignup = async (req, res, code, accountType) => {
         // Verify the ID token and extract the user's Google profile
         const payload = await verifyGoogleToken(id_token);
         const emailFromGoogle = payload['email'];
-        const emailExists = await emailExistsInBoth(emailFromGoogle);
-        if (emailExists) {
-            return res.status(409).json({ // Use HTTP status code 409 for conflict
-                message: 'Email already exists. Please log in instead.',
-            });
-        }
         
-        const nameFromGoogle = payload['name'];
-        console.log("email:", emailFromGoogle);
         let Model = accountType === 'driver' ? Driver : Passenger;
         let user = await Model.findOne({ email: emailFromGoogle });
 
-        // If the user does not exist in our database, create a new one
         if (!user) {
+            let OtherModel = accountType === 'driver' ? Passenger : Driver;
+            let otherUser = await OtherModel.findOne({ email: emailFromGoogle });
+            if (otherUser) {
+                return res.status(409).json({
+                    message: `Email already exists as a ${accountType === 'driver' ? 'passenger' : 'driver'}. Please login instead.`,
+                });
+            }
             console.log("not exist");
             user = await createUser(Model, {
                 email: emailFromGoogle,
                 name: nameFromGoogle,
-                password: null, // Google users might not have a password
-                phonenumber: '0000000000', // Optional: Prompt for phone number later
+                password: null,
+                phonenumber: '0000000000',
             });
         }
 
-        // Generate a token for the user
         const authToken = jwt.sign({ userId: user._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
 
         return res.status(200).json({

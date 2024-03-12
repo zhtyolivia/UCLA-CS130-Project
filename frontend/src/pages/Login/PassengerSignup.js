@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './PassengerSignup.scss';
 import { API_BASE_URL } from '../../services/api';
 import SignupForm from '../../components/SignupForm/SignupForm.js';
@@ -7,8 +7,13 @@ import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Mak
 import useSignup from '../../hooks/useSignup';
 
 const PassengerSignup = () => {
+    const navigate = useNavigate();
     const handleGoogleSuccess = (googleData) => {
         console.log('Google signup successful:', googleData);
+        if(googleData.token) {
+            window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
+            navigate('/home'); 
+        }
     };
 
     const handleGoogleFailure = (error) => {

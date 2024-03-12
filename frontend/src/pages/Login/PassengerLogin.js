@@ -5,6 +5,7 @@ import {faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { isLoggedIn } from '../../utils/LoginActions';
 import useLogin from '../../hooks/useLogin'; // Ensure this path matches where you save the hook
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
 
 import './PassengerLogin.scss';
 
@@ -21,6 +22,17 @@ const PassengerLogin = () => {
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handlePasswordChange = (event) => setPassword(event.target.value);
 
+    const handleGoogleSuccess = (googleData) => {
+        console.log('Google signup successful:', googleData);
+        if(googleData.token) {
+            window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
+            navigate('/home'); 
+        }
+    };
+
+    const handleGoogleFailure = (error) => {
+        console.error('Google signup failed:', error);
+    };
     const togglePasswordVisibility = () => {
         setPasswordShown(!passwordShown);
     };
@@ -65,9 +77,9 @@ const PassengerLogin = () => {
                     </form>
                     <p className="p-sign-up-text">Don't have an account? <Link to="/passenger-signup" className="sign-up">Sign up</Link></p>
                     <div className="p-social-login">
-                        <button type="button" className="p-social-btn google">
-                            <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
-                        </button>
+                
+                          <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} accountType={"passenger"} />
+                   
                     </div>
                 </div>
             </div>

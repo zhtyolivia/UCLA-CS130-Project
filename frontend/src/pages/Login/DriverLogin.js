@@ -8,6 +8,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../services/api';
 import { isLoggedIn } from '../../utils/LoginActions';
 import useLogin from '../../hooks/useLogin'; // Ensure this path matches where you save the hook
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
 
 
 const DriverLogin = () => {
@@ -27,6 +28,19 @@ const DriverLogin = () => {
             navigate("/driver-home");
         }
     }, [navigate]);
+
+
+    const handleGoogleSuccess = (googleData) => {
+        console.log('Google signup successful:', googleData);
+        if(googleData.token) {
+            window.localStorage.setItem('AuthToken', `Bearer ${googleData.token}`);
+            navigate('/driver-home'); 
+        }
+    };
+
+    const handleGoogleFailure = (error) => {
+        console.error('Google signup failed:', error);
+    };
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -60,9 +74,7 @@ const DriverLogin = () => {
                         Don't have an account? <Link to="/driver-signup">Sign up</Link>
                     </p>
                     <div className="social-login">
-                        <button type="button" className="social-btn google">
-                            <FontAwesomeIcon icon={faGoogle} /> Sign up using Google
-                        </button>
+                    <GoogleSignup onSuccess={handleGoogleSuccess} onFailure={handleGoogleFailure} accountType={"passenger"} />
                     </div>
                 </div>
             </div>
