@@ -1,6 +1,5 @@
 // services/api.js
-export const API_BASE_URL = 'https://cs130-swift-link-f88aab47b45c.herokuapp.com';
-
+export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 export const fetchPostById = async (id) => {
   try {
