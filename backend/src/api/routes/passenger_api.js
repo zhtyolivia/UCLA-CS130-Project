@@ -1,3 +1,4 @@
+//Part of this file was leveraged from GPT/Copilot
 const express = require('express');
 const multer = require("multer");
 const sharp = require("sharp");
