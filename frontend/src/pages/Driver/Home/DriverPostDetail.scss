@@ -3,20 +3,20 @@
 
 
 .back-button {
-  background: $driver-secondary-color; // Choose a background color that suits your design
-  color: white; // Choose a text color that is readable on the button background
-  border: 1px solid white; // Optional border color
-  border-radius: 4px; // Rounded corners for the button
+  background: $driver-secondary-color; 
+  color: white; 
+  border: 1px solid white; 
+  border-radius: 4px; 
   cursor: pointer;
-  padding: 10px 20px; // Bigger padding for a larger button
-  font-size: 1rem; // Larger font size for the button text
-  margin-top: 20px; // Adjust margin-top to move below the top bar
-  margin-left: 20px; // Add margin-left to align with the brand text if needed
+  padding: 10px 20px; 
+  font-size: 1rem; 
+  margin-top: 20px; 
+  margin-left: 20px; 
   align-self: flex-start;
-  text-decoration: none; // Remove underline from link
-  display: inline-block; // Needed to apply padding and margin correctly
+  text-decoration: none;
+  display: inline-block; 
   &:hover {
-    background: darken($driver-primary-color, 10%); // Darken the button on hover for better UX
+    background: darken($driver-primary-color, 10%); 
   }
 }
 
@@ -24,8 +24,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; // Align to the top after navigation bar
-    padding: 0.5rem 2rem; // Reduced top padding
+    justify-content: flex-start; 
+    padding: 0.5rem 2rem; 
     
     .post-details {
       max-width: 800px;
@@ -33,7 +33,7 @@
       margin: 1rem 0; 
       padding: 1rem;
       border-bottom: 2px solid #dee2e6;
-      text-align: center; // Center the text within the post details
+      text-align: center; 
   
       h1 {
         font-size: 2.5rem;
@@ -41,7 +41,6 @@
         margin-bottom: 0.5rem;
       }
       
-      // You can add more styles for other details here
     }
   
     .passenger-cards-container {
@@ -74,10 +73,8 @@
           }
         }
         
-        // Add styles for buttons or other elements if needed
       }
     }
   
-    // You can add media queries for responsive design as needed
   }
   

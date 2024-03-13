@@ -8,10 +8,6 @@ import AddIcon from '@mui/icons-material/Add';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
-const getCurrentUserId = (token) => {
-  // Decode JWT and get user ID. For now, we're just passing the token through for the example.
-  return token;
-};
 const DriverNav = () => {
   const [userId, setUserId] = useState(null);
   const navigate = useNavigate();
@@ -21,8 +17,6 @@ const DriverNav = () => {
     const token = localStorage.getItem('AuthToken');
     setUserId(token);
   }, []);
-
-
 
   const handleLogout = () => {
     window.localStorage.clear();

@@ -2,8 +2,8 @@
 @import '../../styles/variables';
 
 .p-navbar {
-  background-color: $passenger-primary-color; /* background */
-  color: #fff; /* text color */
+  background-color: $passenger-primary-color;
+  color: #fff; 
   padding: 20px; 
   display: flex;
   justify-content: space-between;
@@ -12,8 +12,8 @@
   margin-top: 0;
 
   &-logo {
-    font-size: 2rem; /* font size */
-    color: #fff; /* text color */
+    font-size: 2rem;
+    color: #fff; 
     text-decoration: none;
   }
 
@@ -28,8 +28,8 @@
 
       .p-nav-link {
         text-decoration: none;
-        color: #fff; /* text color */
-        font-size: 1.2rem; /* font size */
+        color: #fff;
+        font-size: 1.2rem; 
         
         &:hover {
           text-decoration: underline;
@@ -51,7 +51,7 @@
     width: 400px;
 
     @media screen and (max-width: 768px) {
-      width: 200px; /* a different width for smaller screens */
+      width: 200px; 
     }
   }
 

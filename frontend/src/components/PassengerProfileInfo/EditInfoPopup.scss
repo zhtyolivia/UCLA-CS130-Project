@@ -11,7 +11,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it's above other content */
+  z-index: 1000; 
 }
 
 .edit-popup-content {
@@ -25,7 +25,7 @@
   label {
     display: block;
     margin-top: 10px;
-    color: $text-color-dark; // Assuming you have such variable defined for text color
+    color: $text-color-dark; 
   }
 
   input[type="text"],
@@ -33,7 +33,7 @@
   input[type="file"] {
     width: 100%;
     padding: 10px;
-    margin: 5px 0 15px 0; // Adds space above and below each input
+    margin: 5px 0 15px 0; 
     border: 1px solid #ccc;
     border-radius: 5px;
   }

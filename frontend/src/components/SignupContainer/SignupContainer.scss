@@ -14,7 +14,7 @@ html, body {
     height: 100%;
     margin: 0;
     padding: 0;
-    background-color: #000000; /* Black background */
+    background-color: #000000; 
 }
 
 .log-in-top-stripe {
@@ -23,12 +23,11 @@ html, body {
     background-color: $driver-primary-color;
     display: flex;
     align-items: center;
-    padding-left: 16px; /* Adjust as needed for padding on the left */
+    padding-left: 16px; 
 }
 
-/* Style for the brand text */
 .brand-text {
-    font-size: 40px; /* Adjust as needed for font size */
+    font-size: 40px;
     font-weight: bold;
     color: white;
 }
@@ -42,22 +41,20 @@ html, body {
 }
 
 .login-card {
-    background: #fff; /* White background for the card */
+    background: #fff; 
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     width: 100%;
     max-width: 400px;
     position: relative;
-    margin-top: -20px; /* Optional: to slightly overlap the top stripe */
+    margin-top: -20px; 
 }
 
-
-/* Add a title to the login card for "Book your rides with SwiftLink" */
 .login-title {
-    font-size: 2rem; /* Large text size for the title */
-    color: #000; /* Black text */
-    margin-bottom: 1rem; /* Space below the title */
+    font-size: 2rem; 
+    color: #000; 
+    margin-bottom: 1rem; 
     text-align: center;
 }
 
@@ -150,14 +147,14 @@ html, body {
 }
 
 .password-group input {
-    padding-right: 40px; /* Adjust padding to ensure text does not overlap button */
+    padding-right: 40px; 
 }
 
 .toggle-password {
     position: absolute;
-    right: 10px; /* Adjust based on your design */
+    right: 10px; 
     border: none;
     background: none;
     cursor: pointer;
-    color: #717171; /* Adjust color as needed */
+    color: #717171; 
 }

@@ -4,14 +4,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import './DriverSignup.scss';
 import { API_BASE_URL } from '../../services/api';
 import SignupForm from '../../components/SignupForm/SignupForm.js';
-import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; 
 import useSignup from '../../hooks/useSignup';
 
 
 const DriverSignup = () => {
     const navigate = useNavigate();
     const [errors, setErrors] = useState({});
-    const [signupSuccess, setSignupSuccess] = useState(false); // 新增状态来跟踪注册成功
+    const [signupSuccess, setSignupSuccess] = useState(false); 
 
     const handleGoogleSuccess = (googleData) => {
         

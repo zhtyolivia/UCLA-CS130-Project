@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './PassengerSignup.scss';
 import { API_BASE_URL } from '../../services/api';
 import SignupForm from '../../components/SignupForm/SignupForm.js';
-import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; 
 import useSignup from '../../hooks/useSignup';
 
 const PassengerSignup = () => {
@@ -21,7 +21,6 @@ const PassengerSignup = () => {
         console.error('Google signup failed:', error);
     };
 
-    // useSignup hook is used to handle the signup logic
     const { handleSubmit, errors } = useSignup('Passenger', `${API_BASE_URL}/passenger/register`, '/passenger-login');
 
     return (

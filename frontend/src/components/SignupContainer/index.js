@@ -2,19 +2,17 @@
 /* Part of this file was leveraged from GPT */ 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import GoogleSignup from './GoogleSignup/GoogleSignup'; // make sure this path is correct
+import GoogleSignup from './GoogleSignup/GoogleSignup'; 
 import SignupForm from './SignupForm/SignupForm';
 import 'SignupContainer.scss';
 
 const SignupContainer = ({ onSubmit, errors, userRole }) => {
     const handleGoogleSuccess = (googleData) => {
         console.log(`${userRole} Google signup successful:`, googleData);
-        // Implement your logic for successful Google signup
     };
 
     const handleGoogleFailure = (error) => {
         console.error(`${userRole} Google signup failed:`, error);
-        // Implement your logic for failed Google signup
     };
 
     return (

@@ -7,7 +7,6 @@ import { SuccessPopup } from '../SuccessPopup/SuccessPopup';
 
 import axios from "axios";
 import { API_BASE_URL } from '../../services/api';
-// export const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 const PassengerInfo = ({name, email, phonenumber, avatar}) => {
     const [showEditPopup, setShowEditPopup] = useState(false); 
@@ -33,9 +32,7 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
     const handleChange = (e) => {
         const { name, value, files } = e.target; 
         if (name === 'avatar') {
-            // console.log(files[0]);
             setProfile(prev => ({ ...prev, avatar: files[0]}));
-            // console.log('after setProfile, profile: ', profile)
         } else {
             setProfile(prev => ({ ...prev, [name]: value }));
         }
@@ -62,7 +59,6 @@ const PassengerInfo = ({name, email, phonenumber, avatar}) => {
         }; 
 
         try{
-            // console.log('profileData:', profileData)
             const data = await axios.put(`${API_BASE_URL}/passenger/update`, profileData).then((res) => res.data);
             if (data.status === 'SUCCESS') {
                 setProfile(profile)
