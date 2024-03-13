@@ -4,12 +4,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import DriverNav from '../../../components/Navigation/DriverNavbar';
 import './InitiateRide.scss';
-
-// Replace the API_BASE_URL with the actual base URL of your API
 import { API_BASE_URL } from '../../../services/api';
 
 const InitiateRide = () => {
-    // State variables for form inputs
     const [startLocation, setStartLocation] = useState('');
     const [endLocation, setEndLocation] = useState('');
     const [startTime, setStartTime] = useState('');
@@ -23,7 +20,6 @@ const InitiateRide = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
     
-        // Create an object with form data
         const rideData = {
             startingLocation: startLocation,
             endingLocation: endLocation,
@@ -34,21 +30,20 @@ const InitiateRide = () => {
             additionalNotes: description,
         };
     
-        const token = localStorage.getItem('AuthToken'); // Ensure token is stored correctly in localStorage
+        const token = localStorage.getItem('AuthToken');
     
         try {
             const response = await axios.post(`${API_BASE_URL}/driverpost/newpost`, rideData, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': token // Use token directly if it already includes "Bearer "
+                    'Authorization': token 
                 }
             });
     
             console.log('Ride submitted successfully:', response.data);
-            navigate('/driver-home'); // Redirect to the driver home page
+            navigate('/driver-home'); 
         } catch (error) {
             console.error('Error submitting new ride:', error.response || error);
-            // Handle different responses based on the error response status code
             if (error.response && error.response.status === 403) {
                 console.error('Forbidden: This action is not allowed.');
             } else {

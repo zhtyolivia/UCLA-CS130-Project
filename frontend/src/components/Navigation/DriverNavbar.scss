@@ -25,7 +25,7 @@
   &-nav {
     display: flex;
     align-items: center;
-    gap: 20px; // Adjust as needed
+    gap: 20px; 
 
     .d-nav-item {
       .d-nav-link {
@@ -43,20 +43,20 @@
 
 .d-search-bar {
   display: flex;
-  flex-grow: 0.5; // Allow the search bar to grow
+  flex-grow: 0.5; 
   justify-content: center; // Center search bar
 
   input[type="text"] {
-    padding: 12px 24px; // Bigger padding for larger search bar
+    padding: 12px 24px; 
     border-radius: 5px;
     border: none;
     margin-right: 10px;
     font-size: 1rem;
-    flex-grow: 1; // Let input grow as well
+    flex-grow: 1; 
 
     @media screen and (max-width: 768px) {
-      width: auto; // Auto width on smaller screens
-      flex-grow: 1; // Ensure it grows to fill space
+      width: auto; 
+      flex-grow: 1; 
     }
   }
 

@@ -12,7 +12,7 @@ export const fetchPostById = async (id) => {
     return data;
   } catch (e) {
     console.error("Error fetching data: ", e);
-    throw e; // Re-throw the error for handling it in the calling function
+    throw e; 
   }
 };
 

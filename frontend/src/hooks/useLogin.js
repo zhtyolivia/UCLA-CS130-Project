@@ -51,7 +51,6 @@ const useLogin = () => {
         } else if (errorText === "Wrong password") {
             setErrors({ password: errorText });
         }
-        // Handle other types of errors (e.g., invalid account type) if needed
     };
 
     return { login, errors };

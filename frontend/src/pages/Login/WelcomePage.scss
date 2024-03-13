@@ -4,7 +4,7 @@
 
 .welcome-container {
   height: 100vh;
-  background-color: $passenger-primary-color; /* Dark background */
+  background-color: $passenger-primary-color; 
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,24 +21,24 @@
   left: 0;
   background-image: url('../../assets/logo.png');
   background-size: cover;
-  opacity: 0.5; /* Almost see-through */
+  opacity: 0.5; 
 }
 
 .welcome-content {
   position: relative;
-  z-index: 1; /* Ensure the text appears above the background image */
+  z-index: 1; 
   color: white;
   text-align: center;
-  max-width: 600px; /* Adjust the width as needed */
+  max-width: 600px; 
 }
 
 .welcome-content h1 {
-  font-size: 3rem; /* Larger text */
+  font-size: 3rem; 
   margin-bottom: 0.5em;
 }
 
 .welcome-content p {
-  font-size: 1.5rem; /* Larger text */
+  font-size: 1.5rem; 
   margin-bottom: 1em;
 }
 

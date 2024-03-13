@@ -220,12 +220,3 @@ export const markNotificationAsRead = (notificationId) => {
     }
   });
 };
-
-
-/*
-No mock API for: 
-  - Edit info/update account info 
-  - Send join request 
-  - Cancel join request  
-  - ...
-*/

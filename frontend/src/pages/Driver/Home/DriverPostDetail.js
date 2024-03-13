@@ -10,7 +10,7 @@ const DriverPostDetail = () => {
   const { post } = state || {};
 
 const handleBack = () => {
-    navigate(-1); // This will take the user back to the previous page
+    navigate(-1); 
   };
   if (!post) {
     return <div>No post data available. Please select a post from the driver dashboard.</div>;
@@ -18,7 +18,7 @@ const handleBack = () => {
 
   return (
     <div>
-      <DriverNav /> {/* This is the navigation bar */}
+      <DriverNav /> 
       <div className="driver-post-detail">
         <button onClick={handleBack} className="back-button">Back</button>
         <div className="post-details">

@@ -53,7 +53,7 @@ const PassengerProfile = () => {
                 <div className="ride-history">
                     <h3>Join Request History</h3>
                     <div className="section-divider"></div>
-                    {joinRequests.map(joinRequest => ( // Using index as a fallback key
+                    {joinRequests.map(joinRequest => ( // index: fallback key
                       <div key={joinRequest.postId} className="ride-history-item">
                           <p><strong>Start location:</strong> {joinRequest.startingLocation}</p>
                           <p><strong>End location:</strong> {joinRequest.endingLocation}</p>
@@ -68,7 +68,7 @@ const PassengerProfile = () => {
                 <div className="ride-history">
                     <h3>Post History</h3>
                     <div className="section-divider"></div>
-                    {passengerPosts.map(post => ( // Using index as a fallback key
+                    {passengerPosts.map(post => ( 
                       <div key={post.postId} className="ride-history-item">
                           <p><strong>Start location:</strong> {post.startingLocation}</p>
                           <p><strong>End location:</strong> {post.endingLocation}</p>

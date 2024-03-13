@@ -23,7 +23,6 @@
   max-width: 400px;
 }
 
-// Common style for both textarea and input
 .input-common {
   width: 100%;
   padding: 10px;
@@ -34,11 +33,11 @@
   font-family: 'Arial', sans-serif;
   font-size: 14px;
   line-height: 1.5;
-  // Input specific
+  // Input 
   &:not(textarea) {
     resize: none;
   }
-  // Textarea specific
+  // Textarea 
   &.popup-textarea {
     resize: vertical;
     min-height: 80px;
@@ -47,7 +46,7 @@
 
 .popup-actions {
   display: flex;
-  justify-content: space-between; // Ensure buttons are spread out
+  justify-content: space-between; 
   button {
     padding: 10px 20px;
     border: none;
@@ -55,7 +54,6 @@
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.3s;
-    // Specific styles for different buttons if needed
     &.popup-button {
       cursor: pointer;
       padding-left: 10px;
@@ -84,23 +82,6 @@
   justify-content: center; 
   gap: 20px; 
 }
-
-// .popup-button {
-//   cursor: pointer;
-//   padding-left: 10px;
-//   padding-right: 10px; 
-//   padding-top: 5px;
-//   padding-bottom: 5px;
-//   background-color: $passenger-primary-color;
-//   color: white;
-//   border: none;
-//   border-radius: 5px;
-//   margin-top: 15px;
-//   margin-bottom: 5px;
-//   &:hover {
-//     background-color: $passenger-hover-color;
-//   }
-// }
 
 .secondary-popup-button {
   cursor: pointer;

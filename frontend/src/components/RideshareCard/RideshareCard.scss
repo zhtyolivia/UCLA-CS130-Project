@@ -8,25 +8,25 @@
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
-  &-title { // Use & for nested selectors to append "-title" to the parent selector
+  &-title { 
     text-align: center;
-    margin-bottom: 10px; // Adjust spacing between title and details
-    font-size: 24px; // Set the font size
+    margin-bottom: 10px; 
+    font-size: 24px; 
     font-weight: bold;
-    color: $text-color-dark; // Use variables for colors
+    color: $text-color-dark; 
   }
 
   &-details {
-    margin-bottom: 10px; // Adjust spacing between details and content
+    margin-bottom: 10px; 
 
     p {
       text-align: left;
-      margin-bottom: 5px; // Adjust spacing between paragraphs
+      margin-bottom: 5px; 
     }
   }
 
   &-content {
     text-align: left;
-    color: $text-color-light; // Use variables for colors
+    color: $text-color-light; 
   }
 }

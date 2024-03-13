@@ -5,7 +5,7 @@
 import React, { useState, useEffect } from 'react';
 import './InitiatorInfo.css'; 
 import { useParams } from 'react-router-dom';
-import { fetchPostById } from '../../services/mockAPI'; // Import the mock API function
+import { fetchPostById } from '../../services/mockAPI'; 
 import defaultAvatar from '../../assets/default_avatar.jpeg';
 
 const InitiatorInfo = ({post}) => {
