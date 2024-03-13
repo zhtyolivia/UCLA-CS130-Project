@@ -9,7 +9,6 @@ const bcrypt = require('bcrypt');
 const { authenticateToken } = require('../middlewares/jwtauthenticate');
 const { handleGoogleSignup, handleTraditionalSignup } = require('../../services/signupHelpers');
 
-//Data Module
 const Driver = require('../../models/driver_model');
 const Passenger = require('../../models/passenger_model');
 const Passengerpost = require('../../models/passengerpost_model');
@@ -56,11 +55,11 @@ router.get('/my-driver-posts', authenticateToken, async (req, res) => {
     try {
         const driverWithPosts = await Driver.findById(driverId)
             .populate({
-                path: 'driverposts', // Populating driver posts
+                path: 'driverposts', 
                 populate: {
-                    path: 'passengers', // Nested population for passengers within each driver post
-                    model: 'Passenger', // Specify the model name if not automatically inferred
-                    select: 'name email phonenumber' // Adjust according to the details you want to include (e.g., name, email)
+                    path: 'passengers', 
+                    model: 'Passenger', 
+                    select: 'name email phonenumber'
                 }
             })
             .exec();
@@ -102,7 +101,7 @@ router.get('/my-driver-posts', authenticateToken, async (req, res) => {
  */
 
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
-    const driverId = req.user.userId; // Assuming the driver's ID is stored in req.user.userId
+    const driverId = req.user.userId;
 
     try {
         const driver = await Driver.findById(driverId);
@@ -164,13 +163,11 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
 
-        // Initialize the user profile object with user details
         let userProfile = {
-            ...user._doc, // Spread the user document to include all user info
-            avatar: undefined, // Initialize avatar field
+            ...user._doc, 
+            avatar: undefined, 
         };
 
-        // Convert avatar buffer to base64 string if exists
         if (user.avatar && user.avatar.data) {
             userProfile.avatar = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
         }
@@ -208,7 +205,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
  *     }
  */
 
-// Updated /register endpoint to call the appropriate function based on the request
 router.post('/register', async (req, res) => {
     const { email, password, name, phonenumber, accountType } = req.body;
     console.log("Traditional Signup attempt");
@@ -222,9 +218,7 @@ router.post('/register/google', async (req, res) => {
     await handleGoogleSignup(req, res, code, accountType);
 });
 
-// Logout route
 router.get('/logout', (req, res) => {
-  // Code to handle user logout
   res.redirect('/login');
 });
 
@@ -267,10 +261,8 @@ router.post('/signin', (req, res) =>{
         Driver.find({email}).then(data => {
             if (data){
                 const hashPassword = data[0].password;
-                //console.log(hashPassword);
                 bcrypt.compare(password,hashPassword).then(result =>{
                     if (result){
-                        //console.log("same");
                         const token = jwt.sign({ userId: data[0]._id }, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '24h' });
                         res.json({
                             status: "Success",
@@ -346,26 +338,18 @@ router.put('/update', authenticateToken, async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
 
-        // Update name and phone number
         if (name) user.name = name.trim();
         if (phonenumber) user.phonenumber = phonenumber.trim();
 
-        // Update email after validation
         if (email && email !== user.email) {
-            // Validate and check for existing email
             const emailTaken = await emailExistsInBoth(email);
             if (emailTaken) {
                 return res.status(400).send({ message: "Email already in use" });
             }
             user.email = email.trim();
-            // Optional: Implement email verification
         }
 
-        // Update password
         if (newPassword) {
-            // Validate new password strength here
-
-            // Hash new password and update
             const hashPassword = await bcrypt.hash(newPassword, 10);
             user.password = hashPassword;
         }
@@ -410,7 +394,6 @@ router.get('/passengerposts', authenticateToken, async (req, res) => {
 });
 
 // ======================================== Avatar ==========================================
-// Multer setup for file handling
 const upload = multer({
     limits: { fileSize: 16 * 1024 * 1024 }, // 16MB limit
     fileFilter(req, file, cb) {
@@ -439,21 +422,16 @@ const upload = multer({
  * @apiError DriverNotFound The authenticated driver was not found.
  * @apiError ServerError Unexpected server error.
  */
-
-// API endpoint to upload and update the driver's avatar
 router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
-    if (!req.file) { // Check if the file is not uploaded
+    if (!req.file) { 
         return res.status(400).send({ message: "Avatar is required." });
     }
 
     try {
-        // Use the authenticated driver's ID from the token
         const driver = await Driver.findById(req.user.userId);
         if (!driver) {
             return res.status(404).send({ error: "Driver not found" });
         }
-
-        // Proceed with resizing and saving the avatar
         const buffer = await sharp(req.file.buffer)
             .resize(250, 250, {
                 fit: sharp.fit.cover,
@@ -469,7 +447,6 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
         res.status(400).send({ error: error.message });
     }
 }, (error, req, res, next) => {
-    // Error handling middleware for Multer
     res.status(400).send({ error: error.message });
 });
 

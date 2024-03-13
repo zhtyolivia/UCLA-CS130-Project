@@ -7,7 +7,6 @@ const { authenticateToken } = require("../middlewares/jwtauthenticate");
 
 const passengerpostRouter = express.Router();
 
-// Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
 
 /**
@@ -46,7 +45,7 @@ passengerpostRouter.get("/search", async (req, res) => {
 
       let searchQuery = { $or: [] };
       terms.forEach((term) => {
-          const regex = new RegExp(term, 'i'); // Case-insensitive regex for each term
+          const regex = new RegExp(term, 'i');
           searchQuery.$or.push({ startingLocation: regex });
           searchQuery.$or.push({ endingLocation: regex });
       });
@@ -60,7 +59,6 @@ passengerpostRouter.get("/search", async (req, res) => {
               res.status(500).json({ error: "Search operation failed" });
           });
   } else {
-      // If no searchTerm is provided, return all passenger posts
       Passengerpost.find({})
           .then((results) => {
               res.json(results);
@@ -93,17 +91,16 @@ passengerpostRouter.get("/search", async (req, res) => {
  * @apiError PostNotFound The specified post was not found.
  */
 
-// Given post id, show all the post info.
 passengerpostRouter.get('/:postId', async (req, res) => {
-  const { postId } = req.params; // Extract the postId from the URL parameters
+  const { postId } = req.params;
 
   try {
-      const post = await Passengerpost.findById(postId).exec(); // Fetch the post from the database
+      const post = await Passengerpost.findById(postId).exec();
 
       if (!post) {
           return res.status(404).json({ message: "Passenger post not found" });
       }
-      res.json(post); // Return the post details
+      res.json(post);
   } catch (error) {
       console.error('Error fetching passenger post:', error);
       res.status(500).json({ message: 'Error fetching passenger post' });
@@ -150,9 +147,8 @@ passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
   additionalNotes = additionalNotes.trim();
 
   try {
-    // Create the new rideshare post
     const newpassengerpost = new Passengerpost({
-      passengerId, // Assuming your Passengerpost model has a field for driverId
+      passengerId,
       startingLocation,
       endingLocation,
       startTime,
@@ -162,9 +158,8 @@ passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
 
     const result = await newpassengerpost.save();
 
-    // Update the passenger's document to include this new rideshare post
     await Passenger.findByIdAndUpdate(passengerId, {
-      $push: { passengerposts: result._id }, // Assuming your Passenger model has a 'rides' field that stores ride IDs
+      $push: { passengerposts: result._id },
     });
 
     res.json({
@@ -198,21 +193,17 @@ passengerpostRouter.post("/newpost", authenticateToken, async (req, res) => {
  * @apiError DeletionFailed An error occurred during the deletion process.
  */
 
-
-// Delete route that uses the post ID as a unique identifier
 passengerpostRouter.delete(
   "/deletepost/:postId",
   authenticateToken,
   async (req, res) => {
-    const passengerId = req.user.userId; // Assuming this is populated by the authenticateToken middleware
+    const passengerId = req.user.userId;
     const postId = req.params.postId;
 
     try {
-      // Convert string IDs to ObjectId for comparison
       const objectIdPassengerId = new mongoose.Types.ObjectId(passengerId);
       const objectIdPostId = new mongoose.Types.ObjectId(postId);
 
-      // First, find the post to ensure it exists and belongs to the requesting passenger
       const post = await Passengerpost.findOne({
         _id: objectIdPostId,
         passengerId: objectIdPassengerId,
@@ -226,18 +217,15 @@ passengerpostRouter.delete(
         });
       }
 
-      // Delete the found post
       await Passengerpost.findByIdAndDelete(objectIdPostId);
 
-      // Remove the post reference from the Passenger document, if necessary
-      // Assuming the Passenger model has a field named 'passengerposts' storing post references
       await Passenger.findByIdAndUpdate(objectIdPassengerId, {
         $pull: { passengerposts: objectIdPostId },
       });
 
       res.json({ status: "SUCCESS", message: "Post deleted successfully" });
     } catch (err) {
-      console.error(err); // For debugging purposes
+      console.error(err);
       res.status(500).json({
         status: "FAILED",
         message: "An error occurred during the deletion process",

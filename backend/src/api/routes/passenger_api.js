@@ -47,18 +47,15 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
 
-        // Convert avatar buffer to base64 string if exists
         let avatarBase64;
         if (user.avatar && user.avatar.data) {
             avatarBase64 = `data:${user.avatar.contentType};base64,${user.avatar.data.toString('base64')}`;
         }
 
-        // Fetch all join requests made by the passenger
         const JoinRequests = await joinRequest.find({ passengerId: req.user.userId })
                                               .populate('driverPostId')
                                               .exec();
 
-        // Prepare join request details
         const rideshares = JoinRequests.map(request => {
             const rideshareDetails = {
                 postId: request.driverPostId._id,
@@ -68,7 +65,6 @@ router.get('/profile', authenticateToken, async (req, res) => {
                 status: request.status,
                 additionalNotes: request.driverPostId.additionalNotes,
                 numberOfSeats: request.driverPostId.numberOfSeats,
-                // Include full details if accepted, partial if pending or rejected
                 ...(request.status === 'accepted' && {
                     licensenumber: request.driverPostId.licensenumber,
                     model: request.driverPostId.model,
@@ -79,14 +75,12 @@ router.get('/profile', authenticateToken, async (req, res) => {
             return rideshareDetails;
         });
 
-        // Fetch all posts made by the passenger
         const passengerPosts = await Passengerpost.find({ passengerId: req.user.userId });
 
-        // Include join request details with user profile information
         const userProfile = {
-            ...user._doc, // Spread the user document to include all user info
+            ...user._doc, 
             avatar: avatarBase64,
-            rideshares, // Add the rideshare details to the profile response
+            rideshares, 
             passengerPosts
         };
 
@@ -114,7 +108,7 @@ router.get('/profile', authenticateToken, async (req, res) => {
 
 
 router.get('/my-join-requests', authenticateToken, async (req, res) => {
-    const passengerId = req.user.userId; // Assuming the passenger's ID is stored in req.user.userId
+    const passengerId = req.user.userId;
 
     try {
         const JoinRequests = await joinRequest.find({ passengerId })
@@ -130,7 +124,6 @@ router.get('/my-join-requests', authenticateToken, async (req, res) => {
                 status: request.status,
                 additionalNotes: request.driverPostId.additionalNotes,
                 numberOfSeats: request.driverPostId.numberOfSeats,
-                // Include full details if accepted, partial if pending or rejected
                 ...(request.status === 'accepted' && {
                     licensenumber: request.driverPostId.licensenumber,
                     model:request.driverPostId.model,
@@ -357,26 +350,18 @@ router.put('/update', authenticateToken, async (req, res) => {
             return res.status(404).send({ message: "User not found" });
         }
 
-        // Update name and phone number
         if (name) user.name = name.trim();
         if (phonenumber) user.phonenumber = phonenumber.trim();
 
-        // Update email after validation
         if (email && email !== user.email) {
-            // Validate and check for existing email
             const emailTaken = await emailExistsInBoth(email);
             if (emailTaken) {
                 return res.status(400).send({ message: "Email already in use" });
             }
             user.email = email.trim();
-            // Optional: Implement email verification
         }
 
-        // Update password
         if (newPassword) {
-            // Validate new password strength here
-
-            // Hash new password and update
             const hashPassword = await bcrypt.hash(newPassword, 10);
             user.password = hashPassword;
         }
@@ -409,10 +394,9 @@ router.put('/update', authenticateToken, async (req, res) => {
  */
 
 
-// GET all driver posts for passengers to view
 router.get('/driverposts', authenticateToken, async (req, res) => {
     try {
-        const driverPosts = await Driverpost.find({}); // Modify query as needed
+        const driverPosts = await Driverpost.find({});
         res.status(200).json(driverPosts);
     } catch (error) {
         console.error('Failed to fetch driver posts:', error);
@@ -449,20 +433,17 @@ const upload = multer({
  */
 
 
-// API endpoint to upload and update the passenger's avatar
 router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, res) => {
-    if (!req.file) { // Check if the file is not uploaded
+    if (!req.file) {
         return res.status(400).send({ message: "Avatar is required." });
     }
 
     try {
-        // Use the authenticated user's ID instead of getting it from the URL
         const passenger = await Passenger.findById(req.user.userId);
         if (!passenger) {
             return res.status(404).send({ error: "Passenger not found" });
         }
 
-        // Proceed with resizing and saving the avatar as before
         const buffer = await sharp(req.file.buffer)
             .resize(250, 250, {
                 fit: sharp.fit.cover,
@@ -478,7 +459,6 @@ router.post("/avatar", authenticateToken, upload.single("avatar"), async (req, r
         res.status(400).send({ error: error.message });
     }
 }, (error, req, res, next) => {
-    // Error handling middleware for Multer
     res.status(400).send({ error: error.message });
 });
 

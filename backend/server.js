@@ -15,9 +15,8 @@ const DriverRouter = require('./src/api/routes/driver_api');
 const DriverPostRouter = require('./src/api/routes/driverpost_api');
 const PassengerPostRouter = require("./src/api/routes/passengerpost_api");
 
-app.use(express.json()); // Middleware for parsing JSON bodies
+app.use(express.json());
 
-// Define a simple route
 app.get("/", (req, res) => {
   res.send("Ride Sharing App Backend");
 });
