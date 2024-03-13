@@ -24,8 +24,10 @@ jobs:
         cache: 'npm'
 
     - name: Install backend dependencies
-      run: npm ci
+      run: |
+        npm ci || cat /home/runner/.npm/_logs/*-debug.log
       working-directory: backend
+      
 
     - name: Test backend
       run: npm test
