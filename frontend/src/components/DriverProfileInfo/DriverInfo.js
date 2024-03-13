@@ -55,7 +55,10 @@ const DriverInfo = ({name, email, phonenumber, avatar}) => {
 
         try{
             console.log('profileData:', profileData)
-            const data = await axios.put(`${API_BASE_URL}/driver/update`, profileData).then((res) => res.data);
+            const token = localStorage.getItem('AuthToken');
+            const data = await axios.put(`${API_BASE_URL}/driver/update`, profileData,{
+                headers: { 'Authorization': token },
+            }).then((res) => res.data);
             if (data.status === 'SUCCESS') {
                 setProfile(profile)
                 setShowEditPopup(false); 
