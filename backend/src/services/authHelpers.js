@@ -1,3 +1,4 @@
+//Part of this file was leveraged from GPT/Copilot
 //authHelper.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');

@@ -1,3 +1,4 @@
+//Part of this file was leveraged from GPT/Copilot
 //signupHelper.js
 const bcrypt = require('bcrypt');
 const {OAuth2Client} = require('google-auth-library');
