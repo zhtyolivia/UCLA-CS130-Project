@@ -3,15 +3,15 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../services/api'; 
-import DriverNav from '../../../components/Navigation/DriverNavbar'; // Assuming this is your navbar component
+import DriverNav from '../../../components/Navigation/DriverNavbar'; 
 import './PassengerPostDetail.scss';
 
 const PassengerPostDetail = () => {
-    const { postId } = useParams(); // This should match the parameter name in your route
+    const { postId } = useParams(); 
     const [postDetails, setPostDetails] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
-    const navigate = useNavigate(); // Hook for navigation
+    const navigate = useNavigate(); 
 
 
     useEffect(() => {
@@ -38,12 +38,12 @@ const PassengerPostDetail = () => {
     }, [postId]);
     
     const goBack = () => {
-      navigate('/driver-home'); // Updated to navigate to '/driver-home'
+      navigate('/driver-home'); 
     };
     
     if (loading) return <div>Loading...</div>;
     if (error) return <div>{error}</div>;
-    if (!postDetails) return <Navigate to="/" />; // Redirect if no postDetails
+    if (!postDetails) return <Navigate to="/" />; 
 
     return (
       <div className="passenger-post-detail">
@@ -63,7 +63,6 @@ const PassengerPostDetail = () => {
           <div className="detail-value">{postDetails.numberOfPeople}</div>
           <div className="detail-label">Description:</div>
           <div className="detail-value">{postDetails.additionalNotes}</div>
-          {/* Add more details as needed */}
         </div>
       </div>
     );

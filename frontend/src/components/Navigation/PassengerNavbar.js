@@ -13,11 +13,10 @@ import LogoutIcon from '@mui/icons-material/Logout';
 
 function Navigation() {
   const [userId, setUserId] = useState(null);
-  const [searchValue, setSearchValue] = useState(''); // State to hold search input value
+  const [searchValue, setSearchValue] = useState(''); 
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch current user ID
     const token = localStorage.getItem('AuthToken'); 
     setUserId(token);
   }, []);
@@ -28,15 +27,12 @@ function Navigation() {
   };
 
   const handleSearch = () => {
-    // Redirect to search page with query
     navigate(`/search?query=${searchValue}`);
   };
 
   const signoutaction = () => {
     window.localStorage.clear();
     window.sessionStorage.clear();
-    //console.log("sign out");
-    // console.log(window,localStorage)
     navigate('/welcome');
   };
 

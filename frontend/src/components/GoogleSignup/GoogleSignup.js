@@ -11,26 +11,22 @@ const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
       console.log("Token response from Google:", tokenResponse);
       console.log("account Type:", accountType);
       try {
-        // Construct the endpoint URL based on accountType
         const endpoint = accountType === 'driver' ? '/driver/register/google' : '/passenger/register/google';
         const payload = {
           code: tokenResponse.code,
           accountType,
         };
-        // Make a POST request to the appropriate endpoint
         const response = await axios.post(`https://cs130-swift-link-f88aab47b45c.herokuapp.com${endpoint}`, payload);
         
-        // If the request is successful, handle success
         if (onSuccess) onSuccess(response.data);
       } catch (error) {
         // The response from the backend is in error.response.data
         if (error.response) {
-          // The server responded with a status code outside the 2xx range
           console.log(error.response.data);
           // If the request fails, handle failure and pass the error message to onFailure
           if (onFailure) onFailure(error.response.data.message);
         } else {
-          // The request was made but no response was received or an error occurred in setting up the request
+          // no response was received or an error occurred in setting up the request
           if (onFailure) onFailure(error.message);
         }
       }
@@ -39,7 +35,7 @@ const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
       console.error('Google login failed:', error);
       if (onFailure) onFailure(error);
     },
-    flow: 'auth-code', // Make sure this matches your frontend setup
+    flow: 'auth-code', 
   });
 
   return (

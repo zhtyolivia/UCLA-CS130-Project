@@ -2,34 +2,33 @@
 @import '../../styles/variables';
 
 .passenger-info {
-    display: flex; /* Use flexbox for layout */
-    margin-bottom: 20px; /* Add some space between user info and post details */
+    display: flex; 
+    margin-bottom: 20px; 
     margin-top: 20px;
 }
 
 .passenger-avatar {
-    margin-right: 50px; /* Add space between avatar and user details */
-    // display: flex;
+    margin-right: 50px; 
     justify-content: center;
     align-items: center;
     align-items: center;
 }
 
 .passenger-avatar img {
-    width: 100px; /* Set width for the avatar image */
-    height: 100px; /* Set height for the avatar image */
-    border-radius: 50%; /* Make the avatar image round */
+    width: 100px; 
+    height: 100px; 
+    border-radius: 50%; 
 }
 
 .passenger-details {
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack flex items vertically */
-    justify-content: space-around; /* Distribute space around items */
+    display: flex; 
+    flex-direction: column; 
+    justify-content: space-around; 
     text-align: left;
 }
 
 .passenger-info-header {
-    margin-bottom: 10px; /* If you want to keep some space between header and details */
+    margin-bottom: 10px;
 }
 
 .edit-button {

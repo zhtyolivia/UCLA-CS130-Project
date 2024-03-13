@@ -12,7 +12,7 @@ import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Mak
 
 const DriverLogin = () => {
     const navigate = useNavigate();
-    const { login, errors } = useLogin('driver'); // Assuming your useLogin hook can accept 'driver' as an argument for accountType
+    const { login, errors } = useLogin('driver'); 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordShown, setPasswordShown] = useState(false);
@@ -22,7 +22,6 @@ const DriverLogin = () => {
     const togglePasswordVisibility = () => setPasswordShown(!passwordShown);
 
     useEffect(() => {
-        // Assuming isLoggedIn checks auth token validity and determines if it's a driver's token
         if (isLoggedIn()) {
 
             navigate("/driver-home");
@@ -44,7 +43,7 @@ const DriverLogin = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        login(email, password, 'driver'); // Now, explicitly passing 'driver' as the accountType
+        login(email, password, 'driver'); 
     };
 
     return (

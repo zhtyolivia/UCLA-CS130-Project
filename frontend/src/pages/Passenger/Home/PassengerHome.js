@@ -1,15 +1,15 @@
 /* Part of this file was leveraged from GPT */ 
 import React, { useState, useEffect } from 'react';
-import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
+import { Navigate } from 'react-router-dom'; 
 import './PassengerHome.scss';
 import Navigation from '../../../components/Navigation/PassengerNavbar';
 import Post from '../../../components/RideshareCard/RideshareCard';
-import { fetchDriverPosts } from '../../../services/api'; // Make sure the path is correct
-import { isLoggedIn } from '../../../utils/LoginActions'; // Make sure the path is correct
+import { fetchDriverPosts } from '../../../services/api'; 
+import { isLoggedIn } from '../../../utils/LoginActions'; 
 
 function PassengerHome() {
 
-  const [posts, setPosts] = useState([]); // Initialize posts state to an empty array
+  const [posts, setPosts] = useState([]); 
 
 
   useEffect(() => {
@@ -33,7 +33,7 @@ function PassengerHome() {
       <main className="posts-grid">
         {posts.map(post => (
           <Post 
-            key={post._id} // Add the key prop here using post._id as its value
+            key={post._id}
             id={post._id}
             startingLocation={post.startingLocation} 
             endingLocation={post.endingLocation} 

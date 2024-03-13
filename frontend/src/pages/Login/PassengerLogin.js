@@ -5,21 +5,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { isLoggedIn } from '../../utils/LoginActions';
-import useLogin from '../../hooks/useLogin'; // Ensure this path matches where you save the hook
-import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; // Make sure this path is correct
+import useLogin from '../../hooks/useLogin'; 
+import GoogleSignup from '../../components/GoogleSignup/GoogleSignup.js'; 
 
 import './PassengerLogin.scss';
 
 const PassengerLogin = () => {
     const navigate = useNavigate();
-    const { login, errors } = useLogin(); // Using the custom hook
-    const accountType = "passenger"; // Or "driver", depending on the context or user selection
-
+    const { login, errors } = useLogin(); 
+    const accountType = "passenger"; 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordShown, setPasswordShown] = useState(false);
 
-    // Replace handleChange with specific handlers for clarity and simplicity
     const handleEmailChange = (event) => setEmail(event.target.value);
     const handlePasswordChange = (event) => setPassword(event.target.value);
 

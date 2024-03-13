@@ -25,7 +25,7 @@ const SignupForm = ({ onSubmit, errors, userRole }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        onSubmit(values); // Delegate submission logic to the parent component
+        onSubmit(values); 
     };
 
     return (
