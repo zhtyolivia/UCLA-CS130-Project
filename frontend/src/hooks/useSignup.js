@@ -1,4 +1,5 @@
 // useSignup.js
+/* Part of this file was leveraged from GPT */ 
 import { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';

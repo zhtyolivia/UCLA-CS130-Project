@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 import '../../Driver/InitiateRide/InitiateRide.scss';
 import React, { useState} from 'react';
 import { useNavigate, Navigate } from 'react-router-dom';

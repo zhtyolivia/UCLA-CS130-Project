@@ -1,5 +1,6 @@
 // Displays information about the driver who initiated this rideshare.
 // Used for the Post page. 
+/* Part of this file was leveraged from GPT */ 
 
 import React, { useState, useEffect } from 'react';
 import './InitiatorInfo.css'; 

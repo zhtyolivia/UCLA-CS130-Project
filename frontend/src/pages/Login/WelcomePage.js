@@ -1,4 +1,5 @@
 // WelcomePage.js
+/* Part of this file was leveraged from GPT */ 
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './WelcomePage.scss'; 

@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 export const convertDate2Readable = (dateString) => {
     const options = {
         timeZone: "America/Los_Angeles",

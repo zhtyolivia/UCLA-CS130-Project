@@ -1,8 +1,9 @@
 // SignupForm.js
+/* Part of this file was leveraged from GPT */ 
 import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import './SignupForm.scss'; // Adjust CSS file name as needed
+import './SignupForm.scss'; 
 
 const SignupForm = ({ onSubmit, errors, userRole }) => {
     const [values, setValues] = useState({

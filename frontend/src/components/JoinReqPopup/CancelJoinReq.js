@@ -1,4 +1,5 @@
 // JoinReqPopup.js
+/* Part of this file was leveraged from GPT */ 
 import './JoinReqPopup.scss'; // Importing the CSS for the Popup
 
 const CancelJoinReq = ({ onClose, onSubmit}) => {

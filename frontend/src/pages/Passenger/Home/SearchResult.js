@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, Navigate } from 'react-router-dom';
 import Post from '../../../components/RideshareCard/RideshareCard';

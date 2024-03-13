@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 import './EditInfoPopup.scss'; // Importing the CSS for the Popup
 
 const EditInfoPopup = ({ onClose, onSubmit, onChange, profile}) => {
