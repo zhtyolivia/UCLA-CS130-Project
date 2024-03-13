@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 import React, { useState, useEffect } from 'react';
 import './PassengerProfileInfo.scss'; 
 import defaultAvatar from '../../assets/default_avatar.jpeg';

@@ -1,5 +1,5 @@
 // SuccessPopup.js
-import './SuccessPopup.scss'; // Importing the CSS for the Popup
+import './SuccessPopup.scss'; 
 
 export const SuccessPopup = ({ onClose, msg}) => {
   return (

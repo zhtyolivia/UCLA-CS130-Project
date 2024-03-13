@@ -1,11 +1,4 @@
-// Sample structure for passenger 
-// const passenger = {
-//     id: 1, 
-//     username: 'test_passenger',
-//     name: 'Olive',
-//     email: 'olive@example.com',
-//     avatarUrl: 'https://example.com/avatar.png'
-// 
+/* Part of this file was leveraged from GPT */ 
 const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:3001';
 
 // Sample structure for drivers

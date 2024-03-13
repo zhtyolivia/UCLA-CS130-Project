@@ -1,4 +1,4 @@
-
+/* Part of this file was leveraged from GPT */ 
 import React, { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom'; // Import Navigate for redirection
 import './PassengerHome.scss';

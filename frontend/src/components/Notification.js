@@ -1,3 +1,4 @@
+/* Part of this file was leveraged from GPT */ 
 import React, { useState, useEffect } from 'react';
 import { Tooltip, IconButton, Popover, Paper, Typography, List, ListItem, Divider, Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
