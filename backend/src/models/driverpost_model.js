@@ -1,4 +1,3 @@
-//Part of this file was leveraged from GPT/Copilot
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -14,7 +13,6 @@ const DriverpostSchema = new Schema({
   },
   startTime: {
     type: Date,
-    // required: true,
   },
   licensenumber:{
     type: String
@@ -24,7 +22,6 @@ const DriverpostSchema = new Schema({
   },
   numberOfSeats: {
     type: Number,
-    // required: true,
   },
   phonenumber:{
     type: String
@@ -34,7 +31,6 @@ const DriverpostSchema = new Schema({
   },
   additionalNotes: {
     type: String,
-    // required: false,
   },
   passengers: [{type:Schema.Types.ObjectId, ref:'Passenger'}],
   joinrequests: [{type: Schema.Types.ObjectId, ref:'Joinrequest'}]

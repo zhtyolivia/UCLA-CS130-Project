@@ -9,7 +9,6 @@ const { authenticateToken } = require("../middlewares/jwtauthenticate");
 
 const driverpostRouter = express.Router();
 
-// Array to hold all the keywords to split
 const delimiters = ["to", ",", "-", " "];
 
 /**
@@ -34,7 +33,6 @@ driverpostRouter.get("/search", async (req, res) => {
   let searchTerm = req.query.term;
 
   if (searchTerm) {
-      // Your existing code for processing the search term and constructing the search query
       delimiters.forEach((delimiter) => {
           const spacedDelimiter = ` ${delimiter.trim()} `;
           searchTerm = searchTerm.split(delimiter).join(spacedDelimiter);
@@ -45,7 +43,7 @@ driverpostRouter.get("/search", async (req, res) => {
 
       let searchQuery = { $or: [] };
       terms.forEach((term) => {
-          const regex = new RegExp(term, 'i'); // Case-insensitive regex for each term
+          const regex = new RegExp(term, 'i');
           searchQuery.$or.push({ startingLocation: regex });
           searchQuery.$or.push({ endingLocation: regex });
       });
@@ -59,7 +57,6 @@ driverpostRouter.get("/search", async (req, res) => {
               res.status(500).json({ error: "Search operation failed" });
           });
   } else {
-      // If no searchTerm is provided, return all posts
       Driverpost.find({})
           .then((results) => {
               res.json(results);
@@ -96,30 +93,25 @@ driverpostRouter.patch('/join-requests/:requestId/accept', authenticateToken, as
   try {
       const JoinRequest = await joinRequest.findById(requestId);
       if (JoinRequest.status !== 'pending') {
-        // If the join request is not pending, do not proceed with acceptance
         return res.status(400).json({ message: 'Join request is not pending or has already been processed' });
       }
-  
-      // Update the join request status to 'accepted'
+
       JoinRequest.status = 'accepted';
       await JoinRequest.save();
       const driverPost = await Driverpost.findById(JoinRequest.driverPostId);
       if (!driverPost) {
           return res.status(404).json({ message: 'Driver post not found' });
       }
-      // Assuming driverPost has an array to store passengerIds of accepted passengers
       if (!driverPost.passengers.includes(JoinRequest.passengerId)) {
           driverPost.passengers.push(JoinRequest.passengerId);
           driverPost.numberOfSeats -= JoinRequest.seatsneeded;
           await driverPost.save();
       }
 
-      // Send email notification to the passenger
       const passenger = await Passenger.findById(JoinRequest.passengerId)
       if (!passenger) {
         console.log('Passenger not found');
       } else {
-        // console.log('Passenger email:', passenger.email);
         const subject = 'Ride Share Request Update';
         const text = `Your ride share request for the post starting at ${driverPost.startingLocation} has been accepted.`;
         await sendEmail(passenger.email, subject, text);
@@ -155,20 +147,17 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
           return res.status(404).json({ message: 'Join request not found' });
       }
       if (JoinRequest.status !== 'pending') {
-        // If the join request is not pending, do not proceed with acceptance
         return res.status(400).json({ message: 'Join request is not pending or has already been processed' });
       }
 
       JoinRequest.status = 'declined';
       await JoinRequest.save();
 
-      // Send email notification to the passenger
       const driverPost = await Driverpost.findById(JoinRequest.driverPostId);
       const passenger = await Passenger.findById(JoinRequest.passengerId)
       if (!passenger) {
         console.log('Passenger not found');
       } else {
-        // console.log('Passenger email:', passenger.email);
         const subject = 'Ride Share Request Update';
         const text = `Your ride share request for the post starting at ${driverPost.startingLocation} has been accepted.`;
         await sendEmail(passenger.email, subject, text);
@@ -199,7 +188,7 @@ driverpostRouter.patch('/join-requests/:requestId/decline', authenticateToken, a
 
 driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
   const { postId } = req.params;
-  const passengerId = req.user.userId; // Assuming `req.user` holds authenticated user info and has a userId field
+  const passengerId = req.user.userId; 
 
   try {
     const driverPost = await Driverpost.findById(postId).populate('driverId').exec();
@@ -208,27 +197,22 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
       return res.status(404).json({ message: 'Driver post not found' });
     }
 
-    // Query for a join request by the current passenger for this driver post
     const JoinRequest = await joinRequest.findOne({
       driverPostId: postId,
       passengerId: passengerId
     }).exec();
 
     let driverAvatar = undefined;
-    // Convert driver avatar buffer to base64 string if exists and join request is accepted
     if (driverPost.driverId.avatar && driverPost.driverId.avatar.data) {
       driverAvatar = `data:${driverPost.driverId.avatar.contentType};base64,${driverPost.driverId.avatar.data.toString('base64')}`;
     }
-    // Prepare the response object including the driverPost details
     let response = {
       driverPost: {
-        // Include all driverPost details that are always visible
         startingLocation: driverPost.startingLocation,
         endingLocation: driverPost.endingLocation,
         startTime: driverPost.startTime,
         numberOfSeats: driverPost.numberOfSeats,
         additionalNotes: driverPost.additionalNotes,
-        // Conditionally include the license number
         ...(JoinRequest && JoinRequest.status === 'accepted' && {
           avatar:driverAvatar,
           drivername: driverPost.driverId.name,
@@ -237,11 +221,10 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
           email: driverPost.driverId.email,
           phonenumber: driverPost.driverId.phonenumber}),
       },
-      hasJoined: false, // Default to false
-      joinRequestStatus: null // Default to null
+      hasJoined: false,
+      joinRequestStatus: null
     };
 
-    // If a join request exists, modify the response object accordingly
     if (JoinRequest) {
       response.hasJoined = true;
       response.joinRequestStatus = JoinRequest.status;
@@ -277,11 +260,10 @@ driverpostRouter.get('/:postId', authenticateToken, async (req, res) => {
 
 driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
   try {
-    const passengerId = req.user.userId; // Assuming `req.user` is populated by your authentication middleware
+    const passengerId = req.user.userId; 
     const { postId } = req.params;
     const { seatsneeded, message } = req.body;
 
-    // Optional: Check if the post exists and if a join request already exists
     const existingPost = await Driverpost.findById(postId);
     if (!existingPost) {
       return res.status(404).json({ message: 'Rideshare post not found' });
@@ -296,18 +278,16 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
       return res.status(400).json({ message: 'Join request already sent' });
     }
 
-    // Create a new join request
     const newJoinRequest = new joinRequest({
       driverPostId: postId,
       passengerId,
       seatsneeded,
       message,
-      status: 'pending', // Explicitly setting status, though it's the default value
+      status: 'pending',
     });
 
     const savedJoinRequest = await newJoinRequest.save();
 
-    // Update the Passenger document to include this new join request
     await Passenger.findByIdAndUpdate(passengerId, {
       $push: { joinrequests: savedJoinRequest._id }
     });
@@ -322,16 +302,13 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
       });
     }
 
-    //send email notification
     const driver = await Driver.findById(existingPost.driverId);
     if (!driver) {
       console.error('Driver not found');
     } else {
-      // Prepare email notification details
       const subject = 'New Ride Share Join Request';
       const text = `A new passenger has requested to join your ride share from ${existingPost.startingLocation} to ${existingPost.endingLocation}. Please check your dashboard for more details.`;
 
-      // Send email to the Driver
       await sendEmail(driver.email, subject, text);
     }
 
@@ -361,58 +338,47 @@ driverpostRouter.post('/:postId/join', authenticateToken, async (req, res) => {
  */
 
 driverpostRouter.post('/:postId/cancel', authenticateToken, async (req, res) => {
-  const passengerId = req.user.userId; // Assuming `req.user` is populated by your authentication middleware
+  const passengerId = req.user.userId;
   const { postId } = req.params;
 
   try {
-    // Find the join request made by this passenger for the specified post
     const JoinRequest = await joinRequest.findOne({
       driverPostId: postId,
       passengerId: passengerId,
     });
 
-    // If no join request is found, return an error
     if (!JoinRequest) {
       return res.status(404).json({ message: 'Join request not found or already cancelled' });
     }
 
-    // Optionally, update the Passenger document to remove this join request
     await Passenger.findByIdAndUpdate(passengerId, {
       $pull: { joinrequests: JoinRequest._id }
     });
 
-    // Optionally, update the DriverPost document to remove this join request
     if (JoinRequest.status === 'accepted') {
-      // Only update the DriverPost document to increment numberOfSeats if join request was accepted
       await Driverpost.findByIdAndUpdate(postId, {
         $pull: { joinrequests: JoinRequest._id, passengers: passengerId },
         $inc: { numberOfSeats: JoinRequest.seatsneeded }
       });
     } else {
-      // If the join request was not accepted, just remove it from the join requests list
       await Driverpost.findByIdAndUpdate(postId, {
         $pull: { joinrequests: JoinRequest._id, passengers: passengerId }
       });
     }
 
-    // If the post belongs to a driver, you might also want to remove this join request from the Driver document
     const existingPost = await Driverpost.findById(postId);
     if (existingPost && existingPost.driverId) {
       await Driver.findByIdAndUpdate(existingPost.driverId, {
         $pull: { joinrequests: JoinRequest._id}
       });
     }
-    // Remove the join request
     await joinRequest.findByIdAndDelete(JoinRequest._id);
 
-    // Send Email
     const driver = await Driver.findById(existingPost.driverId);
     if (driver) {
-      // Email details
       const subject = 'Ride Share Join Request Cancelled';
       const text = `A passenger has cancelled their request to join your ride share from ${existingPost.startingLocation} to ${existingPost.endingLocation}.`;
 
-      // Send email notification
       await sendEmail(driver.email, subject, text);
     }
 
@@ -458,7 +424,6 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
   startTime = startTime.trim();
   licensenumber = licensenumber.trim();
   model = model.trim();
-  //numberOfSeats = numberOfSeats.trim();
   additionalNotes = additionalNotes.trim();
 
   try {
@@ -471,7 +436,7 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
     }
     const { phonenumber, email } = driver;
     const newdriverpost = new Driverpost({
-      driverId, // Assuming your Driverpost model has a field for driverId
+      driverId, 
       startingLocation,
       endingLocation,
       startTime,
@@ -485,9 +450,8 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
 
     const result = await newdriverpost.save();
 
-    // Update the driver's document to include this new rideshare post
     await Driver.findByIdAndUpdate(driverId, {
-      $push: { driverposts: result._id } // Assuming your Driver model has a 'rides' field that stores ride IDs
+      $push: { driverposts: result._id } 
     });
 
     res.json({
@@ -525,7 +489,7 @@ driverpostRouter.post('/newpost', authenticateToken, async (req, res) =>{
  * @apiError InternalServerError An error occurred on the server while fetching the posts.
  */
 
-// for getting all posts
+
 driverpostRouter.get("/", async (req, res) => {
   try {
     const posts = await Driverpost.find({});

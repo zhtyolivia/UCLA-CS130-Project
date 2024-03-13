@@ -1,4 +1,3 @@
-//Part of this file was leveraged from GPT/Copilot
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 

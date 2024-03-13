@@ -1,4 +1,3 @@
-//Part of this file was leveraged from GPT/Copilot
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -22,7 +21,6 @@ const PassengerpostSchema = new Schema({
   },
   additionalNotes: {
     type: String,
-    // required: false,
   }
 });
 
