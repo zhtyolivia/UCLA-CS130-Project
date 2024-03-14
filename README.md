@@ -32,7 +32,21 @@ Our website can be found [here](https://main--rideshare-swiftlink.netlify.app/)!
 
 If you'd like to host the app locally. Please follow the instruction in this section. 
 
-To start the backend, navigate to `/backend` and run 
+To use Google Auth API locally, in `/backend/.env`, change the line 
+
+```
+GOOGLE_REDIRECT_URI='https://main--rideshare-swiftlink.netlify.app'
+
+```
+
+to 
+
+```
+GOOGLE_REDIRECT_URI='http://localhost:3000'
+```
+
+Then start the backend. Navigate to `/backend` and run 
+
 ```
 npm install 
 npm start
