@@ -36,7 +36,6 @@ To use Google Auth API locally, in `/backend/.env`, change the line
 
 ```
 GOOGLE_REDIRECT_URI='https://main--rideshare-swiftlink.netlify.app'
-
 ```
 
 to 
