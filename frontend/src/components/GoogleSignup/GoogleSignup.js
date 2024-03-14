@@ -2,6 +2,7 @@
 import React from 'react';
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
+import {API_BASE_URL} from '../../services/api'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faGoogle } from '@fortawesome/free-brands-svg-icons';
 
@@ -16,7 +17,7 @@ const GoogleSignup = ({ onSuccess, onFailure, accountType }) => {
           code: tokenResponse.code,
           accountType,
         };
-        const response = await axios.post(`https://cs130-swift-link-f88aab47b45c.herokuapp.com${endpoint}`, payload);
+        const response = await axios.post(`${API_BASE_URL}${endpoint}`, payload);
         
         if (onSuccess) onSuccess(response.data);
       } catch (error) {
