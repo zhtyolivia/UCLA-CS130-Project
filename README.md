@@ -51,10 +51,22 @@ npm install
 npm start
 ```
 
+To test the backend locally, run
+
+```
+npm test
+```
+
 To start the frontend, navigate to `/frontend` and run 
 ```
 npm install 
 npm start
-``` 
+```
+
+To test the frontend locally, run
+
+```
+npm test
+```
 
 With steps above, you will open the SwiftLink welcome page on port 3000 in your browser. 
